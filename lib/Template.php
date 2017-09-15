@@ -101,9 +101,7 @@ class Template {
      */
     static private function _renderAreas($page, &$contents) {
         // setup areas
-        $areas =    [   'TOPNAV'        => Pagetree::buildMenu(),
-                        'CONTENTLEFT'   => '',
-        ];
+        $areas =    [   'TOPNAV'        => Pagetree::buildMenu()];
 
         if ($page != null && self::exists($page)) {
             $areas['CONTENTMIDDLE'] = self::getContents($page);

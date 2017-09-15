@@ -26,6 +26,23 @@ var Gundert = {
     },
 
     /**
+     * Get user language in a format usable for dataTables configuration
+     * (default = English)
+     *
+     * @return string
+     */
+    GetLanguageForDatatables: function() {
+        var language = Gundert.GetLanguage();
+        switch (language) {
+            case 'de':
+                return 'German';
+            case 'en':
+                return 'English';
+        }
+        return 'English';
+    },
+
+    /**
      * Helper function to get only the first element with a certain class
      *
      * @param string classname
@@ -44,7 +61,7 @@ var Gundert = {
     GetOrCreateSearchResult: function() {
         var div_search_result = document.getElementById('div_gundert_search_result');
         if (div_search_result == undefined) {
-            var div_parent = Gundert.GetFirstElementByClassName('ut-page__main');
+            var div_parent = document.getElementById('gundert-contentmiddle');
             div_search_result = document.createElement('div');
             div_search_result.setAttribute('class', 'container');
             div_search_result.innerHTML = '<div id="div_gundert_search_result"></div>';
@@ -117,7 +134,7 @@ var Gundert = {
         table += '<h1>'+category+'</h1>';
 
         // table header
-        table += '<table id="search_result_table_gundert" class="ut-table">';
+        table += '<table id="gundert-searchresult" class="ut-table">';
         table += '<thead class="ut-table__header">';
         table += '<tr class="ut-table__row">';
         fields.forEach(function(field) {
@@ -139,16 +156,21 @@ var Gundert = {
         table += '</tbody>';
 
         table += '</table>';
-
+        console.log(Gundert.GetLanguageForDatatables());
 
         // Trigger DataTable plugin
         var div_search_result = Gundert.GetOrCreateSearchResult();
         div_search_result.innerHTML = table;
-        $('#search_result_table_gundert').DataTable({
+        $('#gundert-searchresult').DataTable({
             // put DataTable options here
             // see https://datatables.net/reference/option/
             paging: false,
             searching: false,
+            "language": {
+                //local url doesnt work (though correct file is downloaded)... but works with cdn path. Strange!
+                //"url": "vendor/jquery-datatables-plugins/i18n/" + Gundert.GetLanguageForDatatables() + ".json"
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/"+Gundert.GetLanguageForDatatables()+".json"
+            }
         });
     },
 
