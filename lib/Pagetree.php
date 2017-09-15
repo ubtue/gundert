@@ -49,11 +49,11 @@ class Pagetree {
     static private function _buildMenuNoChildren($page, $level) {
         switch ($level) {
             case 1:
-                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="{register:count_MENUOBJ}"><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
+                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
             case 2:
-                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="{register:count_MENUOBJ}"><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
+                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
             case 3:
-                return '<li class="ut-nav__item ut-nav__item--level-3" data-level-count="{register:count_MENUOBJ}"><a class="ut-link ut-nav__link ut-nav__link--level-3" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
+                return '<li class="ut-nav__item ut-nav__item--level-3" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link ut-nav__link--level-3" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
             default:
                 throw new Exception('menu level ' . $level . ' cannot be rendered');
         }
@@ -71,9 +71,9 @@ class Pagetree {
     static private function _buildMenuChildrenStart($page, $level) {
         switch ($level) {
             case 1:
-                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="{register:count_MENUOBJ}"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
+                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.self::getPageSiblingNumber($page).'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
             case 2:
-                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="{register:count_MENUOBJ}"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
+                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.self::getPageSiblingNumber($page).'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
             default:
                 throw new Exception('menu level ' . $level . ' cannot be rendered with children');
         }
@@ -165,6 +165,84 @@ class Pagetree {
             }
         }
         return false;
+    }
+
+    /**
+     * Get children of the given page (empty array if none)
+     *
+     * @return array
+     */
+    static public function getChildren($page) {
+        return self::_getChildren($page, self::PAGES);
+    }
+
+    /**
+     * recursion: find children of the page inside the subtree
+     *
+     * @param string $page
+     * @param array $subtree
+     *
+     * @return array
+     */
+    static private function _getChildren($page, $subtree) {
+        foreach ($subtree as $key => $value) {
+            if ($key === $page) {
+                return $value;
+            } elseif ($value === $page) {
+                return [];
+            } elseif (is_array($value)) {
+                $children = self::_getChildren($page, $value);
+                if (count($children) > 0) {
+                    return $children;
+                }
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Get list of page and all siblings
+     *
+     * @param string $page
+     *
+     * @return array
+     */
+    static public function getPageSiblings($page) {
+        $pagePath = array_reverse(self::getBreadCrumbPath($page));
+        $subtree = self::PAGES;
+        do {
+            $page = array_pop($pagePath);
+            if (count($pagePath) > 0) {
+                $subtree = $subtree[$page];
+            }
+        } while (count($pagePath) > 0);
+
+        $siblings = array();
+        foreach ($subtree as $key => $value) {
+            if (is_array($value)) {
+                $siblings[] = $key;
+            } else {
+                $siblings[] = $value;
+            }
+        }
+
+        return $siblings;
+
+    }
+
+    /**
+     * Get number of the page inside the current level of its parent
+     */
+    static public function getPageSiblingNumber($page) {
+        $siblings = self::getPageSiblings($page);
+        $i=0;
+        foreach ($siblings as $sibling) {
+            $i++;
+            if ($sibling == $page) {
+                return $i;
+            }
+        }
     }
 
     /**
