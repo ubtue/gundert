@@ -165,7 +165,6 @@ var Gundert = {
             // put DataTable options here
             // see https://datatables.net/reference/option/
             paging: false,
-            searching: false,
             "language": {
                 //local url doesnt work (though correct file is downloaded)... but works with cdn path. Strange!
                 //"url": "vendor/jquery-datatables-plugins/i18n/" + Gundert.GetLanguageForDatatables() + ".json"

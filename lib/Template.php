@@ -134,5 +134,12 @@ class Template {
         foreach ($markers as $key => $value) {
             $contents = preg_replace('"###'.$key.'###"', $value, $contents);
         }
+
+        // special markers for displaytexts
+        preg_match_all('"###DT-([^#]+)###"', $contents, $hits);
+        foreach ($hits[1] as $i => $displayTextKey) {
+            $displayText = Languages::getDisplayText($displayTextKey);
+            $contents = str_replace($hits[0][$i], $displayText, $contents);
+        }
     }
 }
