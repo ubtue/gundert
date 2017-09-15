@@ -1,0 +1,476 @@
+/* ==========================================================================
+   STYLEGUIDE CUSTOM DESIGN
+   ========================================================================== */
+
+/**
+ * Body Styles
+ *
+ * 1. Vertikales Scrolling unterdrücken
+ */
+body {
+	overflow-x: hidden; /* [1] */
+}
+
+/**
+ * Pattern Rahmen
+ */
+.sg-main {
+	width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+	.sg-main {
+		width: 100%;
+	}
+}
+
+@media screen and (min-width: 992px) {
+	.sg-main {
+		width: 960px;
+		margin: 0px auto;
+	}
+}
+
+@media screen and (min-width: 1260px) {
+	.sg-main {
+		width: 1200px;
+	}
+}
+
+/**
+ * Pattern Liste
+ */
+#sg-patterns {
+	-webkit-box-sizing: border-box !important;
+	box-sizing: border-box !important;
+	max-width: 100%;
+	padding: 0;
+}
+
+/**
+ * Full Width helper Container
+ */
+.sg-full-width {
+	background-color: #a51e37;
+	padding: 1rem 0.5rem;
+}
+
+@media screen and (min-width: 992px) {
+	.sg-full-width {
+		padding: 0;
+		width: 100vw;
+		margin-left: calc(-100vw / 2 + 960px / 2);
+		margin-right: calc(-100vw / 2 + 960px / 2);
+	}
+
+	.sg-full-width .sg-subtype {
+		margin: 0px auto;
+		width: 960px;
+	}
+}
+
+@media screen and (min-width: 1260px) {
+	.sg-full-width {
+		margin-left: calc(-100vw / 2 + 1200px / 2);
+		margin-right: calc(-100vw / 2 + 1200px / 2);
+	}
+
+	.sg-full-width .sg-subtype {
+		width: 1200px;
+	}
+}
+
+/**
+ * Pattern Subtype
+ */
+.sg-subtype {
+	padding: 2rem 0;
+}
+
+.sg-subtype h2 {
+	color: #ffffff;
+	font-size: 4rem;
+	line-height: 100%;
+	margin: 0 0 1rem 0;
+	font-weight: 600;
+}
+
+.sg-subtype h2 a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.sg-subtype .sg-pattern-body p {
+	color: #ffffff;
+	font-size: 1.5rem;
+	font-weight: 300;
+	line-height: 1.8;
+	opacity: 0.9;
+	margin: 0 0 1rem 0;
+}
+
+/**
+ * Markierung einzelner Patterns
+ */
+.sg-pattern[id*="sg-overview"] {
+	padding-left: 2rem;
+	border-left: solid 6px #f2f2f2;
+}
+
+.sg-pattern[id*="sg-overview"] .sg-pattern-title a {
+
+}
+
+.sg-pattern[id*="sg-overview"] .sg-pattern-title a:before {
+	content: "\21BB";
+	color: #a51e37;
+	display: inline-block;
+	margin-right: 0.25rem;
+}
+
+.sg-pattern[id*="sg-overview"] .sg-pattern-example a.link {
+	margin-right: 2rem;
+}
+
+/**
+ * Pattern Info (collapse)
+ */
+.sg-pattern .sg-pattern-head {
+}
+
+.sg-pattern .sg-pattern-head .sg-pattern-title {
+	font-size: 1.4em !important;
+	text-transform: none !important;
+}
+
+.sg-pattern .sg-pattern-extra {
+	background-color: transparent;
+	border: none;
+	border-top: solid 2px #f2f2f2;
+}
+
+.sg-pattern .sg-pattern-extra.active {
+	border-radius: 0;
+	max-height: none !important;
+}
+
+.sg-pattern .sg-pattern-extra.active .sg-pattern-desc {
+	border-bottom: none;
+}
+
+.sg-pattern .sg-pattern-extra.active .sg-pattern-desc p {
+	margin-top: 0;
+}
+
+/**
+ * Pattern States
+ */
+#sg-patterns .sg-pattern-title span.sg-pattern-state {
+	margin-left: 1rem;
+	display: inline-block;
+	padding: 0.3rem 0.8rem;
+	color: #333333;
+	border: solid 1px transparent;
+	border-radius: 3px;
+	font-size: 0.8rem;
+	text-transform: capitalize;
+}
+
+#sg-patterns .sg-pattern-title span.sg-pattern-state::before {
+	display: none !important;
+}
+
+#sg-patterns .sg-pattern-title span.sg-pattern-state.inprogress {
+	border-color: #f2dede;
+	background-color: #f2dede;
+	color: #a94442;
+}
+
+#sg-patterns .sg-pattern-title span.sg-pattern-state.inprogress::after {
+	content: 'in Bearbeitung';
+}
+
+#sg-patterns .sg-pattern-title span.sg-pattern-state.inreview {
+	border-color: #faebcc;
+	background-color: #fcf8e3;
+	color: #8a6d3b;
+}
+
+#sg-patterns .sg-pattern-title span.sg-pattern-state.inreview::after {
+	content: 'in Überprüfung';
+}
+
+#sg-patterns .sg-pattern-title span.sg-pattern-state.complete {
+	border-color: #d6e9c6;
+	background-color: #dff0d8;
+	color: #3c763d;
+}
+
+#sg-patterns .sg-pattern-title span.sg-pattern-state.complete::after {
+	content: 'Abgeschlossen';
+}
+
+/**
+ * Color Swatches
+ */
+.sg-color-list {
+	list-style-type: none;
+	margin: 0 0 1rem 0;
+	padding: 0 1rem;
+}
+
+.sg-color-list li {
+	text-align: center;
+	background-color: #f2f2f2;
+	border: 2px solid #ffffff;
+	padding: 0.5rem 1.0rem;
+}
+
+.sg-color-list li:hover {
+	color: #ffffff;
+	background: #a51e37;
+}
+
+.sg-color-list .sg-color-list__swatch {
+	display: block;
+	margin: -0.5rem -1.0rem 0.5rem -1.0rem;
+	height: 4rem;
+}
+
+.sg-color-list .sg-color-list__name {
+	display: block;
+	text-align: center;
+}
+
+.sg-color-list .sg-color-list__value {
+	display: block;
+	text-align: center;
+	font-size: 0.8rem;
+	line-height: 1.2;
+}
+
+.sg-color-list .sg-color-list__variable {
+	display: block;
+	text-align: center;
+	font-size: 0.8rem;
+	line-height: 1.2;
+}
+
+@media screen and (min-width: 768px) {
+	.sg-color-list:after {
+		content: "";
+		display: block;
+		height: 1px;
+		clear: both;
+	}
+
+	.sg-color-list li {
+		float: left;
+		width: 25%;
+	}
+}
+
+/**
+ * Darstellung von Icons
+ */
+.sg-icon-list {
+	list-style-type: none;
+	margin: 0 0 1rem 0;
+	padding: 0 1rem;
+}
+
+.sg-icon-list li {
+	text-align: center;
+	background-color: #f2f2f2;
+	border: 2px solid #ffffff;
+	padding: 0.5rem 1.0rem;
+}
+
+.sg-icon-list li:hover {
+	color: #ffffff;
+	background: #a51e37;
+}
+
+.sg-icon-list .sg-icon-list__name {
+	display: block;
+	text-align: center;
+}
+
+.sg-icon-list .sg-icon-list__description {
+	display: block;
+	text-align: center;
+	font-size: 0.8rem;
+	line-height: 1.2;
+	display: none;
+}
+.sg-icon-list .sg-icon-list__usecase {
+	display: block;
+	margin-bottom: 12px;
+	text-align: center;
+	font-size: 0.8rem;
+	line-height: 1.2;
+	display: none;
+}
+.sg-icon-list {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.sg-icon-list .sg-icon-list__description {
+	display: block;
+	margin-top: 12px;
+}
+
+
+.sg-icon-list .ut-icon {
+}
+
+@media screen and (min-width: 768px) {
+	.sg-icon-list:after {
+		content: "";
+		display: block;
+		height: 1px;
+		clear: both;
+	}
+
+	.sg-icon-list li {
+		float: left;
+		width: 20%;
+	}
+}
+
+.icon-socialmedia {
+	width: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+}
+
+/**
+* Darstellung von Abständen
+ */
+.sg-spacer .ut-spacer {
+	background-color: #f2f2f2;
+	background-image: repeating-linear-gradient(-45deg, transparent, transparent 6px, rgba(255, 255, 255, 1) 6px, rgba(255, 255, 255, 1) 12px);
+	margin: 1rem 0 2rem 0;
+}
+
+/**
+ * Code Highlighting
+ */
+.sg-code {
+	color: #a51e37;
+	display: inline-flex;
+	padding: 0 0.2em;
+	background-color: #f2f2f2;
+}
+
+/**
+ * Hinweis
+ */
+.sg-note {
+	display: block;
+	padding: 0.5rem 0rem 0.5rem 1.0rem;
+	border-left: solid 6px #eee;
+	font-size: 0.85rem;
+}
+.sg-note:before {
+	content:'Hinweis:';
+	display: block;
+	margin-bottom: 0.25rem;
+	font-weight: 600;
+}
+
+/**
+ * Hinweis: Varianten
+ */
+.sg-note--code {
+	border-color: orange;
+}
+.sg-note--code:before {
+	content: 'Implementierungshinweis:';
+}
+.sg-note--bitv {
+	border-color: green;
+}
+.sg-note--bitv:before {
+	content: 'Hinweis zur Barrierefreiheit:';
+}
+.sg-note--usage {
+	border-color: cornflowerblue;
+}
+.sg-note--usage:before {
+	content: 'Verwendungshinweis:';
+}
+
+
+/**
+ * Anpassung Bootstrap Grid
+ */
+.sg-row {
+}
+
+.sg-row--padding > div {
+	padding-right: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+
+.sg-grid {
+	margin-bottom: 1rem;
+}
+
+.sg-grid .sg-grid-content, .ut-grid .sg-grid-content {
+	background-color: #f2f2f2;
+	padding: 2rem 0.5rem;
+	text-align: center;
+	border: solid 1px #dddddd;
+}
+
+.sg-code + .ut-grid {
+	margin-top: 0.5rem;
+}
+
+.ut-grid + .sg-code {
+	margin-top: 1rem;
+}
+
+/**
+ * Code Darstellung
+ */
+.sg-pattern-extra-code {
+	min-height: 350px;
+}
+
+/**
+ * Darstellung Box-Varianten
+ */
+.sg-box-overview .ut-news-box {
+	margin-bottom: 1rem;
+}
+
+
+/**
+ * Darstellung Copyright-Overlays
+ */
+#atoms-image-copyright-overlay-sg-overview .ut-img__copyright--overlay,
+#atoms-image-copyright-popover .ut-img__copyright--overlay {
+	bottom: auto;
+}
+
+/**
+ * Darstellung Copyright-Aside
+ */
+#atoms-image-copyright-aside .ut-img__copyright--aside-rotate {
+	width:500px;
+}
+
+/**
+ * Darstellung Atom Slider-Image
+ */
+#atoms-image-slider-1920x515 .ut-img {
+	max-width: 100%;
+	height:auto;
+}
+
+
+

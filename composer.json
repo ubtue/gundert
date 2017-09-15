@@ -1,0 +1,18 @@
+{
+    "name": "ubtue/gundert",
+    "description": "A website which provides digital access to Hermann Gundert's assets.",
+    "authors": [
+        {
+            "name": "Mario Trojan",
+            "email": "mario.trojan@uni-tuebingen.de"
+        }
+    ],
+    "require": {
+        "components/bootstrap": "^3.3",
+	"components/jquery": "^1.6",
+	"components/jqueryui": "^1.12",
+	"components/modernizr": "^3.5",
+	"datatables/datatables": "^1.10",
+	"dimsemenov/magnific-popup": "^1.1"
+    }
+}

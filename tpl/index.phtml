@@ -5,40 +5,50 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- CSS includes -->
-        <link rel="stylesheet" type="text/css" href="http://utpatternlab.galileo-webagentur.de/public/css/style.css?1503585913" media="all">
-        <link rel="stylesheet" type="text/css" href="http://utpatternlab.galileo-webagentur.de/public/css/styleguide.css?1503585913" media="all">
-        <link rel="stylesheet" type="text/css" href="http://utpatternlab.galileo-webagentur.de/public/styleguide/css/styleguide.min.css" media="all">
-        <link rel="stylesheet" type="text/css" href="http://utpatternlab.galileo-webagentur.de/public/styleguide/css/prism-typeahead.min.css" media="all">
-        <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" media="all">
-        <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+        <!-- CSS includes (vendor) -->
+        <link rel="stylesheet" type="text/css" href="vendor/ut/css/style.css" media="all">
+        <link rel="stylesheet" type="text/css" href="vendor/ut/css/styleguide.css" media="all">
+        <link rel="stylesheet" type="text/css" href="vendor/ut/css/styleguide.min.css" media="all">
+        <link rel="stylesheet" type="text/css" href="vendor/ut/css/prism-typeahead.min.css" media="all">
+        <link rel="stylesheet" type="text/css" href="vendor/jquery-datatables/css/jquery.dataTables.min.css" media="all">
 
-        <!-- JS includes -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="http://unpkg.com/popper.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/yepnop/yepnope-2.0.0.min.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/modernizr.min.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/jquery-1.10.2.min.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/magnific-popup/jquery.magnific-popup.min.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/bootstrap/tooltip.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/bootstrap/popover.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/bootstrap/transition.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/bootstrap/carousel.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/bootstrap/collapse.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/bootstrap/dropdown.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor//bootstrap/tab.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/vendor/jquery-validation/jquery.validate.min.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/polyfill.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/viewport.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/multi-carousel.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/nav.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/reorganize.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/switchbar.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/lightbox.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/include.js" type="text/javascript"></script>
-        <script src="http://utpatternlab.galileo-webagentur.de/public/js/only-patternlab.js" type="text/javascript"></script>
-        <script src="http://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.js" type="text/javascript"></script>
+        <!-- CSS includes (local) -->
+        <link rel="stylesheet" type="text/css" href="css/ut.fixes.local.css" media="all">
+
+        <!-- JS includes (vendor) -->
+        <!-- jQuery -->
+        <script src="vendor/jquery/jquery.min.js" type="text/javascript"></script>
+        <script src="vendor/jquery-datatables/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="vendor/jquery-validation/jquery.validate.min.js" type="text/javascript"></script>
+
+        <!-- Bootstrap -->
+        <script src="vendor/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/carousel.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/collapse.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/dropdown.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/popover.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/tab.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/tooltip.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/transition.js" type="text/javascript"></script>
+
+        <!-- ut dependencies -->
+        <script src="vendor/magnific-popup/jquery.magnific-popup.min.js" type="text/javascript"></script>
+        <!--<script src="vendor/modernizr/modernizr.js" type="text/javascript"></script>-->
+        <script src="vendor/popper/popper.js" type="text/javascript"></script>
+        <script src="vendor/yepnope/yepnope-2.0.0.min.js" type="text/javascript"></script>
+
+        <!-- ut -->
+        <script src="vendor/ut/js/polyfill.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/viewport.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/multi-carousel.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/nav.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/reorganize.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/switchbar.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/lightbox.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/include.js" type="text/javascript"></script>
+        <script src="vendor/ut/js/only-patternlab.js" type="text/javascript"></script>
+
+        <!-- JS includes (local) -->
         <script src="js/gundert.js" type="text/javascript"></script>
         <script src="cache/displaytexts.js" type="text/javascript"></script>
     </head>

@@ -1,2 +1,5 @@
 nbproject
 public/cache/*
+
+composer.lock
+/vendor
