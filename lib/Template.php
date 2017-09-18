@@ -128,6 +128,7 @@ class Template {
                         'LANGUAGE_PICKER_DE'        => '?language=' . urlencode(Languages::CODE_DE) . '&page=' . urlencode($page),
                         'LANGUAGE_PICKER_EN'        => '?language=' . urlencode(Languages::CODE_EN) . '&page=' . urlencode($page),
                         'LANGUAGE_CODE'             => Session::getLanguage(),
+                        'SITEMAP'                   => Pagetree::buildSitemap(),
         ];
 
         // perform replacing

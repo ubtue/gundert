@@ -26,7 +26,7 @@ class Pagetree {
                     ];
 
     /**
-     * Build menu structure
+     * Build menu HTML structure
      *
      * @return string
      */
@@ -97,6 +97,56 @@ class Pagetree {
             default:
                 throw new Exception('menu level ' . $level . ' cannot be rendered with children');
         }
+    }
+
+    /**
+     * Build sitemap HTML structure
+     *
+     * @return string
+     */
+    static public function buildSitemap() {
+        $sitemap = '<nav class="ut-nav ut-nav--vertical">';
+        $sitemap .= '<ul id="ut-identifier--nav-vertical" class="ut-nav__list collapse">';
+        $sitemap .= self::iterate2('self::_buildSitemapNoChildren', 'self::_buildSitemapChildrenStart', 'self::_buildSitemapChildrenEnd');
+        $sitemap .= '</ul>';
+        $sitemap .= '</nav>';
+        return $sitemap;
+    }
+
+    /**
+     * Build a sitemap entry for an element without children (callback)
+     *
+     * @param string $page  name of the page
+     * @param int $level    level of the page
+     *
+     * @return string       HTML code for the menu entry
+     */
+    static private function _buildSitemapNoChildren($page, $level) {
+        return '<li class="ut-nav__item" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link" href="?page='.$page.'">' . Languages::getDisplayText($page) . '</a></li>';
+    }
+
+    /**
+     * Build start block for a sitemap element with children (callback before children)
+     *
+     * @param string $page  name of the page
+     * @param int $level    level of the page
+     *
+     * @return string
+     */
+    static private function _buildSitemapChildrenStart($page, $level) {
+        return '<li class="ut-nav__item" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link" href="?page='.$page.'">' . Languages::getDisplayText($page) . '</a></li><ul>';
+    }
+
+    /**
+     * Build start block for a sitemap element with children (callback after children)
+     *
+     * @param string $page  name of the page
+     * @param int $level    level of the page
+     *
+     * @return string
+     */
+    static private function _buildSitemapChildrenEnd($page, $level) {
+        return '</ul>';
     }
 
     /**
