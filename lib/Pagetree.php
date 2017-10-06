@@ -11,7 +11,7 @@ class Pagetree {
      * array with page tree, used for breadcrumbs and menu structure
      * @var array
      */
-    const PAGES =   [   'home' => ['scope', 'staff', 'acknowledgements', 'external_consultants', 'imprint'],
+    const PAGES =   [   'home' => ['scope', 'staff', 'acknowledgements', 'imprint'],
                         'materials' => ['printed_all', 'manuscripts_all', 'publications'],
                         'material_by_language' => [ 'malayalam' => ['malayalam_print', 'malayalam_manuscript'],
                                                     'kannada' => ['kannada_print', 'kannada_manuscript'],
