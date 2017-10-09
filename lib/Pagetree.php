@@ -22,7 +22,7 @@ class Pagetree {
                                                 ],
                         'material_by_genre' => ['prose', 'proverbs', 'grammars_and_dictionaries', 'religious_works', 'notebooks_and_drafts', 'records_archive'],
                         'activities',
-                        'links' => ['digital_catalogue', 'digital_humanities_tools', 'etexts'],
+                        'links' => ['digital_catalogues', 'digital_humanities_tools', 'etexts'],
                     ];
 
     /**
