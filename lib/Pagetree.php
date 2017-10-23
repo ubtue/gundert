@@ -296,28 +296,36 @@ class Pagetree {
 
     /**
      * Init pagetree from Xml file
+     * using cache file if exists, else it will be generated
      *
      * @param string $xmlPath
      */
     static public function initPages($xmlPath) {
-        $pages = [];
+        $cachePath = DIR_PUBLIC_CACHE . 'pages.cache';
 
-        $dom = new \DOMDocument();
-        $dom->load($xmlPath);
+        if (!is_file($cachePath)) {
+            $pages = [];
 
-        $page = $dom->documentElement->firstChild;
-        while ($page != null) {
-            if ($page instanceof \DOMElement) {
-                list($id, $subpages) = self::_initPagesRecursive($page);
-                if (count($subpages) == 0) {
-                    $pages[] = $id;
-                } else {
-                    $pages[$id] = $subpages;
+            $dom = new \DOMDocument();
+            $dom->load($xmlPath);
+
+            $page = $dom->documentElement->firstChild;
+            while ($page != null) {
+                if ($page instanceof \DOMElement) {
+                    list($id, $subpages) = self::_initPagesRecursive($page);
+                    if (count($subpages) == 0) {
+                        $pages[] = $id;
+                    } else {
+                        $pages[$id] = $subpages;
+                    }
                 }
+                $page = $page->nextSibling;
             }
-            $page = $page->nextSibling;
+
+            file_put_contents($cachePath, serialize($pages));
         }
-        self::$_pages = $pages;
+
+        self::$_pages = unserialize(file_get_contents($cachePath));
     }
 
     /**
@@ -334,11 +342,11 @@ class Pagetree {
         $subpage = $page->firstChild;
         while ($subpage != null) {
             if ($subpage instanceof \DOMElement) {
-                list($subpage_id, $subpage_children) = self::_initPagesRecursive($subpage);
-                if (count($subpage_children) == 0) {
-                    $subpages[] = $subpage_id;
+                list($subpageId, $subpageChildren) = self::_initPagesRecursive($subpage);
+                if (count($subpageChildren) == 0) {
+                    $subpages[] = $subpageId;
                 } else {
-                    $subpages[$subpage_id] = $subpage_children;
+                    $subpages[$subpageId] = $subpageChildren;
                 }
             }
             $subpage = $subpage->nextSibling;
