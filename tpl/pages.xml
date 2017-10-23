@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<pages>
+    <page id="home">
+        <page id="scope"/>
+        <page id="staff"/>
+        <page id="acknowledgements"/>
+        <page id="imprint"/>
+    </page>
+    <page id="materials">
+        <page id="printed_all"/>
+        <page id="manuscripts_all"/>
+        <page id="publications"/>
+    </page>
+    <page id="material_by_language">
+        <page id="malayalam">
+            <page id="malayalam_print"/>
+            <page id="malayalam_manuscript"/>
+        </page>
+        <page id="kannada">
+            <page id="kannada_print"/>
+            <page id="kannada_manuscript"/>
+        </page>
+        <page id="tamil">
+            <page id="tamil_print"/>
+            <page id="tamil_manuscript"/>
+        </page>
+        <page id="telugu">
+            <page id="telugu_print"/>
+            <page id="telugu_manuscript"/>
+        </page>
+        <page id="german">
+            <page id="german_print"/>
+            <page id="german_manuscript"/>
+        </page>
+        <page id="english">
+            <page id="english_print"/>
+            <page id="english_manuscript"/>
+        </page>
+    </page>
+    <page id="material_by_genre">
+        <page id="prose"/>
+        <page id="proverbs"/>
+        <page id="grammars_and_dictionaries"/>
+        <page id="religious_works"/>
+        <page id="notebooks_and_drafts"/>
+        <page id="records_archive"/>
+    </page>
+    <page id="activities"/>
+    <page id="links">
+        <page id="digital_catalogues"/>
+        <page id="digital_humanities_tools"/>
+        <page id="etexts"/>
+    </page>
+</pages>

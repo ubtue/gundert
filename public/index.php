@@ -28,6 +28,7 @@
     }
 
     // render selected page
+    Pagetree::initPages(DIR_TPL . 'pages.xml');
     $page = Pagetree::PAGE_DEFAULT;
     if (isset($_GET['page'])) {
         $page = $_GET['page'];

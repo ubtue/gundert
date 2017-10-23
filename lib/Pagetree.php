@@ -11,19 +11,7 @@ class Pagetree {
      * array with page tree, used for breadcrumbs and menu structure
      * @var array
      */
-    const PAGES =   [   'home' => ['scope', 'staff', 'acknowledgements', 'imprint'],
-                        'materials' => ['printed_all', 'manuscripts_all', 'publications'],
-                        'material_by_language' => [ 'malayalam' => ['malayalam_print', 'malayalam_manuscript'],
-                                                    'kannada' => ['kannada_print', 'kannada_manuscript'],
-                                                    'tamil' => ['tamil_print', 'tamil_manuscript'],
-                                                    'telugu' => ['telugu_print', 'telugu_manuscript'],
-                                                    'german' => ['german_print', 'german_manuscript'],
-                                                    'english' => ['english_print', 'english_manuscript'],
-                                                ],
-                        'material_by_genre' => ['prose', 'proverbs', 'grammars_and_dictionaries', 'religious_works', 'notebooks_and_drafts', 'records_archive'],
-                        'activities',
-                        'links' => ['digital_catalogues', 'digital_humanities_tools', 'etexts'],
-                    ];
+    static $_pages;
 
     /**
      * Build menu HTML structure
@@ -177,7 +165,7 @@ class Pagetree {
      */
     static public function getBreadcrumbPath($page, $localized=false) {
         $return = [];
-        self::_getBreadcrumbPath($page, self::PAGES, $return);
+        self::_getBreadcrumbPath($page, self::getPages(), $return);
         $return = array_reverse($return);
 
         if ($localized) {
@@ -223,7 +211,7 @@ class Pagetree {
      * @return array
      */
     static public function getChildren($page) {
-        return self::_getChildren($page, self::PAGES);
+        return self::_getChildren($page, self::getPages());
     }
 
     /**
@@ -252,6 +240,18 @@ class Pagetree {
     }
 
     /**
+     * Get pagetree
+     *
+     * @return array
+     */
+    static public function getPages() {
+        if (!isset(self::$_pages)) {
+            throw new \Exception('Pagetree not available!');
+        }
+        return self::$_pages;
+    }
+
+    /**
      * Get list of page and all siblings
      *
      * @param string $page
@@ -260,7 +260,7 @@ class Pagetree {
      */
     static public function getPageSiblings($page) {
         $pagePath = array_reverse(self::getBreadCrumbPath($page));
-        $subtree = self::PAGES;
+        $subtree = self::getPages();
         do {
             $page = array_pop($pagePath);
             if (count($pagePath) > 0) {
@@ -278,7 +278,6 @@ class Pagetree {
         }
 
         return $siblings;
-
     }
 
     /**
@@ -296,11 +295,64 @@ class Pagetree {
     }
 
     /**
+     * Init pagetree from Xml file
+     *
+     * @param string $xmlPath
+     */
+    static public function initPages($xmlPath) {
+        $pages = [];
+
+        $dom = new \DOMDocument();
+        $dom->load($xmlPath);
+
+        $page = $dom->documentElement->firstChild;
+        while ($page != null) {
+            if ($page instanceof \DOMElement) {
+                list($id, $subpages) = self::_initPagesRecursive($page);
+                if (count($subpages) == 0) {
+                    $pages[] = $id;
+                } else {
+                    $pages[$id] = $subpages;
+                }
+            }
+            $page = $page->nextSibling;
+        }
+        self::$_pages = $pages;
+    }
+
+    /**
+     * Get all subpages (recursive) for a page
+     *
+     * @param \DOMElement $page
+     *
+     * @return [id, subpages]
+     */
+    static protected function _initPagesRecursive(\DOMElement $page) {
+        $id = $page->getAttribute('id');
+        $subpages = [];
+
+        $subpage = $page->firstChild;
+        while ($subpage != null) {
+            if ($subpage instanceof \DOMElement) {
+                list($subpage_id, $subpage_children) = self::_initPagesRecursive($subpage);
+                if (count($subpage_children) == 0) {
+                    $subpages[] = $subpage_id;
+                } else {
+                    $subpages[$subpage_id] = $subpage_children;
+                }
+            }
+            $subpage = $subpage->nextSibling;
+        }
+
+        return [$id, $subpages];
+    }
+
+    /**
      * Iteration over pagetree with single callback for each page
      * @param string $callback
      */
     static public function iterate($callback) {
-        return self::_iterate(self::PAGES, 1, $callback);
+        return self::_iterate(self::getPages(), 1, $callback);
     }
 
     /**
@@ -336,7 +388,7 @@ class Pagetree {
      * @return string
      */
     static public function iterate2($callbackNoChildren, $callbakChildrenStart, $callbackChildrenEnd) {
-        return self::_iterate2(self::PAGES, 1, $callbackNoChildren, $callbakChildrenStart, $callbackChildrenEnd);
+        return self::_iterate2(self::getPages(), 1, $callbackNoChildren, $callbakChildrenStart, $callbackChildrenEnd);
     }
 
     /**
