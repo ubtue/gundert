@@ -14,6 +14,18 @@ class Pagetree {
     static $_pages;
 
     /**
+     * Id with page id to search for (for getPage callback)
+     * @var int
+     */
+    static $_callbackPageId;
+
+    /**
+     * Result with found Page object (for getPage callback)
+     * @var Page
+     */
+    static $_callbackResult;
+
+    /**
      * Build menu HTML structure
      *
      * @return string
@@ -28,62 +40,59 @@ class Pagetree {
     /**
      * Build a menu entry for an element without children (callback)
      *
-     * @param string $page  name of the page
-     * @param int $level    level of the page
+     * @param Page $page    page object
      *
      * @return string       HTML code for the menu entry
      * @throws Exception
      */
-    static private function _buildMenuNoChildren($page, $level) {
-        switch ($level) {
+    static private function _buildMenuNoChildren(Page $page) {
+        switch ($page->getLevel()) {
             case 1:
-                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
+                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
             case 2:
-                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
+                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
             case 3:
-                return '<li class="ut-nav__item ut-nav__item--level-3" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link ut-nav__link--level-3" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a></li>';
+                return '<li class="ut-nav__item ut-nav__item--level-3" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-3" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
             default:
-                throw new Exception('menu level ' . $level . ' cannot be rendered');
+                throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered');
         }
     }
 
     /**
      * Build start block for a menu element with children (callback before children)
      *
-     * @param string $page  name of the page
-     * @param int $level    level of the page
+     * @param Page $page    page object
      *
      * @return string
      * @throws Exception
      */
-    static private function _buildMenuChildrenStart($page, $level) {
-        switch ($level) {
+    static private function _buildMenuChildrenStart(Page $page) {
+        switch ($page->getLevel()) {
             case 1:
-                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.self::getPageSiblingNumber($page).'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
+                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
             case 2:
-                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.self::getPageSiblingNumber($page).'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page.'">'.Languages::getDisplayText($page).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
+                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
             default:
-                throw new Exception('menu level ' . $level . ' cannot be rendered with children');
+                throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered with children');
         }
     }
 
     /**
      * Build start block for a menu element with children (callback after children)
      *
-     * @param string $page  name of the page
-     * @param int $level    level of the page
+     * @param Page $page    page object
      *
      * @return string
      * @throws Exception
      */
-    static private function _buildMenuChildrenEnd($page, $level) {
-        switch ($level) {
+    static private function _buildMenuChildrenEnd(Page $page) {
+        switch ($page->getLevel()) {
             case 1:
                 return '</ul></li>';
             case 2:
                 return '</ul></li>';
             default:
-                throw new Exception('menu level ' . $level . ' cannot be rendered with children');
+                throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered with children');
         }
     }
 
@@ -104,36 +113,34 @@ class Pagetree {
     /**
      * Build a sitemap entry for an element without children (callback)
      *
-     * @param string $page  name of the page
-     * @param int $level    level of the page
+     * @param Page $page    page object
      *
      * @return string       HTML code for the menu entry
      */
-    static private function _buildSitemapNoChildren($page, $level) {
-        return '<li class="ut-nav__item" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link" href="?page='.$page.'">' . Languages::getDisplayText($page) . '</a></li>';
+    static private function _buildSitemapNoChildren(Page $page) {
+        return '<li class="ut-nav__item" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link" href="?page='.$page->getId().'">' . Languages::getDisplayText($page->getId()) . '</a></li>';
     }
 
     /**
      * Build start block for a sitemap element with children (callback before children)
      *
-     * @param string $page  name of the page
-     * @param int $level    level of the page
+     * @param Page $page    page object
      *
      * @return string
      */
-    static private function _buildSitemapChildrenStart($page, $level) {
-        return '<li class="ut-nav__item" data-level-count="'.self::getPageSiblingNumber($page).'"><a class="ut-link ut-nav__link" href="?page='.$page.'">' . Languages::getDisplayText($page) . '</a></li><ul>';
+    static private function _buildSitemapChildrenStart(Page $page) {
+        return '<li class="ut-nav__item" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link" href="?page='.$page->getId().'">' . Languages::getDisplayText($page->getId()) . '</a></li><ul>';
     }
 
     /**
      * Build start block for a sitemap element with children (callback after children)
      *
-     * @param string $page  name of the page
+     * @param Page $page    page object
      * @param int $level    level of the page
      *
      * @return string
      */
-    static private function _buildSitemapChildrenEnd($page, $level) {
+    static private function _buildSitemapChildrenEnd(Page $page) {
         return '</ul>';
     }
 
@@ -147,23 +154,21 @@ class Pagetree {
     /**
      * Create empty template if the page doesnt exist yet (callback function)
      *
-     * @param string $page
-     * @param int $level
-     * @param bool $has_children
+     * @param Page $page
      */
-    static private function _createTemplate($page, $level, $has_children) {
-        Template::create($page);
+    static private function _createTemplate(Page $page) {
+        Template::create($page->getId());
     }
 
     /**
      * Get page path (e.g. for breadcrumb)
      *
-     * @param string $page
+     * @param Page $page        page
      * @param bool $localized   translated page names?
      *
      * @return array
      */
-    static public function getBreadcrumbPath($page, $localized=false) {
+    static public function getBreadcrumbPath(Page $page, $localized=false) {
         $return = [];
         self::_getBreadcrumbPath($page, self::getPages(), $return);
         $return = array_reverse($return);
@@ -171,7 +176,7 @@ class Pagetree {
         if ($localized) {
             $return2 = [];
             foreach ($return as $page) {
-                $return2[] = Languages::getDisplayText($page);
+                $return2[] = Languages::getDisplayText($page->getId());
             }
             $return = $return2;
         }
@@ -182,12 +187,12 @@ class Pagetree {
     /**
      * Helper function for recursion
      *
-     * @param string $page
+     * @param Page $page
      * @param array $subtree
      * @param array &$return
      * @return boolean
      */
-    static private function _getBreadcrumbPath($page, $subtree, &$return) {
+    static private function _getBreadcrumbPath(Page $page, $subtree, &$return) {
         foreach ($subtree as $key => $value) {
             if (is_array($value)) {
                 if ($key == $page) {
@@ -206,40 +211,6 @@ class Pagetree {
     }
 
     /**
-     * Get children of the given page (empty array if none)
-     *
-     * @return array
-     */
-    static public function getChildren($page) {
-        return self::_getChildren($page, self::getPages());
-    }
-
-    /**
-     * recursion: find children of the page inside the subtree
-     *
-     * @param string $page
-     * @param array $subtree
-     *
-     * @return array
-     */
-    static private function _getChildren($page, $subtree) {
-        foreach ($subtree as $key => $value) {
-            if ($key === $page) {
-                return $value;
-            } elseif ($value === $page) {
-                return [];
-            } elseif (is_array($value)) {
-                $children = self::_getChildren($page, $value);
-                if (count($children) > 0) {
-                    return $children;
-                }
-            }
-        }
-
-        return [];
-    }
-
-    /**
      * Get pagetree
      *
      * @return array
@@ -252,13 +223,38 @@ class Pagetree {
     }
 
     /**
-     * Get list of page and all siblings
+     * Get page with a special id
      *
-     * @param string $page
+     * @param id $id
      *
      * @return array
      */
-    static public function getPageSiblings($page) {
+    static public function getPage($id) {
+        self::$_callbackPageId = $id;
+        self::$_callbackResult = null;
+        self::iterate('self::_getPageCallback');
+        return self::$_callbackResult;
+    }
+
+    /**
+     * Get page with a special id (callback function)
+     *
+     * @param Page $page
+     */
+    static private function _getPageCallback(Page $page) {
+        if ($page->getId() == self::$_callbackPageId) {
+            self::$_callbackResult = $page;
+        }
+    }
+
+    /**
+     * Get list of page and all siblings
+     *
+     * @param Page $page
+     *
+     * @return array
+     */
+    static public function getPageSiblings(Page $page) {
         $pagePath = array_reverse(self::getBreadCrumbPath($page));
         $subtree = self::getPages();
         do {
@@ -281,20 +277,6 @@ class Pagetree {
     }
 
     /**
-     * Get number of the page inside the current level of its parent
-     */
-    static public function getPageSiblingNumber($page) {
-        $siblings = self::getPageSiblings($page);
-        $i=0;
-        foreach ($siblings as $sibling) {
-            $i++;
-            if ($sibling == $page) {
-                return $i;
-            }
-        }
-    }
-
-    /**
      * Init pagetree from Xml file
      * using cache file if exists, else it will be generated
      *
@@ -305,21 +287,21 @@ class Pagetree {
 
         if (!is_file($cachePath)) {
             $pages = [];
+            $level = 1;
+            $siblingNumber = 1;
 
             $dom = new \DOMDocument();
             $dom->load($xmlPath);
 
-            $page = $dom->documentElement->firstChild;
-            while ($page != null) {
-                if ($page instanceof \DOMElement) {
-                    list($id, $subpages) = self::_initPagesRecursive($page);
-                    if (count($subpages) == 0) {
-                        $pages[] = $id;
-                    } else {
-                        $pages[$id] = $subpages;
-                    }
+            $node = $dom->documentElement->firstChild;
+            while ($node != null) {
+                if ($node instanceof \DOMElement) {
+                    list($id, $subpages) = self::_initPagesRecursive($node, $level+1);
+                    $page = new Page($id, $level, $siblingNumber, $subpages);
+                    ++$siblingNumber;
+                    $pages[$id] = $page;
                 }
-                $page = $page->nextSibling;
+                $node = $node->nextSibling;
             }
 
             file_put_contents($cachePath, serialize($pages));
@@ -332,24 +314,24 @@ class Pagetree {
      * Get all subpages (recursive) for a page
      *
      * @param \DOMElement $page
+     * @param int $level
      *
      * @return [id, subpages]
      */
-    static protected function _initPagesRecursive(\DOMElement $page) {
+    static protected function _initPagesRecursive(\DOMElement $page, $level) {
         $id = $page->getAttribute('id');
+        $siblingNumber = 1;
         $subpages = [];
 
-        $subpage = $page->firstChild;
-        while ($subpage != null) {
-            if ($subpage instanceof \DOMElement) {
-                list($subpageId, $subpageChildren) = self::_initPagesRecursive($subpage);
-                if (count($subpageChildren) == 0) {
-                    $subpages[] = $subpageId;
-                } else {
-                    $subpages[$subpageId] = $subpageChildren;
-                }
+        $node = $page->firstChild;
+        while ($node != null) {
+            if ($node instanceof \DOMElement) {
+                list($subpageId, $subpageChildren) = self::_initPagesRecursive($node, $level+1);
+                $subpage = new Page($subpageId, $level, $siblingNumber, $subpageChildren);
+                ++$siblingNumber;
+                $subpages[$subpage->getId()] = $subpage;
             }
-            $subpage = $subpage->nextSibling;
+            $node = $node->nextSibling;
         }
 
         return [$id, $subpages];
@@ -360,27 +342,22 @@ class Pagetree {
      * @param string $callback
      */
     static public function iterate($callback) {
-        return self::_iterate(self::getPages(), 1, $callback);
+        return self::_iterate(self::getPages(), $callback);
     }
 
     /**
      * Recursive helper function for iterations (single callback)
      *
      * @param array $subtree
-     * @param int $level
      * @param function $callback
      *
      * @return string
      */
-    static private function _iterate($subtree, $level, $callback) {
+    static private function _iterate($subtree, $callback) {
         $return = '';
-        foreach ($subtree as $key => $value) {
-            if (is_array($value)) {
-                $return .= call_user_func($callback, $key, $level, true);
-                $return .= self::_iterate($value, $level+1, $callback);
-            } else {
-                $return .= call_user_func($callback, $value, $level, false);
-            }
+        foreach ($subtree as $pageId => $page) {
+            $return .= call_user_func($callback, $page);
+            $return .= self::_iterate($page->getChildren(), $callback);
         }
         return $return;
     }
@@ -390,35 +367,34 @@ class Pagetree {
      * dependant on whether an element has children or not
      *
      * @param function $callbackNoChildren
-     * @param function $callbakChildrenStart
+     * @param function $callbackChildrenStart
      * @param function $callbackChildrenEnd
      *
      * @return string
      */
-    static public function iterate2($callbackNoChildren, $callbakChildrenStart, $callbackChildrenEnd) {
-        return self::_iterate2(self::getPages(), 1, $callbackNoChildren, $callbakChildrenStart, $callbackChildrenEnd);
+    static public function iterate2($callbackNoChildren, $callbackChildrenStart, $callbackChildrenEnd) {
+        return self::_iterate2(self::getPages(), $callbackNoChildren, $callbackChildrenStart, $callbackChildrenEnd);
     }
 
     /**
      * Recursive helper function for iterations (multiple callbacks)
      *
      * @param array $subtree
-     * @param int $level
      * @param function $callbackNoChildren
-     * @param function $callbakChildrenStart
+     * @param function $callbackChildrenStart
      * @param function $callbackChildrenEnd
      *
      * @return string
      */
-    static private function _iterate2($subtree, $level, $callbackNoChildren, $callbakChildrenStart, $callbackChildrenEnd) {
+    static private function _iterate2($subtree, $callbackNoChildren, $callbackChildrenStart, $callbackChildrenEnd) {
         $return = '';
-        foreach ($subtree as $key => $value) {
-            if (is_array($value)) {
-                $return .= call_user_func($callbakChildrenStart, $key, $level);
-                $return .= self::_iterate2($value, $level+1, $callbackNoChildren, $callbakChildrenStart, $callbackChildrenEnd);
-                $return .= call_user_func($callbackChildrenEnd, $key, $level);
+        foreach ($subtree as $pageId => $page) {
+            if ($page->hasChildren()) {
+                $return .= call_user_func($callbackChildrenStart, $page);
+                $return .= self::_iterate2($page->getChildren(), $callbackNoChildren, $callbackChildrenStart, $callbackChildrenEnd);
+                $return .= call_user_func($callbackChildrenEnd, $page);
             } else {
-                $return .= call_user_func($callbackNoChildren, $value, $level);
+                $return .= call_user_func($callbackNoChildren, $page);
             }
         }
         return $return;

@@ -29,10 +29,11 @@
 
     // render selected page
     Pagetree::initPages(DIR_TPL . 'pages.xml');
-    $page = Pagetree::PAGE_DEFAULT;
+    $pageId = Pagetree::PAGE_DEFAULT;
     if (isset($_GET['page'])) {
-        $page = $_GET['page'];
+        $pageId = $_GET['page'];
     }
+    $page = Pagetree::getPage($pageId);
     Template::render($page);
 
 ?>

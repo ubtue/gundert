@@ -7,9 +7,9 @@ class Template {
     /**
      * Create an empty template for the page (if not existing)
      *
-     * @param string $page
+     * @param Page $page
      */
-    static public function create($page) {
+    static public function create(Page $page) {
         if (!self::exists($page)) {
             $path = self::getPath($page);
             touch($path);
@@ -19,22 +19,22 @@ class Template {
     /**
      * Check if the template file for the page already exists
      *
-     * @param string $page
+     * @param Page $page
      *
      * @return bool
      */
-    static public function exists($page) {
+    static public function exists(Page $page) {
         return is_file(self::getPath($page));
     }
 
     /**
      * Get contents of template file for a page
      *
-     * @param string $page
+     * @param Page $page
      *
      * @return string
      */
-    static public function getContents($page) {
+    static public function getContents(Page $page) {
         return file_get_contents(self::getPath($page));
     }
 
@@ -58,15 +58,15 @@ class Template {
      * Get path of the template file for a page
      * (also consider interface language)
      *
-     * @param string $page
+     * @param Page $page
      *
      * @return string
      */
-    static public function getPath($page) {
+    static public function getPath(Page $page) {
         $language = Session::getLanguage();
-        $pathDefault = DIR_TPL_PAGES . $page . '.phtml';
+        $pathDefault = DIR_TPL_PAGES . $page->getId() . '.phtml';
         if ($language != Languages::CODE_DEFAULT) {
-            $pathLanguage = DIR_TPL_PAGES . $page . '-' . $language . '.phtml';
+            $pathLanguage = DIR_TPL_PAGES . $page->getId() . '-' . $language . '.phtml';
             if (is_file($pathLanguage)) {
                 return $pathLanguage;
             }
@@ -78,9 +78,9 @@ class Template {
      * Render the whole website including the given page template.
      * The page template should contain areas and markers, similar to typo3 templates.
      *
-     * @param string $page
+     * @param Page $page
      */
-    static public function render($page=null) {
+    static public function render(Page $page=null) {
         // get raw template content
         $contents = self::_getMainContents();
 
@@ -96,10 +96,10 @@ class Template {
      * Replace template areas with generated content
      * <!-- ###AREA### Start --><!-- ###AREA### End -->
      *
-     * @param string $page
+     * @param Page $page
      * @param string $contents
      */
-    static private function _renderAreas($page, &$contents) {
+    static private function _renderAreas(Page $page, &$contents) {
         // setup areas
         $areas =    [   'TOPNAV'        => Pagetree::buildMenu()];
 
@@ -108,7 +108,7 @@ class Template {
             if (self::exists($page)) {
                 $areas['CONTENTMIDDLE'] = self::getContents($page);
             } else {
-                $children = Pagetree::getChildren($page);
+                $children = $page->getChildren();
                 foreach ($children as $child) {
                     $areas['CONTENTMIDDLE'] .= self::getContents($child);
                 }
@@ -125,14 +125,14 @@ class Template {
      * Replace template markers with generated content
      * ###MARKER###
      *
-     * @param string $page
+     * @param Page $page
      * @param string $contents
      */
-    static private function _renderMarkers($page, &$contents) {
+    static private function _renderMarkers(Page $page, &$contents) {
         // setup markers
         $markers =  [   'BREADCRUMB'                => implode(' &gt; ', Pagetree::getBreadcrumbPath($page, true)),
-                        'LANGUAGE_PICKER_DE'        => '?language=' . urlencode(Languages::CODE_DE) . '&page=' . urlencode($page),
-                        'LANGUAGE_PICKER_EN'        => '?language=' . urlencode(Languages::CODE_EN) . '&page=' . urlencode($page),
+                        'LANGUAGE_PICKER_DE'        => '?language=' . urlencode(Languages::CODE_DE) . '&page=' . urlencode($page->getId()),
+                        'LANGUAGE_PICKER_EN'        => '?language=' . urlencode(Languages::CODE_EN) . '&page=' . urlencode($page->getId()),
                         'LANGUAGE_CODE'             => Session::getLanguage(),
                         'LANGUAGE_CODE_LOWER'       => mb_strtolower(Session::getLanguage()),
                         'LANGUAGE_CODE_UPPER'       => mb_strtoupper(Session::getLanguage()),

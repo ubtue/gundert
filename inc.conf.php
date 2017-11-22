@@ -17,6 +17,7 @@
 
     // includes
     require(DIR_LIB . 'Languages.php');
+    require(DIR_LIB . 'Page.php');
     require(DIR_LIB . 'Pagetree.php');
     require(DIR_LIB . 'Session.php');
     require(DIR_LIB . 'Template.php');
