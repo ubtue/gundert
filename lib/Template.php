@@ -103,10 +103,16 @@ class Template {
         // setup areas
         $areas =    [   'TOPNAV'        => Pagetree::buildMenu()];
 
-        if ($page != null && self::exists($page)) {
-            $areas['CONTENTMIDDLE'] = self::getContents($page);
-        } else {
-            $areas['CONTENTMIDDLE'] = '';
+        $areas['CONTENTMIDDLE'] = '';
+        if ($page != null) {
+            if (self::exists($page)) {
+                $areas['CONTENTMIDDLE'] = self::getContents($page);
+            } else {
+                $children = Pagetree::getChildren($page);
+                foreach ($children as $child) {
+                    $areas['CONTENTMIDDLE'] .= self::getContents($child);
+                }
+            }
         }
 
         // replace areas
@@ -128,6 +134,8 @@ class Template {
                         'LANGUAGE_PICKER_DE'        => '?language=' . urlencode(Languages::CODE_DE) . '&page=' . urlencode($page),
                         'LANGUAGE_PICKER_EN'        => '?language=' . urlencode(Languages::CODE_EN) . '&page=' . urlencode($page),
                         'LANGUAGE_CODE'             => Session::getLanguage(),
+                        'LANGUAGE_CODE_LOWER'       => mb_strtolower(Session::getLanguage()),
+                        'LANGUAGE_CODE_UPPER'       => mb_strtoupper(Session::getLanguage()),
                         'SITEMAP'                   => Pagetree::buildSitemap(),
         ];
 
