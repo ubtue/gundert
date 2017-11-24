@@ -6,38 +6,38 @@
         <page id="acknowledgements"/>
         <page id="imprint"/>
     </page>
-    <page id="materials">
+    <page id="materials" callable="false">
         <page id="printed_all"/>
         <page id="manuscripts_all"/>
         <page id="publications"/>
     </page>
-    <page id="material_by_language">
-        <page id="malayalam">
+    <page id="material_by_language" callable="false">
+        <page id="malayalam" callable="false">
             <page id="malayalam_print"/>
             <page id="malayalam_manuscript"/>
         </page>
-        <page id="kannada">
+        <page id="kannada" callable="false">
             <page id="kannada_print"/>
             <page id="kannada_manuscript"/>
         </page>
-        <page id="tamil">
+        <page id="tamil" callable="false">
             <page id="tamil_print"/>
             <page id="tamil_manuscript"/>
         </page>
-        <page id="telugu">
+        <page id="telugu" callable="false">
             <page id="telugu_print"/>
             <page id="telugu_manuscript"/>
         </page>
-        <page id="german">
+        <page id="german" callable="false">
             <page id="german_print"/>
             <page id="german_manuscript"/>
         </page>
-        <page id="english">
+        <page id="english" callable="false">
             <page id="english_print"/>
             <page id="english_manuscript"/>
         </page>
     </page>
-    <page id="material_by_genre">
+    <page id="material_by_genre" callable="false">
         <page id="prose"/>
         <page id="proverbs"/>
         <page id="grammars_and_dictionaries"/>
