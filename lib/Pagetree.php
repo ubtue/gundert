@@ -69,9 +69,17 @@ class Pagetree {
     static private function _buildMenuChildrenStart(Page $page) {
         switch ($page->getLevel()) {
             case 1:
-                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
+                if ($page->isCallable()) {
+                    return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
+                } else {
+                    return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1 ut-nav__link--is-disabled">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
+                }
             case 2:
-                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
+                if ($page->isCallable()) {
+                    return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
+                } else {
+                    return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2 ut-nav__link--is-disabled">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
+                }
             default:
                 throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered with children');
         }

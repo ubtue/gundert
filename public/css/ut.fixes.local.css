@@ -2,3 +2,8 @@
     font-family: 'UT Icons';
     src: url('../fonts/uticonfont.woff') format('woff');
 }
+
+/* don't use hover color if link is disabled' */
+.ut-nav__link--level-2.ut-nav__link--is-disabled:hover {
+    color: #565c65 !important ;
+}
