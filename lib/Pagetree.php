@@ -251,23 +251,14 @@ class Pagetree {
      */
     static public function getPageSiblings(Page $page) {
         $pagePath = array_reverse(self::getBreadCrumbPath($page));
-        $subtree = self::getPages();
+        $siblings = self::getPages();
         do {
-            $page = array_pop($pagePath);
-            if (count($pagePath) > 0) {
-                $subtree = $subtree[$page];
+            $parentPage = array_pop($pagePath);
+            print "parent: " . $parentPage->getId() . "<br/>\n";
+            if ($page->getId() != $parentPage->getId() && $parentPage->hasChildren()) {
+                $siblings = $parentPage->getChildren();
             }
         } while (count($pagePath) > 0);
-
-        $siblings = array();
-        foreach ($subtree as $key => $value) {
-            if (is_array($value)) {
-                $siblings[] = $key;
-            } else {
-                $siblings[] = $value;
-            }
-        }
-
         return $siblings;
     }
 
