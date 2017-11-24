@@ -110,7 +110,9 @@ class Template {
             } else {
                 $children = $page->getChildren();
                 foreach ($children as $child) {
-                    $areas['CONTENTMIDDLE'] .= self::getContents($child);
+                    $child_contents = self::getContents($child);
+                    self::_renderMarkers($child, $child_contents);
+                    $areas['CONTENTMIDDLE'] .= $child_contents;
                 }
             }
         }
