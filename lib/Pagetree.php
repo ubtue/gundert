@@ -193,17 +193,12 @@ class Pagetree {
      * @return boolean
      */
     static private function _getBreadcrumbPath(Page $page, $subtree, &$return) {
-        foreach ($subtree as $key => $value) {
-            if (is_array($value)) {
-                if ($key == $page) {
-                    $return[] = $key;
-                    return true;
-                } elseif (self::_getBreadcrumbPath($page, $value, $return)) {
-                    $return[] = $key;
-                    return true;
-                }
-            } elseif ($page == $value) {
-                $return[] = $value;
+        foreach ($subtree as $pageFromTree) {
+            if ($pageFromTree->getId() == $page->getId()) {
+                $return[] = $pageFromTree;
+                return true;
+            } elseif ($pageFromTree->hasChildren() && self::_getBreadcrumbPath($page, $pageFromTree->getChildren(), $return)) {
+                $return[] = $pageFromTree;
                 return true;
             }
         }
