@@ -139,7 +139,7 @@ var Gundert = {
         //var fields = ["title", "type", "author", "projectname"];
 
         // headline
-        table += '<h1>'+category+'</h1>';
+        table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
 
         // table header
         table += '<table id="gundert-searchresult" class="ut-table gundert-language-'+language+'">';

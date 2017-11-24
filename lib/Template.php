@@ -136,6 +136,7 @@ class Template {
                         'LANGUAGE_CODE'             => Session::getLanguage(),
                         'LANGUAGE_CODE_LOWER'       => mb_strtolower(Session::getLanguage()),
                         'LANGUAGE_CODE_UPPER'       => mb_strtoupper(Session::getLanguage()),
+                        'PAGENAME'                  => $page->getId(),
                         'SITEMAP'                   => Pagetree::buildSitemap(),
         ];
 
