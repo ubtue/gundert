@@ -117,6 +117,11 @@ class Template {
             }
         }
 
+        $footer = new Page('footer', 0, 0);
+        if (self::exists($footer)) {
+            $areas['FOOTER'] = self::getContents($footer);
+        }
+
         // replace areas
         foreach ($areas as $key => $value) {
             $contents = preg_replace('"<!-- ###'.$key.'### Start -->(.*)<!-- ###'.$key.'### End -->"s', $value, $contents);
