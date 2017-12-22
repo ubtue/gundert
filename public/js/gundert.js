@@ -206,6 +206,6 @@ var Gundert = {
      */
     ShowLoader: function(language) {
         var div_search_result = Gundert.GetOrCreateSearchResult(language);
-        div_search_result.innerHTML = '<div align="center"><img src="img/loader.gif"/></div>';
+        div_search_result.innerHTML = '<div align="center"><span class="ut-icon ut-icon--animate-spin" role="img" aria-label="loading..."></span></div>';
     },
 };
