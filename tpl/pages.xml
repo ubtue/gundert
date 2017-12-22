@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <pages>
-    <page id="home">
+    <page id="home" container="false">
         <page id="scope"/>
         <page id="staff"/>
         <page id="acknowledgements"/>

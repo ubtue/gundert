@@ -11,6 +11,13 @@ class Page {
     private $_callable = true;
 
     /**
+     * Should a container be added to the page?
+     * (disable e.g. if a carousel needs to be displayed, which would be limited by a container)
+     * @var bool
+     */
+    private $_container = true;
+
+    /**
      * Page ID (for pagetree, template filename, menu display text, etc.)
      * @var string
      */
@@ -41,10 +48,12 @@ class Page {
      * @param int $level            Menu level of the Page
      * @param int $siblingNumber    Sibling number of the page inside its parent
      * @param bool $callable        Is the page callable in menu?
+     * @param bool $container       Should a container be auto-inserted into the page?
      * @param mixed $children       Page or array of Page objects
      */
-    function __construct($id, $level, $siblingNumber, $callable=true, $children=[]) {
+    function __construct($id, $level, $siblingNumber, $callable=true, $container=true, $children=[]) {
         $this->_callable = $callable;
+        $this->_container = $container;
         $this->_id = $id;
         $this->_level = $level;
         $this->_siblingNumber = $siblingNumber;
@@ -118,5 +127,14 @@ class Page {
      */
     public function isCallable() {
         return $this->_callable;
+    }
+
+    /**
+     * Is container
+     *
+     * @return bool
+     */
+    public function isContainer() {
+        return $this->_container;
     }
 }

@@ -29,13 +29,19 @@ class Template {
 
     /**
      * Get contents of template file for a page
+     * (add container if necessary)
      *
      * @param Page $page
      *
      * @return string
      */
     static public function getContents(Page $page) {
-        return file_get_contents(self::getPath($page));
+        $contents = file_get_contents(self::getPath($page));
+        if ($page->isContainer()) {
+            $contents = '<div class="container">' . $contents . '</div>';
+        }
+
+        return $contents;
     }
 
     /**

@@ -290,8 +290,8 @@ class Pagetree {
             $node = $dom->documentElement->firstChild;
             while ($node != null) {
                 if ($node instanceof \DOMElement) {
-                    list($id, $callable, $subpages) = self::_initPagesRecursive($node, $level+1);
-                    $page = new Page($id, $level, $siblingNumber, $callable, $subpages);
+                    list($id, $callable, $container, $subpages) = self::_initPagesRecursive($node, $level+1);
+                    $page = new Page($id, $level, $siblingNumber, $callable, $container, $subpages);
                     ++$siblingNumber;
                     $pages[$id] = $page;
                 }
@@ -315,21 +315,22 @@ class Pagetree {
     static protected function _initPagesRecursive(\DOMElement $page, $level) {
         $id = $page->getAttribute('id');
         $callable = ($page->getAttribute('callable') != 'false');
+        $container = ($page->getAttribute('container') != 'false');
         $siblingNumber = 1;
         $subpages = [];
 
         $node = $page->firstChild;
         while ($node != null) {
             if ($node instanceof \DOMElement) {
-                list($subpageId, $subpageCallable, $subpageChildren) = self::_initPagesRecursive($node, $level+1);
-                $subpage = new Page($subpageId, $level, $siblingNumber, $subpageCallable, $subpageChildren);
+                list($subpageId, $subpageCallable, $subpageContainer, $subpageChildren) = self::_initPagesRecursive($node, $level+1);
+                $subpage = new Page($subpageId, $level, $siblingNumber, $subpageCallable, $subpageContainer, $subpageChildren);
                 ++$siblingNumber;
                 $subpages[$subpage->getId()] = $subpage;
             }
             $node = $node->nextSibling;
         }
 
-        return [$id, $callable, $subpages];
+        return [$id, $callable, $container, $subpages];
     }
 
     /**
