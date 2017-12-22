@@ -60,14 +60,16 @@ var Gundert = {
      * @return DomElement
      */
     GetOrCreateSearchResult: function(language) {
-        var div_search_result = document.getElementById('div_gundert_search_result');
+        var div_search_result = document.getElementById('gundert-searchresult');
         if (div_search_result == undefined) {
             var div_parent = document.getElementById('gundert-contentmiddle');
-            div_search_result = document.createElement('div');
-            div_search_result.setAttribute('class', 'container');
-            div_search_result.innerHTML = '<div id="div_gundert_search_result" class="gundert-language-'+language+'"></div>';
-            div_search_result = div_parent.insertBefore(div_search_result, div_parent.firstChild.nextSibling);
+            var div_container = document.createElement('div');
+            div_container.setAttribute('class', 'container');
+            div_container.innerHTML = '<div id="gundert-searchresult" class="gundert-language-'+language+'"></div>';
+            div_container = div_parent.insertBefore(div_container, div_parent.firstChild.nextSibling);
+            div_search_result = div_container.firstChild;
         }
+
         return div_search_result;
     },
 
@@ -79,6 +81,7 @@ var Gundert = {
      * @param string language
      */
     Query: function(category, language) {
+        Gundert.ShowLoader(language);
         $.ajax({
             url: 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list?sammlung=52+22+23',
             success: function(result) {
@@ -96,6 +99,7 @@ var Gundert = {
      * @param string language
      */
     QueryDummyRemote: function(category, language) {
+        Gundert.ShowLoader(language);
         $.ajax({
             url: 'js/dummydata.json',
             success: function(result) {
@@ -113,6 +117,7 @@ var Gundert = {
      * @param string language
      */
     QueryDummyLocal: function(category, language) {
+        Gundert.ShowLoader(language);
         $.ajax({
             url: 'js/dummydata.json',
             success: function(result) {
@@ -142,7 +147,7 @@ var Gundert = {
         table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
 
         // table header
-        table += '<table id="gundert-searchresult" class="ut-table gundert-language-'+language+'">';
+        table += '<table id="gundert-searchresult-table" class="ut-table gundert-language-'+language+'">';
         table += '<thead class="ut-table__header">';
         table += '<tr class="ut-table__row">';
         fields.forEach(function(field) {
@@ -169,10 +174,9 @@ var Gundert = {
         var div_search_result = Gundert.GetOrCreateSearchResult(language);
         div_search_result.innerHTML = table;
 
-        $('#gundert-searchresult').DataTable({
+        $('#gundert-searchresult-table').DataTable({
             // put DataTable options here
             // see https://datatables.net/reference/option/
-            paging: false,
             responsive: true,
             "language": {
                 //local url doesnt work (though correct file is downloaded)... but works with cdn path. Strange!
@@ -193,5 +197,15 @@ var Gundert = {
         var language = Gundert.GetLanguage();
         //Gundert.Query(category, language);
         Gundert.QueryDummyLocal(category, language);
+    },
+
+    /**
+     * Show loader while datatables query is running
+     *
+     * @param string language
+     */
+    ShowLoader: function(language) {
+        var div_search_result = Gundert.GetOrCreateSearchResult(language);
+        div_search_result.innerHTML = '<div align="center"><img src="img/loader.gif"/></div>';
     },
 };
