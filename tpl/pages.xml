@@ -1,4 +1,20 @@
 <?xml version="1.0"?>
+<!--
+    available page options (= XML attributes):
+    - id
+        page id, mandatory (e.g. to get the template for the page)
+    - container (default true):
+        wrap content in a div container
+            should only be turned off for special design requirements,
+            such as the "home" page with e.g. a carousel
+    - callable (default true):
+        should the page be callable in menu (true), or only its children (false)?
+            this is useful if a page has children, but no text on its own.
+            e.g. "home" (true) has children AND text.
+            e.g. "material_by_genre" (false) has children but no text
+            e.g. "links" (true) has children but no text, but is callable anyway
+                => in this case, all child pages will be rendered at the same time when the page is called.
+-->
 <pages>
     <page id="home" container="false">
         <page id="scope"/>
