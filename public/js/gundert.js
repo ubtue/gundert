@@ -1,6 +1,30 @@
 var Gundert = {
 
     /**
+     * Build query URL by mapping
+     *
+     * @note The remote URL must support CORS!
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+     *
+     * @param object mapping
+     *
+     * @return string
+     */
+    BuildQueryURL: function(mapping) {
+        var base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
+        var suffix = '';
+        for (var key in mapping['query']) {
+            if (suffix == '') {
+                suffix += '?';
+            } else {
+                suffix += '&';
+            }
+            suffix += key + '=' + mapping['query'][key];
+        }
+        return base_url + suffix;
+    },
+
+    /**
      * Get a translated display text matching the user's selected language
      *
      * @param string id
@@ -82,28 +106,18 @@ var Gundert = {
      */
     Query: function(category, language) {
         Gundert.ShowLoader(language);
+        var mapping = GundertCategoryMappings.GetMapping(category);
+        var url = Gundert.BuildQueryURL(mapping);
         $.ajax({
-            url: 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list?sammlung=52+22+23',
+            url: url,
             success: function(result) {
-                Gundert.RenderResult(category, language, result);
-            }
-        });
-    },
-
-    /**
-     * Perform the search for a given category.
-     * The json is just called from a URL without api.
-     * This is just a testing function, e.g. to use if the API is down.
-     *
-     * @param string category
-     * @param string language
-     */
-    QueryDummyRemote: function(category, language) {
-        Gundert.ShowLoader(language);
-        $.ajax({
-            url: 'js/dummydata.json',
-            success: function(result) {
-                Gundert.RenderResult(category, language, result);
+                Gundert.RenderResult(category, language, mapping, result);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                Gundert.RenderError();
             }
         });
     },
@@ -118,12 +132,22 @@ var Gundert = {
      */
     QueryDummyLocal: function(category, language) {
         Gundert.ShowLoader(language);
+        var mapping = GundertCategoryMappings.GetMapping(category);
+        var url = Gundert.BuildQueryURL(mapping);
         $.ajax({
-            url: 'js/dummydata.json',
+            url: 'js/dummydata2.json',
             success: function(result) {
-                Gundert.RenderResult(category, language, result);
+                Gundert.RenderResult(category, language, mapping, result);
             }
         });
+    },
+
+    /**
+     * Show errors
+     */
+    RenderError: function() {
+        var div_search_result = Gundert.GetOrCreateSearchResult('error');
+        div_search_result.innerHTML = '<font color="red">SORRY! The external information could not be received, please try again later.</font>';
     },
 
     /**
@@ -132,16 +156,13 @@ var Gundert = {
      *
      * @param string category
      * @param string language
+     * @param object mapping
      * @param JsonObject data
      */
-    RenderResult: function(category, language, data) {
+    RenderResult: function(category, language, mapping, data) {
         // Prepare result HTML
         var table = '';
-
-        //dummy fields
-        var fields = ["signature", "author", "title", "released", "type", "volume"];
-        //real fields
-        //var fields = ["title", "type", "author", "projectname"];
+        var fields = mapping['result'];
 
         // headline
         table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
@@ -161,7 +182,17 @@ var Gundert = {
         data.forEach(function(row) {
             table += '<tr class="ut-table__row">';
             fields.forEach(function(field) {
-                table += '<td class="ut-table__item ut-table__body__item">'+row[field]+'</td>';
+                table += '<td class="ut-table__item ut-table__body__item">';
+                if (Array.isArray(field)) {
+                    field.forEach(function(value) {
+                       table += row[field] + '<br/>';
+                    });
+                } else if (row[field] === undefined) {
+                    table += '';
+                } else {
+                    table += row[field];
+                }
+                table += '</td>';
             });
 
             table += '</tr>';
@@ -195,8 +226,8 @@ var Gundert = {
      */
     Search: function(category) {
         var language = Gundert.GetLanguage();
-        //Gundert.Query(category, language);
-        Gundert.QueryDummyLocal(category, language);
+        Gundert.Query(category, language);
+        //Gundert.QueryDummyLocal(category, language);
     },
 
     /**
