@@ -183,15 +183,31 @@ var Gundert = {
             table += '<tr class="ut-table__row">';
             fields.forEach(function(field) {
                 table += '<td class="ut-table__item ut-table__body__item">';
-                if (Array.isArray(field)) {
-                    field.forEach(function(value) {
-                       table += row[field] + '<br/>';
+                var column = row[field];
+
+                // unify values
+                var values = [];
+                if (Array.isArray(column)) {
+                    column.forEach(function(value) {
+                       values.push(value);
                     });
-                } else if (row[field] === undefined) {
-                    table += '';
-                } else {
-                    table += row[field];
+                } else if (column !== undefined) {
+                    values.push(column);
                 }
+
+                // translate if necessary
+                var value_nr = 0;
+                values.forEach(function(value) {
+                    ++value_nr;
+                    if (value_nr > 1) {
+                        table += '<br/>';
+                    }
+                    if (GundertCategoryMappings.TranslatableFields.includes(field)) {
+                        table += Gundert.GetDisplayText(value);
+                    } else {
+                        table += value;
+                    }
+                });
                 table += '</td>';
             });
 

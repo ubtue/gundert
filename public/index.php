@@ -19,7 +19,7 @@
         foreach ($displayTexts as $language => $languageTexts) {
             $js .= "\t" . $language . ': {' . JS_EOL;
             foreach ($languageTexts as $id => $text) {
-                $js .= "\t\t" . $id . ':"' . $text . '",' . JS_EOL;
+                $js .= "\t\t" . '"' . $id . '":"' . $text . '",' . JS_EOL;
             }
             $js .= "\t" . '},' . JS_EOL;
         }

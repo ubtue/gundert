@@ -5,7 +5,7 @@
  *  - 52: Gundert Prints (Drucke)
  *  - 53: Gundert Manuscripts (Handschriften)
  *
- *  languages: (ISO-639-2)
+ * languages: (ISO-639-2)
  *  - deu (german)
  *  - eng (english)
  *  - mal (malayalam)
@@ -13,21 +13,21 @@
  *  - tam (tamil)
  *  - tel (telugu)
  *
- *  subject_ids:
- * (- short     | long                  | GND-Number)
- *  - lit       | Literatur             | 4035964-5
- *  - non-fic   | Fachliteratur         | 4153493-1 !!! nicht zugeordnet !!!
- *  - school    | Schulbuch             | 4053458-3
- *  - dic       | Wörterbuch            | 4066724-8
- *  - vya       | Grammar               | 4021806-5
- *  - records   | Archivalien           | 4142
- *  - letters   | Briefe                | 4008240-4 !!! nicht zugeordnet !!!
- *  - prov      | Sprichwörter          | 4056550-6
- *  - notes     | Notizbuch             | 4225695-1
- *  - rel       | Christliche Literatur | 4010110-1
+ * subject_ids (GND-Number, translations see ini files):
+ * - 4035964-5
+ * - 4153493-1 !!! not assigned !!!
+ * - 4053458-3
+ * - 4066724-8
+ * - 4021806-5
+ * - 4142
+ * - 4008240-4 !!! not assigned !!!
+ * - 4056550-6
+ * - 4225695-1
+ * - 4010110-1
  */
 var GundertCategoryMappings = {
 
+    TranslatableFields: ["languages", "subject_ids"],
     DefaultMapping: {"query": {"collection": "52+53"}, "result": ["date", "title"]},
     Mappings: {
         // materials
