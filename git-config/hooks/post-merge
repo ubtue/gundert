@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Git hook for cleaning cache after merge (e.g. on displaytext changes)
+echo "cleaning cache..."
+DIR="$(dirname $(readlink --canonicalize "$0"))"
+DIR_CACHE=$DIR/../../public/cache/
+rm $DIR_CACHE/*
