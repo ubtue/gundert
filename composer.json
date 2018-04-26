@@ -9,7 +9,7 @@
     ],
     "require": {
         "components/bootstrap": "^3.3",
-	"components/jquery": "^1.6",
+	"components/jquery": "^3.3",
 	"components/jqueryui": "^1.12",
 	"datatables/datatables": "^1.10",
 	"dimsemenov/magnific-popup": "^1.1",
