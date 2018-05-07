@@ -89,7 +89,7 @@ var Gundert = {
             var div_parent = document.getElementById('gundert-contentmiddle');
             var div_container = document.createElement('div');
             div_container.setAttribute('class', 'container');
-            div_container.innerHTML = '<div id="gundert-searchresult" class="gundert-language-'+language+'"></div>';
+            div_container.innerHTML = '<div id="gundert-searchresult" class="gundert-result-'+language+'"></div>';
             div_container = div_parent.insertBefore(div_container, div_parent.firstChild.nextSibling);
             div_search_result = div_container.firstChild;
         }
@@ -204,6 +204,8 @@ var Gundert = {
                     }
                     if (GundertCategoryMappings.TranslatableFields.includes(field)) {
                         table += Gundert.GetDisplayText(value);
+                    } else if (field == 'collection') {
+                        table += Gundert.GetDisplayText(field + '_' + value);
                     } else {
                         table += value;
                     }

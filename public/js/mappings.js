@@ -50,12 +50,12 @@ var GundertCategoryMappings = {
         "english_manuscript": {"query": {"collection": "53", "languages": "eng"}, "result": ["date", "title", "subject_ids"]},
 
         // material by genre
-        "prose": {"query": {"collection": "52+53", "subject_ids": "4035964-5"}, "result": ["date", "title", "subject_ids", "languages"]},
-        "proverbs": {"query": {"collection": "52+53", "subject_ids": "4056550-6"}, "result": ["date", "title", "subject_ids", "languages"]},
-        "grammars_and_dictionaries": {"query": {"collection": "52+53", "subject_ids": "4053458-3+4066724-8+4021806-5"}, "result": ["date", "title", "subject_ids", "languages"]},
-        "religious_works": {"query": {"collection": "52+53", "subject_ids": "4010110-1"}, "result": ["date", "title", "subject_ids", "languages"]},
-        "notebooks_and_drafts": {"query": {"collection": "52+53", "subject_ids": "4225695-1"}, "result": ["date", "title", "subject_ids", "languages"]},
-        "records_archive": {"query": {"collection": "52+53", "subject_ids": "4142"}, "result": ["date", "title", "subject_ids", "languages"]},
+        "prose": {"query": {"collection": "52+53", "subject_ids": "4035964-5"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
+        "proverbs": {"query": {"collection": "52+53", "subject_ids": "4056550-6"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
+        "grammars_and_dictionaries": {"query": {"collection": "52+53", "subject_ids": "4053458-3+4066724-8+4021806-5"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
+        "religious_works": {"query": {"collection": "52+53", "subject_ids": "4010110-1"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
+        "notebooks_and_drafts": {"query": {"collection": "52+53", "subject_ids": "4225695-1"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
+        "records_archive": {"query": {"collection": "52+53", "subject_ids": "4142"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
     },
 
     /**
