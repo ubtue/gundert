@@ -14,6 +14,9 @@
             e.g. "material_by_genre" (false) has children but no text
             e.g. "links" (true) has children but no text, but is callable anyway
                 => in this case, all child pages will be rendered at the same time when the page is called.
+    - hidden (default false):
+        shoud the page be hidden in menu?
+            e.g. for pages that should only be reachable via footer link, like "sitemap"
 -->
 <pages>
     <page id="home" container="false">
@@ -65,4 +68,5 @@
         <page id="digital_humanities_tools"/>
         <page id="etexts"/>
     </page>
+    <page id="sitemap" hidden="true"/>
 </pages>

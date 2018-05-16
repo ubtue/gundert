@@ -46,15 +46,17 @@ class Pagetree {
      * @throws Exception
      */
     static private function _buildMenuNoChildren(Page $page) {
-        switch ($page->getLevel()) {
-            case 1:
-                return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
-            case 2:
-                return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
-            case 3:
-                return '<li class="ut-nav__item ut-nav__item--level-3" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-3" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
-            default:
-                throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered');
+        if (!$page->isHidden()) {
+            switch ($page->getLevel()) {
+                case 1:
+                    return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
+                case 2:
+                    return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
+                case 3:
+                    return '<li class="ut-nav__item ut-nav__item--level-3" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link ut-nav__link--level-3" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a></li>';
+                default:
+                    throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered');
+            }
         }
     }
 
@@ -67,26 +69,28 @@ class Pagetree {
      * @throws Exception
      */
     static private function _buildMenuChildrenStart(Page $page) {
-        switch ($page->getLevel()) {
-            case 1:
-                if ($page->isCallable()) {
-                    return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
-                } else {
-                    return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1 ut-nav__link--is-disabled">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
-                }
-            case 2:
-                if ($page->isCallable()) {
-                    return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
-                } else {
-                    return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2 ut-nav__link--is-disabled">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
-                }
-            default:
-                throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered with children');
+        if (!$page->isHidden()) {
+            switch ($page->getLevel()) {
+                case 1:
+                    if ($page->isCallable()) {
+                        return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
+                    } else {
+                        return '<li class="ut-nav__item ut-nav__item--level-1" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-1 ut-nav__link--is-disabled">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-2">';
+                    }
+                case 2:
+                    if ($page->isCallable()) {
+                        return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2" href="?page='.$page->getId().'">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
+                    } else {
+                        return '<li class="ut-nav__item ut-nav__item--level-2" data-level-count="'.$page->getSiblingNumber().'"><div class="ut-nav__link-group "><a class="ut-link ut-nav__link ut-nav__link--level-2 ut-nav__link--is-disabled">'.Languages::getDisplayText($page->getId()).'</a><a class="ut-nav__toggle-link"><span class="ut-nav__toggle-line"></span><span class="ut-nav__toggle-icon"></span></a></div><ul class="ut-nav__list ut-nav__list--level-3">';
+                    }
+                default:
+                    throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered with children');
+            }
         }
     }
 
     /**
-     * Build start block for a menu element with children (callback after children)
+     * Build end block for a menu element with children (callback after children)
      *
      * @param Page $page    page object
      *
@@ -94,13 +98,15 @@ class Pagetree {
      * @throws Exception
      */
     static private function _buildMenuChildrenEnd(Page $page) {
-        switch ($page->getLevel()) {
-            case 1:
-                return '</ul></li>';
-            case 2:
-                return '</ul></li>';
-            default:
-                throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered with children');
+        if (!$page->isHidden()) {
+            switch ($page->getLevel()) {
+                case 1:
+                    return '</ul></li>';
+                case 2:
+                    return '</ul></li>';
+                default:
+                    throw new \Exception('menu level ' . $page->getLevel() . ' cannot be rendered with children');
+            }
         }
     }
 
@@ -290,8 +296,8 @@ class Pagetree {
             $node = $dom->documentElement->firstChild;
             while ($node != null) {
                 if ($node instanceof \DOMElement) {
-                    list($id, $callable, $container, $subpages) = self::_initPagesRecursive($node, $level+1);
-                    $page = new Page($id, $level, $siblingNumber, $callable, $container, $subpages);
+                    list($id, $hidden, $callable, $container, $subpages) = self::_initPagesRecursive($node, $level+1);
+                    $page = new Page($id, $level, $siblingNumber, $hidden, $callable, $container, $subpages);
                     ++$siblingNumber;
                     $pages[$id] = $page;
                 }
@@ -310,10 +316,11 @@ class Pagetree {
      * @param \DOMElement $page
      * @param int $level
      *
-     * @return [id, callable, subpages]
+     * @return [id, hidden, callable, container, subpages]
      */
     static protected function _initPagesRecursive(\DOMElement $page, $level) {
         $id = $page->getAttribute('id');
+        $hidden = ($page->getAttribute('hidden') == 'true');
         $callable = ($page->getAttribute('callable') != 'false');
         $container = ($page->getAttribute('container') != 'false');
         $siblingNumber = 1;
@@ -322,15 +329,15 @@ class Pagetree {
         $node = $page->firstChild;
         while ($node != null) {
             if ($node instanceof \DOMElement) {
-                list($subpageId, $subpageCallable, $subpageContainer, $subpageChildren) = self::_initPagesRecursive($node, $level+1);
-                $subpage = new Page($subpageId, $level, $siblingNumber, $subpageCallable, $subpageContainer, $subpageChildren);
+                list($subpageId, $subpageHidden, $subpageCallable, $subpageContainer, $subpageChildren) = self::_initPagesRecursive($node, $level+1);
+                $subpage = new Page($subpageId, $level, $siblingNumber, $subpageHidden, $subpageCallable, $subpageContainer, $subpageChildren);
                 ++$siblingNumber;
                 $subpages[$subpage->getId()] = $subpage;
             }
             $node = $node->nextSibling;
         }
 
-        return [$id, $callable, $container, $subpages];
+        return [$id, $hidden, $callable, $container, $subpages];
     }
 
     /**

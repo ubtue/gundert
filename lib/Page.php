@@ -18,6 +18,13 @@ class Page {
     private $_container = true;
 
     /**
+     * Is the page hidden?
+     * e.g. for pages that should only be reachable via footer link, like "sitemap"
+     * @var bool
+     */
+    private $_hidden = false;
+
+    /**
      * Page ID (for pagetree, template filename, menu display text, etc.)
      * @var string
      */
@@ -47,11 +54,13 @@ class Page {
      * @param string $id            Page ID
      * @param int $level            Menu level of the Page
      * @param int $siblingNumber    Sibling number of the page inside its parent
+     * @param bool $hidden          Is the page hidden in menu?
      * @param bool $callable        Is the page callable in menu?
      * @param bool $container       Should a container be auto-inserted into the page?
      * @param mixed $children       Page or array of Page objects
      */
-    function __construct($id, $level, $siblingNumber, $callable=true, $container=true, $children=[]) {
+    function __construct($id, $level, $siblingNumber, $hidden=false, $callable=true, $container=true, $children=[]) {
+        $this->_hidden = $hidden;
         $this->_callable = $callable;
         $this->_container = $container;
         $this->_id = $id;
@@ -136,5 +145,14 @@ class Page {
      */
     public function isContainer() {
         return $this->_container;
+    }
+
+    /**
+     * Is hidden
+     *
+     * @return bool
+     */
+    public function isHidden() {
+        return $this->_hidden;
     }
 }
