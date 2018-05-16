@@ -20,7 +20,6 @@
         <page id="scope"/>
         <page id="staff"/>
         <page id="acknowledgements"/>
-        <page id="imprint"/>
     </page>
     <page id="materials" callable="false">
         <page id="printed_all"/>
