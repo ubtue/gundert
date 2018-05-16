@@ -21,6 +21,7 @@
 <pages>
     <page id="home" container="false">
         <page id="scope"/>
+        <page id="facts_and_figures"/>
         <page id="staff"/>
         <page id="acknowledgements"/>
     </page>
