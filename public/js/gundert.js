@@ -204,6 +204,11 @@ var Gundert = {
                     }
                     if (GundertCategoryMappings.TranslatableFields.includes(field)) {
                         table += Gundert.GetDisplayText(value);
+                    } else if (field == 'title') {
+                        if (row.projectname == undefined)
+                            table += value;
+                        else
+                            table += '<a href="http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/">' + value + '</a>';
                     } else if (field == 'collection') {
                         table += Gundert.GetDisplayText(field + '_' + value);
                     } else {
@@ -222,6 +227,12 @@ var Gundert = {
         // Trigger DataTable plugin
         var div_search_result = Gundert.GetOrCreateSearchResult(language);
         div_search_result.innerHTML = table;
+
+        // set custom css classes
+        $.fn.dataTable.ext.classes.sFilterInput = 'ut-form__input';
+        $.fn.dataTable.ext.classes.sLengthSelect = 'ut-form__select';
+        $.fn.dataTable.ext.classes.sPageButton = 'ut-btn';
+
 
         $('#gundert-searchresult-table').DataTable({
             // put DataTable options here
