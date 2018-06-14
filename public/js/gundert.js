@@ -207,8 +207,12 @@ var Gundert = {
                     } else if (field == 'title') {
                         if (row.projectname == undefined)
                             table += value;
-                        else
-                            table += '<a href="http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/">' + value + '</a>';
+                        else {
+                            url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
+                            if (language == 'en')
+                                url += '?ui_lang=eng';
+                            table += '<a href="' + url + '">' + value + '</a>';
+                        }
                     } else if (field == 'collection') {
                         table += Gundert.GetDisplayText(field + '_' + value);
                     } else {
