@@ -11,7 +11,8 @@ var Gundert = {
      * @return string
      */
     BuildQueryURL: function(mapping) {
-        var base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
+        //var base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
+        var base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
         var suffix = '';
         for (var key in mapping['query']) {
             if (suffix == '') {
@@ -108,6 +109,7 @@ var Gundert = {
         Gundert.ShowLoader(language);
         var mapping = GundertCategoryMappings.GetMapping(category);
         var url = Gundert.BuildQueryURL(mapping);
+        console.log("Query URL: " + url);
         $.ajax({
             url: url,
             success: function(result) {
@@ -191,32 +193,40 @@ var Gundert = {
                     column.forEach(function(value) {
                        values.push(value);
                     });
-                } else if (column !== undefined) {
+                } else if (column !== undefined)
                     values.push(column);
-                }
 
                 // translate if necessary
                 var value_nr = 0;
                 values.forEach(function(value) {
-                    ++value_nr;
-                    if (value_nr > 1) {
-                        table += '<br/>';
-                    }
-                    if (GundertCategoryMappings.TranslatableFields.includes(field)) {
-                        table += Gundert.GetDisplayText(value);
-                    } else if (field == 'title') {
-                        if (row.projectname == undefined)
-                            table += value;
-                        else {
-                            url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
-                            if (language == 'en')
-                                url += '?ui_lang=eng';
-                            table += '<a href="' + url + '">' + value + '</a>';
+                    if (value != "") {
+                        ++value_nr;
+                        if (value_nr > 1) {
+                            table += '<br/>';
                         }
-                    } else if (field == 'collection') {
-                        table += Gundert.GetDisplayText(field + '_' + value);
-                    } else {
-                        table += value;
+                        if (GundertCategoryMappings.TranslatableFields.includes(field)) {
+                            table += Gundert.GetDisplayText(value);
+                        } else if (field == 'title') {
+                            if (row.projectname == undefined)
+                                table += value;
+                            else {
+                                var export_version = row['export_version'];
+                                var generate_link = (export_version !== undefined && export_version > 0);
+                                if (generate_link) {
+                                    url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
+                                    if (language == 'en')
+                                        url += '?ui_lang=eng';
+                                    table += '<a href="' + url + '" target="_blank">';
+                                }
+                                table += value;
+                                if (generate_link)
+                                    table += '</a>';
+                            }
+                        } else if (field == 'collection') {
+                            table += Gundert.GetDisplayText(field + '_' + value);
+                        } else {
+                            table += value;
+                        }
                     }
                 });
                 table += '</td>';
@@ -246,7 +256,11 @@ var Gundert = {
                 //local url doesnt work (though correct file is downloaded)... but works with cdn path. Strange!
                 //"url": "vendor/jquery-datatables-plugins/i18n/" + Gundert.GetLanguageForDatatables() + ".json"
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/"+Gundert.GetLanguageForDatatables()+".json"
-            }
+            },
+            // dom reference see: https://datatables.net/reference/option/dom
+            dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+                 "<'row'<'col-sm-12'tr>>" +
+                 "<'row'<'col-sm-5'i><'col-sm-7'p>>"
         });
     },
 

@@ -16,3 +16,10 @@ table.dataTable.dtr-column > tbody > tr.parent th.control:before {
 }
 
 
+option {
+    padding: 0;
+}
+
+.ut-icon--animate-spin {
+    font-size: 2rem;
+}
