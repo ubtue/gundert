@@ -1,5 +1,8 @@
 var Gundert = {
 
+    // Fields for which filter <select> will be generated
+    FilterFields: ['collection', 'languages', 'subject_ids'],
+
     /**
      * Build query URL by mapping
      *
@@ -165,6 +168,7 @@ var Gundert = {
         // Prepare result HTML
         var table = '';
         var fields = mapping['result'];
+        var filter_column_numbers = [];
 
         // headline
         table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
@@ -173,9 +177,15 @@ var Gundert = {
         table += '<table id="gundert-searchresult-table" class="ut-table gundert-language-'+language+'">';
         table += '<thead class="ut-table__header">';
         table += '<tr class="ut-table__row">';
+        var th_section = '';
+        var column_no = 0;
         fields.forEach(function(field) {
-            table += '<th class="ut-table__item ut-table__header__item">'+Gundert.GetDisplayText(field)+'</th>';
+            th_section += '<th class="ut-table__item ut-table__header__item">'+Gundert.GetDisplayText(field)+'</th>';
+            if (Gundert.FilterFields.includes(field))
+                filter_column_numbers.push(column_no);
+            ++column_no;
         });
+        table += th_section;
         table += '</tr>';
         table += '</thead>';
 
@@ -235,7 +245,9 @@ var Gundert = {
             table += '</tr>';
         });
         table += '</tbody>';
-
+        table += '<tfoot>';
+        table += th_section;
+        table += '</tfoot>';
         table += '</table>';
 
         // Trigger DataTable plugin
@@ -246,9 +258,10 @@ var Gundert = {
         $.fn.dataTable.ext.classes.sFilterInput = 'ut-form__input';
         $.fn.dataTable.ext.classes.sLengthSelect = 'ut-form__select';
         $.fn.dataTable.ext.classes.sPageButton = 'ut-btn';
+        $.fn.dataTable.ext.classes.sPageButtonActive = 'active';
 
 
-        $('#gundert-searchresult-table').DataTable({
+        var dataTable = $('#gundert-searchresult-table').DataTable({
             // put DataTable options here
             // see https://datatables.net/reference/option/
             responsive: true,
@@ -258,10 +271,49 @@ var Gundert = {
                 //"url": "vendor/jquery-datatables-plugins/i18n/" + Gundert.GetLanguageForDatatables() + ".json"
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/"+Gundert.GetLanguageForDatatables()+".json"
             },
+            // manipulate table layout for page bar at top AND bottom
             // dom reference see: https://datatables.net/reference/option/dom
             dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
                  "<'row'<'col-sm-12'tr>>" +
-                 "<'row'<'col-sm-5'i><'col-sm-7'p>>"
+                 "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+
+            // add column filter
+            // for example, see: https://datatables.net/examples/api/multi_filter_select.html
+            initComplete: function () {
+                var column_no = 0;
+                this.api().columns().every( function () {
+                    var column = this;
+                    if (filter_column_numbers.includes(column_no)) {
+                        var select = $('<select><option value=""></option></select>');
+                        select.appendTo($(column.footer()).empty());
+                        select.on( 'change', function() {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+                                    var pattern = '^('+val+')|('+val+'<br>.*)|(.*<br>'+val+'<br>.*)|(.*<br>'+val+')$';
+                                    column
+                                        .search( pattern, true, false )
+                                        .draw();
+                                });
+
+                        var option_values = [];
+                        column.data().unique().each(function (column_values, index) {
+                            column_values.split('<br>').forEach(function(column_value) {
+                                column_value = column_value.trim();
+                                if (!option_values.includes(column_value))
+                                    option_values.push(column_value);
+                            });
+                        });
+
+                        option_values.sort().forEach(function(option_value) {
+                            select.append('<option value="'+option_value+'">'+option_value+'</option>');
+                        });
+                    } else
+                        $('').appendTo($(column.footer()).empty());
+
+                    ++column_no;
+                });
+            }
         });
     },
 
