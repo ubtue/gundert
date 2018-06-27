@@ -67,10 +67,9 @@ var GundertCategoryMappings = {
      * @return object
      */
     GetMapping: function(category) {
-        if (GundertCategoryMappings.Mappings[category] === undefined) {
+        if (GundertCategoryMappings.Mappings[category] === undefined)
             return GundertCategoryMappings.DefaultMapping;
-        } else {
+        else
             return GundertCategoryMappings.Mappings[category];
-        }
     },
 };
