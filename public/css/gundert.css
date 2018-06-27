@@ -23,3 +23,7 @@ option {
 .ut-icon--animate-spin {
     font-size: 2rem;
 }
+
+.dataTables_paginate {
+    padding-top: 0px !important;
+}
