@@ -15,14 +15,14 @@ var Gundert = {
      */
     BuildQueryURL: function(mapping) {
         //var base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
-        var base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
-        var suffix = '';
-        for (var key in mapping['query']) {
-            if (suffix == '') {
+        const base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
+        let suffix = '';
+        for (let key in mapping['query']) {
+            if (suffix == '')
                 suffix += '?';
-            } else {
+            else
                 suffix += '&';
-            }
+
             suffix += key + '=' + mapping['query'][key];
         }
         return base_url + suffix;
@@ -36,12 +36,11 @@ var Gundert = {
      * @return string
      */
     GetDisplayText: function(id) {
-        var language = Gundert.GetLanguage();
-        if (GundertDisplayTexts.hasOwnProperty(language) && GundertDisplayTexts[language].hasOwnProperty(id)) {
+        const language = Gundert.GetLanguage();
+        if (GundertDisplayTexts.hasOwnProperty(language) && GundertDisplayTexts[language].hasOwnProperty(id))
             return GundertDisplayTexts[language][id];
-        } else {
+        else
             return '#' + id + '#';
-        }
     },
 
     /**
@@ -60,14 +59,14 @@ var Gundert = {
      * @return string
      */
     GetLanguageForDatatables: function() {
-        var language = Gundert.GetLanguage();
+        const language = Gundert.GetLanguage();
         switch (language) {
             case 'de':
                 return 'German';
             case 'en':
+            default:
                 return 'English';
         }
-        return 'English';
     },
 
     /**
@@ -77,7 +76,7 @@ var Gundert = {
      * @return DomElement
      */
     GetFirstElementByClassName: function(classname) {
-        var elements = document.getElementsByClassName(classname);
+        const elements = document.getElementsByClassName(classname);
         return elements[0];
     },
 
@@ -88,10 +87,10 @@ var Gundert = {
      * @return DomElement
      */
     GetOrCreateSearchResult: function(language) {
-        var div_search_result = document.getElementById('gundert-searchresult');
+        let div_search_result = document.getElementById('gundert-searchresult');
         if (div_search_result == undefined) {
-            var div_parent = document.getElementById('gundert-contentmiddle');
-            var div_container = document.createElement('div');
+            let div_parent = document.getElementById('gundert-contentmiddle');
+            let div_container = document.createElement('div');
             div_container.setAttribute('class', 'container');
             div_container.innerHTML = '<div id="gundert-searchresult" class="gundert-result-'+language+'"></div>';
             div_container = div_parent.insertBefore(div_container, div_parent.firstChild.nextSibling);
@@ -110,8 +109,8 @@ var Gundert = {
      */
     Query: function(category, language) {
         Gundert.ShowLoader(language);
-        var mapping = GundertCategoryMappings.GetMapping(category);
-        var url = Gundert.BuildQueryURL(mapping);
+        let mapping = GundertCategoryMappings.GetMapping(category);
+        const url = Gundert.BuildQueryURL(mapping);
         console.log("Query URL: " + url);
         $.ajax({
             url: url,
@@ -137,8 +136,8 @@ var Gundert = {
      */
     QueryDummyLocal: function(category, language) {
         Gundert.ShowLoader(language);
-        var mapping = GundertCategoryMappings.GetMapping(category);
-        var url = Gundert.BuildQueryURL(mapping);
+        const mapping = GundertCategoryMappings.GetMapping(category);
+        const url = Gundert.BuildQueryURL(mapping);
         $.ajax({
             url: 'js/dummydata2.json',
             success: function(result) {
@@ -151,7 +150,7 @@ var Gundert = {
      * Show errors
      */
     RenderError: function() {
-        var div_search_result = Gundert.GetOrCreateSearchResult('error');
+        let div_search_result = Gundert.GetOrCreateSearchResult('error');
         div_search_result.innerHTML = '<font color="red">SORRY! The external information could not be received, please try again later.</font>';
     },
 
@@ -166,9 +165,9 @@ var Gundert = {
      */
     RenderResult: function(category, language, mapping, data) {
         // Prepare result HTML
-        var table = '';
-        var fields = mapping['result'];
-        var filter_column_numbers = [];
+        let table = '';
+        const fields = mapping['result'];
+        let filter_column_numbers = [];
 
         // headline
         table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
@@ -177,8 +176,8 @@ var Gundert = {
         table += '<table id="gundert-searchresult-table" class="ut-table gundert-language-'+language+'">';
         table += '<thead class="ut-table__header">';
         table += '<tr class="ut-table__row">';
-        var th_section = '';
-        var column_no = 0;
+        let th_section = '';
+        let column_no = 0;
         fields.forEach(function(field) {
             th_section += '<th class="ut-table__item ut-table__header__item">'+Gundert.GetDisplayText(field)+'</th>';
             if (Gundert.FilterFields.includes(field))
@@ -195,10 +194,10 @@ var Gundert = {
             table += '<tr class="ut-table__row">';
             fields.forEach(function(field) {
                 table += '<td class="ut-table__item ut-table__body__item">';
-                var column = row[field];
+                const column = row[field];
 
                 // unify values
-                var values = [];
+                let values = [];
                 if (Array.isArray(column)) {
                     column.forEach(function(value) {
                        values.push(value);
@@ -207,7 +206,7 @@ var Gundert = {
                     values.push(column);
 
                 // translate if necessary
-                var value_nr = 0;
+                let value_nr = 0;
                 values.forEach(function(value) {
                     if (value != "") {
                         ++value_nr;
@@ -220,8 +219,8 @@ var Gundert = {
                             if (row.projectname == undefined)
                                 table += value;
                             else {
-                                var export_version = row['export_version'];
-                                var generate_link = (export_version !== undefined && export_version > 0);
+                                const export_version = row['export_version'];
+                                const generate_link = (export_version !== undefined && export_version > 0);
                                 if (generate_link) {
                                     url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
                                     if (language == 'en')
@@ -251,17 +250,17 @@ var Gundert = {
         table += '</table>';
 
         // Trigger DataTable plugin
-        var div_search_result = Gundert.GetOrCreateSearchResult(language);
+        let div_search_result = Gundert.GetOrCreateSearchResult(language);
         div_search_result.innerHTML = table;
 
         // set custom css classes
-        $.fn.dataTable.ext.classes.sFilterInput = 'ut-form__input';
+        //$.fn.dataTable.ext.classes.sFilterInput = 'ut-form__input';
         $.fn.dataTable.ext.classes.sLengthSelect = 'ut-form__select';
         $.fn.dataTable.ext.classes.sPageButton = 'ut-btn';
         $.fn.dataTable.ext.classes.sPageButtonActive = 'active';
 
 
-        var dataTable = $('#gundert-searchresult-table').DataTable({
+        let dataTable = $('#gundert-searchresult-table').DataTable({
             // put DataTable options here
             // see https://datatables.net/reference/option/
             responsive: true,
@@ -280,27 +279,27 @@ var Gundert = {
             // add column filter
             // for example, see: https://datatables.net/examples/api/multi_filter_select.html
             initComplete: function () {
-                var column_no = 0;
+                let column_no = 0;
                 this.api().columns().every( function () {
-                    var column = this;
+                    let column = this;
                     if (filter_column_numbers.includes(column_no)) {
-                        var select = $('<select><option value=""></option></select>');
+                        let select = $('<select class="ut-form__select ut-form__field"><option value=""></option></select>');
                         select.appendTo($(column.footer()).empty());
                         select.on( 'change', function() {
-                                    var val = $.fn.dataTable.util.escapeRegex(
+                                    const val = $.fn.dataTable.util.escapeRegex(
                                         $(this).val()
                                     );
-                                    var pattern = '^('+val+')|('+val+'<br>.*)|(.*<br>'+val+'<br>.*)|(.*<br>'+val+')$';
+                                    const pattern = '^('+val+')|('+val+'<br>.*)|(.*<br>'+val+'<br>.*)|(.*<br>'+val+')$';
                                     column
                                         .search( pattern, true, false )
                                         .draw();
                                 });
 
-                        var option_values = [];
+                        let option_values = [];
                         column.data().unique().each(function (column_values, index) {
                             column_values.split('<br>').forEach(function(column_value) {
                                 column_value = column_value.trim();
-                                if (!option_values.includes(column_value))
+                                if (column_value != '' && !option_values.includes(column_value))
                                     option_values.push(column_value);
                             });
                         });
@@ -325,7 +324,7 @@ var Gundert = {
      * @param string language
      */
     Search: function(category) {
-        var language = Gundert.GetLanguage();
+        const language = Gundert.GetLanguage();
         Gundert.Query(category, language);
         //Gundert.QueryDummyLocal(category, language);
     },
@@ -336,7 +335,7 @@ var Gundert = {
      * @param string language
      */
     ShowLoader: function(language) {
-        var div_search_result = Gundert.GetOrCreateSearchResult(language);
+        let div_search_result = Gundert.GetOrCreateSearchResult(language);
         div_search_result.innerHTML = '<div align="center"><span class="ut-icon ut-icon--animate-spin" role="img" aria-label="loading..."></span></div>';
     },
 };
