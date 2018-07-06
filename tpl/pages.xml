@@ -28,7 +28,7 @@
     <page id="materials" callable="false">
         <page id="printed_all"/>
         <page id="manuscripts_all"/>
-        <page id="publications"/>
+        <page id="overall_portfolio"/>
     </page>
     <page id="material_by_language" callable="false">
         <page id="malayalam" callable="false">
@@ -47,6 +47,10 @@
             <page id="telugu_print"/>
             <page id="telugu_manuscript"/>
         </page>
+        <page id="sanskrit" callable="false">
+            <page id="sanskrit_print"/>
+            <page id="sanskrit_manuscript"/>
+        </page>
         <page id="german" callable="false">
             <page id="german_print"/>
             <page id="german_manuscript"/>
@@ -57,7 +61,8 @@
         </page>
     </page>
     <page id="material_by_genre" callable="false">
-        <page id="prose"/>
+        <page id="fiction"/>
+        <page id="non-fiction"/>
         <page id="proverbs"/>
         <page id="grammars_and_dictionaries"/>
         <page id="religious_works"/>
