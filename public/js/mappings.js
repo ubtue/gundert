@@ -33,7 +33,7 @@ var GundertCategoryMappings = {
         // materials
         "printed_all": {"query": {"collection": "52"}, "result": ["date", "title", "subject_ids", "languages"]},
         "manuscripts_all": {"query": {"collection": "53"}, "result": ["date", "title", "subject_ids", "languages"]},
-        "overall_portfolio": {"query": {"collection": "52+53"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
+        "overall_portfolio": {"query": {"collection": "52+53"}, "result": ["projectname", "date", "title", "subject_ids", "languages", "collection"]},
 
         // material by language
         "malayalam_print": {"query": {"collection": "52", "languages": "mal"}, "result": ["date", "title", "subject_ids"]},
