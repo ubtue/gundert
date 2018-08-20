@@ -232,7 +232,6 @@ var Gundert = {
         data.forEach(function(row) {
             table += '<tr class="ut-table__row">';
             fields.forEach(function(field) {
-                table += '<td class="ut-table__item ut-table__body__item">';
                 const column = row[field];
 
                 // unify values
@@ -244,39 +243,52 @@ var Gundert = {
                 } else if (column !== undefined)
                     values.push(column);
 
-                // translate if necessary
+                // translate if necessary.
+                // also generate a filter string for orthogonal data.
+                // see https://datatables.net/manual/data/orthogonal-data
+                let cell_display = '';
+                let cell_filter = '';
                 let value_nr = 0;
                 values.forEach(function(value) {
                     if (value != "") {
                         ++value_nr;
                         if (value_nr > 1) {
-                            table += '<br/>';
+                            cell_display += '<br/>';
+                            cell_filter += ','
                         }
                         if (GundertCategoryMappings.TranslatableFields.includes(field)) {
-                            table += Gundert.GetDisplayText(value);
+                            cell_display += Gundert.GetDisplayText(value);
+                            cell_filter += Gundert.GetDisplayText(value);
                         } else if (field == 'title') {
-                            if (row.projectname == undefined)
-                                table += value;
-                            else {
+                            if (row.projectname == undefined) {
+                                cell_display += value;
+                                cell_filter += value;
+                            } else {
                                 const export_version = row['export_version'];
                                 const generate_link = (export_version !== undefined && export_version > 0);
                                 if (generate_link) {
                                     url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
                                     if (language == 'en')
                                         url += '?ui_lang=eng';
-                                    table += '<a href="' + url + '" target="_blank">';
+                                    cell_display += '<a href="' + url + '" target="_blank">';
                                 }
-                                table += value;
+                                cell_display += value;
+                                cell_filter += value;
                                 if (generate_link)
-                                    table += '</a>';
+                                    cell_display += '</a>';
                             }
                         } else if (field == 'collection') {
-                            table += Gundert.GetDisplayText(field + '_' + value);
+                            cell_display += Gundert.GetDisplayText(field + '_' + value);
+                            cell_filter += Gundert.GetDisplayText(field + '_' + value);
                         } else {
-                            table += value;
+                            cell_display += value;
+                            cell_filter += value;
                         }
                     }
                 });
+
+                table += '<td class="ut-table__item ut-table__body__item" data-filter="' + cell_filter + '">';
+                table += cell_display;
                 table += '</td>';
             });
 
@@ -325,14 +337,18 @@ var Gundert = {
                         let select = $('<select class="ut-form__select ut-form__field"><option value=""></option></select>');
                         select.appendTo($(column.footer()).empty());
                         select.on( 'change', function() {
-                                    const val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-                                    const pattern = '^('+val+')|('+val+'<br>.*)|(.*<br>'+val+'<br>.*)|(.*<br>'+val+')$';
-                                    column
-                                        .search( pattern, true, false )
-                                        .draw();
-                                });
+                            let val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            if (val === '')
+                                val = '.*';
+
+                            // filter by using pattern for data-filter attribute
+                            const pattern = '(^\\s*'+val+'\\s*$)|(^\\s*'+val+'\\s*,)|(,\\s*'+val+'\\s*,)|(,\\s*'+val+'\\s*$)';
+                            column
+                                .search( pattern, true, false )
+                                .draw();
+                        });
 
                         let option_values = [];
                         column.data().unique().each(function (column_values, index) {
