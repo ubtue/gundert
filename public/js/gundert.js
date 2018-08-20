@@ -28,6 +28,38 @@ var Gundert = {
         return base_url + suffix;
     },
 
+    Cache: {
+
+       /**
+        * Get search result from cache
+        *
+        * @param string key
+        *
+        * @return object
+        */
+        GetResult: function(key) {
+            try {
+                return JSON.parse(localStorage[key]);
+            } catch (e) {
+                console.log(e);
+                return undefined;
+            }
+        },
+
+       /**
+        * Store search result to cache
+        *
+        * @param string key
+        * @param object value
+        *
+        * @return object
+        */
+       SetResult: function(key, value) {
+           localStorage[key] = JSON.stringify(value);
+       },
+
+    },
+
     /**
      * Get a translated display text matching the user's selected language
      *
@@ -112,18 +144,25 @@ var Gundert = {
         let mapping = GundertCategoryMappings.GetMapping(category);
         const url = Gundert.BuildQueryURL(mapping);
         console.log("Query URL: " + url);
-        $.ajax({
-            url: url,
-            success: function(result) {
-                Gundert.RenderResult(category, language, mapping, result);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
-                Gundert.RenderError();
-            }
-        });
+        var result = Gundert.Cache.GetResult(url);
+        if (result != undefined) {
+            console.log("using cached result");
+            Gundert.RenderResult(category, language, mapping, result);
+        } else {
+            $.ajax({
+                url: url,
+                success: function(result) {
+                    Gundert.Cache.SetResult(url, result);
+                    Gundert.RenderResult(category, language, mapping, result);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Gundert.RenderError();
+                }
+            });
+        }
     },
 
     /**
