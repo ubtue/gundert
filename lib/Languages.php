@@ -5,7 +5,7 @@ namespace Gundert;
 class Languages {
     const CODE_DE = 'de';
     const CODE_EN = 'en';
-    const CODE_DEFAULT = self::CODE_EN;
+    const CODE_DEFAULT = self::CODE_DE;
 
     /**
      * Get display text for the selected id
