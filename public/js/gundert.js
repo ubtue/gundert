@@ -3,6 +3,9 @@ var Gundert = {
     // Fields for which filter <select> will be generated
     FilterFields: ['collection', 'languages', 'subject_ids'],
 
+    // Separators for DataTables orthogonal data
+    Separators: { Display: ',<br>', Filter: ',' },
+
     /**
      * Build query URL by mapping
      *
@@ -234,56 +237,60 @@ var Gundert = {
             fields.forEach(function(field) {
                 const column = row[field];
 
-                // unify values
+                // normalize values to array
                 let values = [];
                 if (Array.isArray(column)) {
                     column.forEach(function(value) {
-                       values.push(value);
+                        if (value != "")
+                            values.push(value);
                     });
-                } else if (column !== undefined)
+                } else if (column !== undefined && column != "")
                     values.push(column);
 
-                // translate if necessary.
-                // also generate a filter string for orthogonal data.
+                // translate values if necessary
+                let translated_values = [];
+                values.forEach(function(value) {
+                    if (GundertCategoryMappings.TranslatableFields.includes(field))
+                        translated_values.push(Gundert.GetDisplayText(value));
+                    else if (field == 'collection')
+                        translated_values.push(Gundert.GetDisplayText(field + '_' + value));
+                    else
+                        translated_values.push(value);
+                });
+                translated_values = translated_values.sort();
+
+                // generate orthogonal data (display value + filter string)
                 // see https://datatables.net/manual/data/orthogonal-data
                 let cell_display = '';
                 let cell_filter = '';
                 let value_nr = 0;
-                values.forEach(function(value) {
-                    if (value != "") {
-                        ++value_nr;
-                        if (value_nr > 1) {
-                            cell_display += '<br/>';
-                            cell_filter += ','
-                        }
-                        if (GundertCategoryMappings.TranslatableFields.includes(field)) {
-                            cell_display += Gundert.GetDisplayText(value);
-                            cell_filter += Gundert.GetDisplayText(value);
-                        } else if (field == 'title') {
-                            if (row.projectname == undefined) {
-                                cell_display += value;
-                                cell_filter += value;
-                            } else {
-                                const export_version = row['export_version'];
-                                const generate_link = (export_version !== undefined && export_version > 0);
-                                if (generate_link) {
-                                    url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
-                                    if (language == 'en')
-                                        url += '?ui_lang=eng';
-                                    cell_display += '<a href="' + url + '" target="_blank">';
-                                }
-                                cell_display += value;
-                                cell_filter += value;
-                                if (generate_link)
-                                    cell_display += '</a>';
-                            }
-                        } else if (field == 'collection') {
-                            cell_display += Gundert.GetDisplayText(field + '_' + value);
-                            cell_filter += Gundert.GetDisplayText(field + '_' + value);
-                        } else {
+                translated_values.forEach(function(value) {
+                    ++value_nr;
+                    if (value_nr > 1) {
+                        cell_display += Gundert.Separators.Display;
+                        cell_filter += Gundert.Separators.Filter;
+                    }
+                    if (field == 'title') {
+                        if (row.projectname == undefined) {
                             cell_display += value;
                             cell_filter += value;
+                        } else {
+                            const export_version = row['export_version'];
+                            const generate_link = (export_version !== undefined && export_version > 0);
+                            if (generate_link) {
+                                url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
+                                if (language == 'en')
+                                    url += '?ui_lang=eng';
+                                cell_display += '<a href="' + url + '" target="_blank">';
+                            }
+                            cell_display += value;
+                            cell_filter += value;
+                            if (generate_link)
+                                cell_display += '</a>';
                         }
+                    } else {
+                        cell_display += value;
+                        cell_filter += value;
                     }
                 });
 
@@ -337,14 +344,13 @@ var Gundert = {
                         let select = $('<select class="ut-form__select ut-form__field"><option value=""></option></select>');
                         select.appendTo($(column.footer()).empty());
                         select.on( 'change', function() {
-                            let val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
+                            let val = $.fn.dataTable.util.escapeRegex($(this).val());
                             if (val === '')
                                 val = '.*';
 
                             // filter by using pattern for data-filter attribute
-                            const pattern = '(^\\s*'+val+'\\s*$)|(^\\s*'+val+'\\s*,)|(,\\s*'+val+'\\s*,)|(,\\s*'+val+'\\s*$)';
+                            const sep = $.fn.dataTable.util.escapeRegex(Gundert.Separators.Filter);
+                            const pattern = '(^\\s*'+val+'\\s*$)|(^\\s*'+val+'\\s*'+sep+')|('+sep+'\\s*'+val+'\\s*'+sep+')|('+sep+'\\s*'+val+'\\s*$)';
                             column
                                 .search( pattern, true, false )
                                 .draw();
@@ -352,7 +358,7 @@ var Gundert = {
 
                         let option_values = [];
                         column.data().unique().each(function (column_values, index) {
-                            column_values.split('<br>').forEach(function(column_value) {
+                            column_values.split(Gundert.Separators.Display).forEach(function(column_value) {
                                 column_value = column_value.trim();
                                 if (column_value != '' && !option_values.includes(column_value))
                                     option_values.push(column_value);
