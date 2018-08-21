@@ -70,13 +70,13 @@ class Template {
      */
     static public function getPath(Page $page) {
         $language = Session::getLanguage();
-        $pathDefault = DIR_TPL_PAGES . $page->getId() . '.phtml';
-        if ($language != Languages::CODE_DEFAULT) {
-            $pathLanguage = DIR_TPL_PAGES . $page->getId() . '-' . $language . '.phtml';
-            if (is_file($pathLanguage)) {
-                return $pathLanguage;
-            }
+
+        $pathLanguage = DIR_TPL_PAGES . $page->getId() . '-' . $language . '.phtml';
+        if (is_file($pathLanguage)) {
+            return $pathLanguage;
         }
+
+        $pathDefault = DIR_TPL_PAGES . $page->getId() . '.phtml';
         return $pathDefault;
     }
 
