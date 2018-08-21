@@ -17,7 +17,7 @@ var Gundert = {
      * @return string
      */
     BuildQueryURL: function(mapping) {
-        //var base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
+        //const base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
         const base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
         let suffix = '';
         for (let key in mapping['query']) {
@@ -194,6 +194,7 @@ var Gundert = {
     RenderError: function() {
         let div_search_result = Gundert.GetOrCreateSearchResult('error');
         div_search_result.innerHTML = '<font color="red">SORRY! The external information could not be received, please try again later.</font>';
+        div_search_result.innerHTML += '<br>Please note that this site is still under construction, and results are only available inside the university network right now.';
     },
 
     /**
