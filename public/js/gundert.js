@@ -194,7 +194,7 @@ var Gundert = {
     RenderError: function() {
         let div_search_result = Gundert.GetOrCreateSearchResult('error');
         div_search_result.innerHTML = '<font color="red">SORRY! The external information could not be received, please try again later.</font>';
-        div_search_result.innerHTML += '<br>Please note that this site is still under construction, and results are only available inside the university network right now.';
+        div_search_result.innerHTML += '<br>Please note that this site is still under construction, and results are only available inside the university library network right now.';
     },
 
     /**
