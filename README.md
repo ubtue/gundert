@@ -15,6 +15,7 @@ The gundert portal is meant to be a lightweight standalone php application, not 
 ||js|site-specific javascripts|
 ||vendor|external dependencies partially managed by composer, see README.md in this folder|
 |tpl||HTML page templates|
+||pages|HTML subpage templates|
 
 ## Installation
 `git clone` this repository
