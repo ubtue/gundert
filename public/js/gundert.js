@@ -33,6 +33,8 @@ var Gundert = {
 
     Cache: {
 
+        Enabled: true,
+
        /**
         * Get search result from cache
         *
@@ -41,6 +43,9 @@ var Gundert = {
         * @return object
         */
         GetResult: function(key) {
+            if (!Gundert.Cache.Enabled)
+                return undefined;
+
             try {
                 return JSON.parse(localStorage[key]);
             } catch (e) {
@@ -57,9 +62,10 @@ var Gundert = {
         *
         * @return object
         */
-       SetResult: function(key, value) {
-           localStorage[key] = JSON.stringify(value);
-       },
+        SetResult: function(key, value) {
+            if (Gundert.Cache.Enabled)
+                localStorage[key] = JSON.stringify(value);
+        },
 
     },
 
