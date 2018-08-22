@@ -43,6 +43,12 @@ class Page {
     private $_siblingNumber;
 
     /**
+     * Shall children be sorted?
+     * @var bool
+     */
+    private $_sortChildren;
+
+    /**
      * Child pages
      * @var array
      */
@@ -57,15 +63,17 @@ class Page {
      * @param bool $hidden          Is the page hidden in menu?
      * @param bool $callable        Is the page callable in menu?
      * @param bool $container       Should a container be auto-inserted into the page?
+     * @param bool $sortChildren    Should children be sorted?
      * @param mixed $children       Page or array of Page objects
      */
-    function __construct($id, $level, $siblingNumber, $hidden=false, $callable=true, $container=true, $children=[]) {
+    function __construct($id, $level, $siblingNumber, $hidden=false, $callable=true, $container=true, $sortChildren=false, $children=[]) {
         $this->_hidden = $hidden;
         $this->_callable = $callable;
         $this->_container = $container;
         $this->_id = $id;
         $this->_level = $level;
         $this->_siblingNumber = $siblingNumber;
+        $this->_sortChildren = $sortChildren;
         $this->addChildren($children);
     }
 
@@ -85,12 +93,25 @@ class Page {
     }
 
     /**
-     * Get Children
+     * Get Children (sort order depending on _sortChildren value)
      *
      * @return array
      */
     public function getChildren() {
-        return $this->_children;
+        if ($this->isSortChildrenActive()) {
+            $sortMap = [];
+            foreach ($this->_children as $id => $child) {
+                $name = Languages::getDisplayText($child->getId());
+                $sortMap[$name] = $id;
+            }
+            ksort($sortMap);
+
+            $children = [];
+            foreach ($sortMap as $name => $id)
+                $children[$id] = $this->_children[$id];
+            return $children;
+        } else
+            return $this->_children;
     }
 
     /**
@@ -154,5 +175,13 @@ class Page {
      */
     public function isHidden() {
         return $this->_hidden;
+    }
+
+    /**
+     * Is child sort active?
+     * @return bool
+     */
+    public function isSortChildrenActive() {
+        return $this->_sortChildren;
     }
 }

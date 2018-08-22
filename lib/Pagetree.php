@@ -296,8 +296,8 @@ class Pagetree {
             $node = $dom->documentElement->firstChild;
             while ($node != null) {
                 if ($node instanceof \DOMElement) {
-                    list($id, $hidden, $callable, $container, $subpages) = self::_initPagesRecursive($node, $level+1);
-                    $page = new Page($id, $level, $siblingNumber, $hidden, $callable, $container, $subpages);
+                    list($id, $hidden, $callable, $container, $sortChildren, $subpages) = self::_initPagesRecursive($node, $level+1);
+                    $page = new Page($id, $level, $siblingNumber, $hidden, $callable, $container, $sortChildren, $subpages);
                     ++$siblingNumber;
                     $pages[$id] = $page;
                 }
@@ -323,21 +323,22 @@ class Pagetree {
         $hidden = ($page->getAttribute('hidden') == 'true');
         $callable = ($page->getAttribute('callable') != 'false');
         $container = ($page->getAttribute('container') != 'false');
+        $sortChildren = ($page->getAttribute('sort_children') == 'true');
         $siblingNumber = 1;
         $subpages = [];
 
         $node = $page->firstChild;
         while ($node != null) {
             if ($node instanceof \DOMElement) {
-                list($subpageId, $subpageHidden, $subpageCallable, $subpageContainer, $subpageChildren) = self::_initPagesRecursive($node, $level+1);
-                $subpage = new Page($subpageId, $level, $siblingNumber, $subpageHidden, $subpageCallable, $subpageContainer, $subpageChildren);
+                list($subpageId, $subpageHidden, $subpageCallable, $subpageContainer, $subpageSortChildren, $subpageChildren) = self::_initPagesRecursive($node, $level+1);
+                $subpage = new Page($subpageId, $level, $siblingNumber, $subpageHidden, $subpageCallable, $subpageContainer, $subpageSortChildren, $subpageChildren);
                 ++$siblingNumber;
                 $subpages[$subpage->getId()] = $subpage;
             }
             $node = $node->nextSibling;
         }
 
-        return [$id, $hidden, $callable, $container, $subpages];
+        return [$id, $hidden, $callable, $container, $sortChildren, $subpages];
     }
 
     /**
