@@ -1,10 +1,13 @@
 var Gundert = {
 
     // Fields for which filter <select> will be generated
-    FilterFields: ['collection', 'languages', 'subject_ids'],
+    FilterFields: [ 'collection', 'languages', 'subject_ids' ],
+
+    // Fields for which normalization will be performed (all non valid characters will not be considered for sorting)
+    NormalizeSortFields: { 'date': /[^0-9]+/g, 'title': /[„“\[\]]+/g },
 
     // Separators for DataTables orthogonal data
-    Separators: { Display: ',<br>', Filter: ',' },
+    Separators: { Display: ',<br>', Filter: ',', Sort: ',' },
 
     /**
      * Build query URL by mapping
@@ -67,6 +70,15 @@ var Gundert = {
                 sessionStorage[key] = JSON.stringify(value);
         },
 
+    },
+
+    EscapeHtml: function(string) {
+        return string
+            .replace(/&/g, '&amp;')
+            .replace(/>/g, '&gt;')
+            .replace(/</g, '&lt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
     },
 
     /**
@@ -270,18 +282,19 @@ var Gundert = {
                 // see https://datatables.net/manual/data/orthogonal-data
                 let cell_display = '';
                 let cell_filter = '';
+                let cell_sort = '';
                 let value_nr = 0;
                 translated_values.forEach(function(value) {
                     ++value_nr;
                     if (value_nr > 1) {
                         cell_display += Gundert.Separators.Display;
                         cell_filter += Gundert.Separators.Filter;
+                        cell_filter += Gundert.Separators.Sort;
                     }
                     if (field == 'title') {
-                        if (row.projectname == undefined) {
+                        if (row.projectname == undefined)
                             cell_display += value;
-                            cell_filter += value;
-                        } else {
+                        else {
                             const export_version = row['export_version'];
                             const generate_link = (export_version !== undefined && export_version > 0);
                             if (generate_link) {
@@ -291,17 +304,35 @@ var Gundert = {
                                 cell_display += '<a href="' + url + '" target="_blank">';
                             }
                             cell_display += value;
-                            cell_filter += value;
                             if (generate_link)
                                 cell_display += '</a>';
                         }
-                    } else {
+                    } else
                         cell_display += value;
-                        cell_filter += value;
+
+                    cell_filter += value;
+
+                    if (Gundert.NormalizeSortFields[field] !== undefined)
+                        cell_sort += value.replace(Gundert.NormalizeSortFields[field], '');
+                    else
+                        cell_sort += value;
+
+                    if (field == 'title') {
+                        cell_sort = cell_sort.replace(/Ā/g, 'A');
+                        cell_sort = cell_sort.replace(/Ḍ/g, 'D');
+                        cell_sort = cell_sort.replace(/Ē/g, 'E');
+                        cell_sort = cell_sort.replace(/Ī/g, 'I');
+                        cell_sort = cell_sort.replace(/Ś/g, 'S');
+                    } else if (field == 'date') {
+                        // date can contain either a normalized year (ca. 1964 => 1946) or a year range (1930-1970 => 19301970)
+                        // sort is alphanumeric
+                        // so we convert the year to a range by doubling it, so dataTables can compare 19641964 to 19301970 alphanumerically
+                        if (cell_sort.length <= 4)
+                            cell_sort = cell_sort + cell_sort;
                     }
                 });
 
-                table += '<td class="ut-table__item ut-table__body__item" data-filter="' + cell_filter + '">';
+                table += '<td class="ut-table__item ut-table__body__item" data-filter="' + Gundert.EscapeHtml(cell_filter) + '" data-sort="' + Gundert.EscapeHtml(cell_sort) + '">';
                 table += cell_display;
                 table += '</td>';
             });
@@ -323,7 +354,6 @@ var Gundert = {
         $.fn.dataTable.ext.classes.sLengthSelect = 'ut-form__select';
         $.fn.dataTable.ext.classes.sPageButton = 'ut-btn';
         $.fn.dataTable.ext.classes.sPageButtonActive = 'active';
-
 
         let dataTable = $('#gundert-searchresult-table').DataTable({
             // put DataTable options here
@@ -351,7 +381,7 @@ var Gundert = {
                     if (filter_column_numbers.includes(column_no)) {
                         let select = $('<select class="ut-form__select ut-form__field"><option value=""></option></select>');
                         select.appendTo($(column.footer()).empty());
-                        select.on( 'change', function() {
+                        select.on('change', function() {
                             let val = $.fn.dataTable.util.escapeRegex($(this).val());
                             if (val === '')
                                 val = '.*';
