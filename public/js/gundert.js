@@ -329,6 +329,7 @@ var Gundert = {
             // put DataTable options here
             // see https://datatables.net/reference/option/
             responsive: true,
+            stateSave: true,
             keys: true,
             "language": {
                 //local url doesnt work (though correct file is downloaded)... but works with cdn path. Strange!
