@@ -361,7 +361,7 @@ var Gundert = {
         let dataTable = $('#gundert-searchresult-table').DataTable({
             // put DataTable options here
             // see https://datatables.net/reference/option/
-            order: [[sort_column_no, asc]],
+            order: [[sort_column_no, 'asc']],
             responsive: true,
             stateSave: true,
             keys: true,
