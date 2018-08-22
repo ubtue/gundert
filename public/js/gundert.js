@@ -47,7 +47,7 @@ var Gundert = {
                 return undefined;
 
             try {
-                return JSON.parse(localStorage[key]);
+                return JSON.parse(sessionStorage[key]);
             } catch (e) {
                 console.log(e);
                 return undefined;
@@ -64,7 +64,7 @@ var Gundert = {
         */
         SetResult: function(key, value) {
             if (Gundert.Cache.Enabled)
-                localStorage[key] = JSON.stringify(value);
+                sessionStorage[key] = JSON.stringify(value);
         },
 
     },
