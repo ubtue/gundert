@@ -229,6 +229,7 @@ var Gundert = {
         let table = '';
         const fields = mapping['result'];
         let filter_column_numbers = [];
+        let sort_column_no = 0;
 
         // headline
         table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
@@ -243,6 +244,8 @@ var Gundert = {
             th_section += '<th class="ut-table__item ut-table__header__item">'+Gundert.GetDisplayText(field)+'</th>';
             if (Gundert.FilterFields.includes(field))
                 filter_column_numbers.push(column_no);
+            if (field == 'title')
+                sort_column_no = column_no;
             ++column_no;
         });
         table += th_section;
@@ -358,6 +361,7 @@ var Gundert = {
         let dataTable = $('#gundert-searchresult-table').DataTable({
             // put DataTable options here
             // see https://datatables.net/reference/option/
+            order: [[sort_column_no, asc]],
             responsive: true,
             stateSave: true,
             keys: true,
