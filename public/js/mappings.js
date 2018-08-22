@@ -36,20 +36,13 @@ var GundertCategoryMappings = {
         "overall_portfolio": {"query": {"collection": "52+53"}, "result": ["projectname", "date", "title", "subject_ids", "languages", "collection"]},
 
         // material by language
-        "malayalam_print": {"query": {"collection": "52", "languages": "mal"}, "result": ["date", "title", "subject_ids"]},
-        "malayalam_manuscript": {"query": {"collection": "53", "languages": "mal"}, "result": ["date", "title", "subject_ids"]},
-        "kannada_print": {"query": {"collection": "52", "languages": "kan"}, "result": ["date", "title", "subject_ids"]},
-        "kannada_manuscript": {"query": {"collection": "53", "languages": "kan"}, "result": ["date", "title", "subject_ids"]},
-        "tamil_print": {"query": {"collection": "52", "languages": "tam"}, "result": ["date", "title", "subject_ids"]},
-        "tamil_manuscript": {"query": {"collection": "53", "languages": "tam"}, "result": ["date", "title", "subject_ids"]},
-        "telugu_print": {"query": {"collection": "52", "languages": "tel"}, "result": ["date", "title", "subject_ids"]},
-        "telugu_manuscript": {"query": {"collection": "53", "languages": "tel"}, "result": ["date", "title", "subject_ids"]},
-        "sanskrit_print": {"query": {"collection": "52", "languages": "san"}, "result": ["date", "title", "subject_ids"]},
-        "sanskrit_manuscript": {"query": {"collection": "53", "languages": "san"}, "result": ["date", "title", "subject_ids"]},
-        "german_print": {"query": {"collection": "52", "languages": "ger"}, "result": ["date", "title", "subject_ids"]},
-        "german_manuscript": {"query": {"collection": "53", "languages": "ger"}, "result": ["date", "title", "subject_ids"]},
-        "english_print": {"query": {"collection": "52", "languages": "eng"}, "result": ["date", "title", "subject_ids"]},
-        "english_manuscript": {"query": {"collection": "53", "languages": "eng"}, "result": ["date", "title", "subject_ids"]},
+        "malayalam": {"query": {"collection": "52+53", "languages": "mal"}, "result": ["date", "title", "subject_ids", "collection"]},
+        "kannada": {"query": {"collection": "52+53", "languages": "kan"}, "result": ["date", "title", "subject_ids", "collection"]},
+        "tamil": {"query": {"collection": "52+53", "languages": "tam"}, "result": ["date", "title", "subject_ids", "collection"]},
+        "telugu": {"query": {"collection": "52+53", "languages": "tel"}, "result": ["date", "title", "subject_ids", "collection"]},
+        "sanskrit": {"query": {"collection": "52+53", "languages": "san"}, "result": ["date", "title", "subject_ids", "collection"]},
+        "german": {"query": {"collection": "52+53", "languages": "ger"}, "result": ["date", "title", "subject_ids", "collection"]},
+        "english": {"query": {"collection": "52+53", "languages": "eng"}, "result": ["date", "title", "subject_ids", "collection"]},
 
         // material by genre
         "fiction": {"query": {"collection": "52+53", "subject_ids": "4035964-5"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
