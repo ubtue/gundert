@@ -22,6 +22,7 @@ The gundert portal is meant to be a lightweight standalone php application, not 
 run `composer install` in cloned repository
 run `rm -r .git/hooks` and `ln -s git-config/hooks .git/hooks`
 config your webserver and use public dir as website root
+(copy inc.conf.local.tpl to inc.conf.local.php and adjust settings if needed)
 
 ## Update
 `git pull`

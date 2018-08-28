@@ -27,6 +27,12 @@
         file_put_contents($jsPath, $js);
     }
 
+    // include local configuration
+    $localCfgPath = DIR_BASE . 'inc.conf.local.php';
+    if (is_file($localCfgPath)) {
+        require($localCfgPath);
+    }
+
     // render selected page
     Pagetree::initPages(DIR_TPL . 'pages.xml');
     $pageId = Pagetree::PAGE_DEFAULT;

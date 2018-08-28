@@ -10,12 +10,14 @@
     // directories (public)
     define('DIR_PUBLIC', DIR_BASE . 'public/');
     define('DIR_PUBLIC_CACHE', DIR_PUBLIC . 'cache/');
+    define('DIR_PUBLIC_JS', DIR_PUBLIC . 'js/');
 
     // used line endings for generating HTML/JS
     define('HTML_EOL', PHP_EOL);
     define('JS_EOL', PHP_EOL);
 
     // includes
+    require(DIR_LIB . 'Config.php');
     require(DIR_LIB . 'Languages.php');
     require(DIR_LIB . 'Page.php');
     require(DIR_LIB . 'Pagetree.php');

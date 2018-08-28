@@ -40,7 +40,6 @@ class Template {
         if ($page->isContainer()) {
             $contents = '<div class="container">' . $contents . '</div>';
         }
-
         return $contents;
     }
 
@@ -58,6 +57,19 @@ class Template {
      */
     static private function _getMainPath() {
         return DIR_TPL . 'index.phtml';
+    }
+
+    /**
+     * Get matomo snippet
+     *
+     * @return string
+     */
+    static private function _getMatomoSnippet() {
+        $snippet = '<!-- Matomo disabled -->';
+        if (Config::IsMatomoEnabled()) {
+            $snippet = file_get_contents(DIR_PUBLIC_JS . 'matomo.js');
+        }
+        return $snippet;
     }
 
     /**
@@ -149,6 +161,7 @@ class Template {
                         'LANGUAGE_CODE'             => Session::getLanguage(),
                         'LANGUAGE_CODE_LOWER'       => mb_strtolower(Session::getLanguage()),
                         'LANGUAGE_CODE_UPPER'       => mb_strtoupper(Session::getLanguage()),
+                        'MATOMO'                    => self::_getMatomoSnippet(),
                         'PAGE_ID'                   => $page->getId(),
                         'PAGE_TITLE'                => Languages::getDisplayText($page->getId()),
                         'SITEMAP'                   => Pagetree::buildSitemap(),
