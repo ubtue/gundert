@@ -20,16 +20,24 @@ var Gundert = {
      * @return string
      */
     BuildQueryURL: function(mapping) {
-        //const base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
-        const base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
-        let suffix = '';
-        for (let key in mapping['query']) {
-            if (suffix == '')
-                suffix += '?';
-            else
-                suffix += '&';
+        let base_url = '';
+        if (mapping['url'] != undefined)
+            base_url = mapping['url'];
+        else {
+            //base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
+            base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
+        }
 
-            suffix += key + '=' + mapping['query'][key];
+        let suffix = '';
+        if (mapping['query'] != undefined) {
+            for (let key in mapping['query']) {
+                if (suffix == '')
+                    suffix += '?';
+                else
+                    suffix += '&';
+
+                suffix += key + '=' + mapping['query'][key];
+            }
         }
         return base_url + suffix;
     },
@@ -159,8 +167,9 @@ var Gundert = {
      *
      * @param string category
      * @param string language
+     * @param bool add_headline
      */
-    Query: function(category, language) {
+    Query: function(category, language, add_headline) {
         Gundert.ShowLoader(language);
         let mapping = GundertCategoryMappings.GetMapping(category);
         const url = Gundert.BuildQueryURL(mapping);
@@ -168,13 +177,13 @@ var Gundert = {
         var result = Gundert.Cache.GetResult(url);
         if (result != undefined) {
             console.log("using cached result");
-            Gundert.RenderResult(category, language, mapping, result);
+            Gundert.RenderResult(category, language, mapping, result, add_headline);
         } else {
             $.ajax({
                 url: url,
                 success: function(result) {
                     Gundert.Cache.SetResult(url, result);
-                    Gundert.RenderResult(category, language, mapping, result);
+                    Gundert.RenderResult(category, language, mapping, result, add_headline);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -193,15 +202,16 @@ var Gundert = {
      *
      * @param string category
      * @param string language
+     * @param string add_headline
      */
-    QueryDummyLocal: function(category, language) {
+    QueryDummyLocal: function(category, language, add_headline) {
         Gundert.ShowLoader(language);
         const mapping = GundertCategoryMappings.GetMapping(category);
         const url = Gundert.BuildQueryURL(mapping);
         $.ajax({
             url: 'js/dummydata2.json',
             success: function(result) {
-                Gundert.RenderResult(category, language, mapping, result);
+                Gundert.RenderResult(category, language, mapping, result, add_headline);
             }
         });
     },
@@ -223,8 +233,9 @@ var Gundert = {
      * @param string language
      * @param object mapping
      * @param JsonObject data
+     * @param bool add_headline
      */
-    RenderResult: function(category, language, mapping, data) {
+    RenderResult: function(category, language, mapping, data, add_headline) {
         // Prepare result HTML
         let table = '';
         const fields = mapping['result'];
@@ -232,7 +243,8 @@ var Gundert = {
         let sort_column_no = 0;
 
         // headline
-        table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
+        if (add_headline)
+            table += '<h1>'+Gundert.GetDisplayText(category)+'</h1>';
 
         // table header
         table += '<table id="gundert-searchresult-table" class="ut-table gundert-language-'+language+'">';
@@ -310,6 +322,10 @@ var Gundert = {
                             if (generate_link)
                                 cell_display += '</a>';
                         }
+                    } else if (field == 'urlP5') {
+                        cell_display += '<a href="' + value + '" target="_blank">P5</a>';
+                    } else if (field == 'urlTXT') {
+                        cell_display += '<a href="' + value + '" target="_blank">TXT</a>';
                     } else
                         cell_display += value;
 
@@ -424,12 +440,12 @@ var Gundert = {
      * (redirects to the active querying mechanism, including result rendering.)
      *
      * @param string category
-     * @param string language
+     * @param bool add_headline
      */
-    Search: function(category) {
+    Search: function(category, add_headline=true) {
         const language = Gundert.GetLanguage();
-        Gundert.Query(category, language);
-        //Gundert.QueryDummyLocal(category, language);
+        Gundert.Query(category, language, add_headline);
+        //Gundert.QueryDummyLocal(category, language, add_headline);
     },
 
     /**

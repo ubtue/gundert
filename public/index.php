@@ -27,6 +27,11 @@
         file_put_contents($jsPath, $js);
     }
 
+    // Generate Letters cache
+    $lettersPath = DIR_PUBLIC_CACHE . 'letters.json';
+    if (!is_file($lettersPath))
+        file_put_contents($lettersPath, json_encode(Letters::GetLetters(), JSON_PRETTY_PRINT));
+
     // include local configuration
     $localCfgPath = DIR_BASE . 'inc.conf.local.php';
     if (is_file($localCfgPath)) {

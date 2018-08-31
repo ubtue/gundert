@@ -51,8 +51,10 @@ var GundertCategoryMappings = {
         "grammars_and_dictionaries": {"query": {"collection": "52+53", "subject_ids": "4053458-3+4066724-8+4021806-5"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
         "religious_works": {"query": {"collection": "52+53", "subject_ids": "4010110-1"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
         "notebooks_and_drafts": {"query": {"collection": "52+53", "subject_ids": "4225695-1"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
-        "letters": {"query": {"collection": "52+53", "subject_ids": "4008240-4"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
         "records_archive": {"query": {"collection": "52+53", "subject_ids": "4142"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
+
+        // material by genre (custom page):
+        "letters": {"url": "/cache/letters.json", "result": ["date", "id", "urlTXT", "urlP5"]},
     },
 
     /**
