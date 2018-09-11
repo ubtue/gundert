@@ -18,6 +18,12 @@ class Page {
     private $_container = true;
 
     /**
+     * Should a page be excluded from menu sorting, even if parent has child sorting enabled?
+     * @var bool
+     */
+    private $_excludeFromSort = false;
+
+    /**
      * Is the page hidden?
      * e.g. for pages that should only be reachable via footer link, like "sitemap"
      * @var bool
@@ -64,9 +70,10 @@ class Page {
      * @param bool $callable        Is the page callable in menu?
      * @param bool $container       Should a container be auto-inserted into the page?
      * @param bool $sortChildren    Should children be sorted?
+     * @param bool $excludeFromSort Shold page be excluded from child sorting?
      * @param mixed $children       Page or array of Page objects
      */
-    function __construct($id, $level, $siblingNumber, $hidden=false, $callable=true, $container=true, $sortChildren=false, $children=[]) {
+    function __construct($id, $level, $siblingNumber, $hidden=false, $callable=true, $container=true, $sortChildren=false, $excludeFromSort=true, $children=[]) {
         $this->_hidden = $hidden;
         $this->_callable = $callable;
         $this->_container = $container;
@@ -74,6 +81,7 @@ class Page {
         $this->_level = $level;
         $this->_siblingNumber = $siblingNumber;
         $this->_sortChildren = $sortChildren;
+        $this->_excludeFromSort = $excludeFromSort;
         $this->addChildren($children);
     }
 
@@ -100,15 +108,24 @@ class Page {
     public function getChildren() {
         if ($this->isSortChildrenActive()) {
             $sortMap = [];
+            $sortEndMap = [];
             foreach ($this->_children as $id => $child) {
                 $name = Languages::getDisplayText($child->getId());
-                $sortMap[$name] = $id;
+                if ($child->isExcludedFromSort())
+                    $sortEndMap[$name] = $id;
+                else
+                    $sortMap[$name] = $id;
             }
             ksort($sortMap);
+            ksort($sortEndMap);
 
             $children = [];
             foreach ($sortMap as $name => $id)
                 $children[$id] = $this->_children[$id];
+
+            foreach ($sortEndMap as $name => $id)
+                $children[$id] = $this->_children[$id];
+
             return $children;
         } else
             return $this->_children;
@@ -166,6 +183,14 @@ class Page {
      */
     public function isContainer() {
         return $this->_container;
+    }
+
+    /**
+     * Is excluded from child sort?
+     * @return bool
+     */
+    public function isExcludedFromSort() {
+        return $this->_excludeFromSort;
     }
 
     /**
