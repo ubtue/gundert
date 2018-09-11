@@ -23,11 +23,8 @@ var Gundert = {
         let base_url = '';
         if (mapping['url'] != undefined)
             base_url = mapping['url'];
-        else {
-            base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
-            //base_url = 'http://zinn.ub.uni-tuebingen.de/opendigi/api/list';
-            //base_url = 'http://idb.ub.uni-tuebingen.de/opendigi/api/list';
-        }
+        else
+            base_url = 'http://idb.ub.uni-tuebingen.de/opendigi/api/list';
 
         let suffix = '';
         if (mapping['query'] != undefined) {
@@ -312,22 +309,18 @@ var Gundert = {
                         if (row.subtitle != undefined)
                             value += " - " + row.subtitle;
 
-                        // generate hyperlink if necessary
-                        if (row.projectname == undefined)
+                        // generate hyperlink if possible
+                        if (row.projectname != undefined) {
+                            url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
+                            if (language == 'en')
+                                url += '?ui_lang=eng';
+                            cell_display += '<a href="' + url + '" target="_blank">';
+                            cell_display += value + '</a>';
+                        } else if(row.doi != undefined) {
+                            url = 'https://doi.org/' + row.doi;
+                            cell_display += '<a href="' + url + '" target="_blank">' + value + '</a>';
+                        } else
                             cell_display += value;
-                        else {
-                            const export_version = row['export_version'];
-                            const generate_link = (export_version !== undefined && export_version > 0);
-                            if (generate_link) {
-                                url = 'http://idb.ub.uni-tuebingen.de/diglit/'+ row.projectname + '/';
-                                if (language == 'en')
-                                    url += '?ui_lang=eng';
-                                cell_display += '<a href="' + url + '" target="_blank">';
-                            }
-                            cell_display += value;
-                            if (generate_link)
-                                cell_display += '</a>';
-                        }
                     // urlP5 and urlTXT are for custom page "letters"
                     } else if (field == 'urlP5') {
                         cell_display += '<a href="' + value + '" target="_blank">P5</a>';
