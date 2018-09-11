@@ -19,6 +19,8 @@
             e.g. for pages that should only be reachable via footer link, like "sitemap"
     - sort_children (default false)
         - sort children in menu by their translated display text (only for direct children)
+    - exclude_from_sort (default false)
+        - no autosort for this child oage even if sort_children for the parent is active (will be appended at the end)
 -->
 <pages>
     <page id="home" container="false">
@@ -40,6 +42,7 @@
         <page id="sanskrit"/>
         <page id="german"/>
         <page id="english"/>
+        <page id="other_languages" exclude_from_sort="true"/>
     </page>
     <page id="material_by_genre" callable="false" sort_children="true">
         <page id="fiction"/>

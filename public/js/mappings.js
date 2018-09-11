@@ -43,6 +43,7 @@ var GundertCategoryMappings = {
         "sanskrit": {"query": {"collection": "52+53", "languages": "san"}, "result": ["date", "title", "subject_ids", "collection"]},
         "german": {"query": {"collection": "52+53", "languages": "ger"}, "result": ["date", "title", "subject_ids", "collection"]},
         "english": {"query": {"collection": "52+53", "languages": "eng"}, "result": ["date", "title", "subject_ids", "collection"]},
+        "other_languages": {"query": {"collection": "52+53", "!languages": "mal+kan+tam+tel+san+ger+eng"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
 
         // material by genre
         "fiction": {"query": {"collection": "52+53", "subject_ids": "4035964-5"}, "result": ["date", "title", "subject_ids", "languages", "collection"]},
