@@ -24,8 +24,9 @@ var Gundert = {
         if (mapping['url'] != undefined)
             base_url = mapping['url'];
         else {
-            //base_url = 'http://cicero.ub.uni-tuebingen.de:8984/basex/digi3f/list';
             base_url = 'http://cicero.ub.uni-tuebingen.de/~wagner/cgi-bin/gundert-json.cgi';
+            //base_url = 'http://zinn.ub.uni-tuebingen.de/opendigi/api/list';
+            //base_url = 'http://idb.ub.uni-tuebingen.de/opendigi/api/list';
         }
 
         let suffix = '';
@@ -307,6 +308,11 @@ var Gundert = {
                         cell_filter += Gundert.Separators.Sort;
                     }
                     if (field == 'title') {
+                        // add subtitle if exists
+                        if (row.subtitle != undefined)
+                            value += " - " + row.subtitle;
+
+                        // generate hyperlink if necessary
                         if (row.projectname == undefined)
                             cell_display += value;
                         else {
@@ -322,6 +328,7 @@ var Gundert = {
                             if (generate_link)
                                 cell_display += '</a>';
                         }
+                    // urlP5 and urlTXT are for custom page "letters"
                     } else if (field == 'urlP5') {
                         cell_display += '<a href="' + value + '" target="_blank">P5</a>';
                     } else if (field == 'urlTXT') {
