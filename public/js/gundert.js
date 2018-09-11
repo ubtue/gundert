@@ -51,7 +51,7 @@ var Gundert = {
         *
         * @return object
         */
-        GetResult: function(key) {
+        Get: function(key) {
             if (!Gundert.Cache.Enabled)
                 return undefined;
 
@@ -71,7 +71,7 @@ var Gundert = {
         *
         * @return object
         */
-        SetResult: function(key, value) {
+        Set: function(key, value) {
             if (Gundert.Cache.Enabled)
                 sessionStorage[key] = JSON.stringify(value);
         },
@@ -85,6 +85,51 @@ var Gundert = {
             .replace(/</g, '&lt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&apos;');
+    },
+
+    // custom cache for column filters
+    Filters: {
+
+        /**
+         * Get filter setting from cache
+         * @param string key
+         * @returns mixed
+         */
+        Get: function(key) {
+            let filters = Gundert.Filters.GetAll();
+            return filters[key];
+        },
+
+        /**
+         * Get all filter settings from cache
+         * @returns Object
+         */
+        GetAll() {
+            let filters = Gundert.Cache.Get('filters');
+            if (filters == undefined)
+                return {};
+            else
+                return filters;
+        },
+
+        /**
+         * Store single filter setting in cache
+         * @param string key
+         * @param mixed value
+         */
+        Set: function(key, value) {
+            let filters = Gundert.Filters.GetAll();
+            filters[key] = value;
+            Gundert.Filters.SetAll(filters);
+        },
+
+        /**
+         * Store filter settings in cache
+         * @param object filters
+         */
+        SetAll: function(filters) {
+            Gundert.Cache.Set('filters', filters);
+        }
     },
 
     /**
@@ -140,6 +185,14 @@ var Gundert = {
     },
 
     /**
+     * Get old language from cache
+     * (needed to check if language has been changed)
+     */
+    GetOldLanguage: function() {
+        return Gundert.Cache.Get('language_old');
+    },
+
+    /**
      * creates a div element, which can be used to display the search result
      *
      * @param string language
@@ -159,6 +212,10 @@ var Gundert = {
         return div_search_result;
     },
 
+    HasLanguageChanged: function() {
+        return (Gundert.GetLanguage() != Gundert.GetOldLanguage());
+    },
+
     /**
      * Perform the search for a given category.
      * Sends query to remote server.
@@ -172,7 +229,7 @@ var Gundert = {
         let mapping = GundertCategoryMappings.GetMapping(category);
         const url = Gundert.BuildQueryURL(mapping);
         console.log("Query URL: " + url);
-        var result = Gundert.Cache.GetResult(url);
+        var result = Gundert.Cache.Get(url);
         if (result != undefined) {
             console.log("using cached result");
             Gundert.RenderResult(category, language, mapping, result, add_headline);
@@ -180,7 +237,7 @@ var Gundert = {
             $.ajax({
                 url: url,
                 success: function(result) {
-                    Gundert.Cache.SetResult(url, result);
+                    Gundert.Cache.Set(url, result);
                     Gundert.RenderResult(category, language, mapping, result, add_headline);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -374,9 +431,19 @@ var Gundert = {
         $.fn.dataTable.ext.classes.sPageButton = 'ut-btn';
         $.fn.dataTable.ext.classes.sPageButtonActive = 'active';
 
+        // clear old state if language has been changed
+        // (else e.g. if an english subject filter was set, the german table will be empty and filter is not usable anymore)
+        if (Gundert.HasLanguageChanged()) {
+            console.log("language has changed, resetting filters...");
+            let dataTable = $('#gundert-searchresult-table').DataTable();
+            dataTable.state.clear();
+            dataTable.destroy();
+            Gundert.Filters.SetAll({});
+        }
+
+        // render DataTable
         let dataTable = $('#gundert-searchresult-table').DataTable({
-            // put DataTable options here
-            // see https://datatables.net/reference/option/
+            // for DataTable options see https://datatables.net/reference/option/
             order: [[sort_column_no, 'asc']],
             responsive: true,
             stateSave: true,
@@ -398,10 +465,12 @@ var Gundert = {
                 let column_no = 0;
                 this.api().columns().every( function () {
                     let column = this;
+                    let filter_id = column.header().textContent;
                     if (filter_column_numbers.includes(column_no)) {
-                        let select = $('<select class="ut-form__select ut-form__field"><option value=""></option></select>');
+                        let select = $('<select id="'+filter_id+'" class="ut-form__select ut-form__field"><option value=""></option></select>');
                         select.appendTo($(column.footer()).empty());
-                        select.on('change', function() {
+                        select.on('change', function(event) {
+                            Gundert.Filters.Set(event.currentTarget.id, $(this).val());
                             let val = $.fn.dataTable.util.escapeRegex($(this).val());
                             if (val === '')
                                 val = '.*';
@@ -424,7 +493,13 @@ var Gundert = {
                         });
 
                         option_values.sort().forEach(function(option_value) {
-                            select.append('<option value="'+option_value+'">'+option_value+'</option>');
+                            let option = '<option value="' + option_value + '"';
+                            if (option_value == Gundert.Filters.Get(filter_id)) {
+                                console.log('setting "' + filter_id + '" filter to "' + option_value + '"');
+                                option += ' selected';
+                            }
+                            option += '>' + option_value + '</option>';
+                            select.append(option);
                         });
                     } else
                         $('').appendTo($(column.footer()).empty());
@@ -433,6 +508,9 @@ var Gundert = {
                 });
             }
         });
+
+        // save old language for "HasLanguageChanged()"
+        Gundert.SetOldLanguage();
     },
 
     /**
@@ -446,6 +524,14 @@ var Gundert = {
         const language = Gundert.GetLanguage();
         Gundert.Query(category, language, add_headline);
         //Gundert.QueryDummyLocal(category, language, add_headline);
+    },
+
+    /**
+     * Store old language to cache
+     * (needed to check if language has been changed)
+     */
+    SetOldLanguage: function() {
+        Gundert.Cache.Set('language_old', Gundert.GetLanguage());
     },
 
     /**
