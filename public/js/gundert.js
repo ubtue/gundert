@@ -400,11 +400,20 @@ var Gundert = {
                         cell_sort = cell_sort.replace(/Ī/g, 'I');
                         cell_sort = cell_sort.replace(/Ś/g, 'S');
                     } else if (field == 'date') {
-                        // date can contain either a normalized year (ca. 1964 => 1946) or a year range (1930-1970 => 19301970)
-                        // sort is alphanumeric
-                        // so we convert the year to a range by doubling it, so dataTables can compare 19641964 to 19301970 alphanumerically
-                        if (cell_sort.length <= 4)
-                            cell_sort = cell_sort + cell_sort;
+                        if (category == 'letters') {
+                            // we can have only year (1828), or year-month (1828-08), or year-month-day (1828-03-08)
+                            // so we set unspecific parts to end of period (month 12 day 31)
+                            if (cell_sort.length == 4)
+                                cell_sort += '12';
+                            if (cell_sort.length == 6)
+                                cell_sort += '31';
+                        } else {
+                            // date can contain either a normalized year (ca. 1964 => 1946) or a year range (1930-1970 => 19301970)
+                            // sort is alphanumeric
+                            // so we convert the year to a range by doubling it, so dataTables can compare 19641964 to 19301970 alphanumerically
+                            if (cell_sort.length <= 4)
+                                cell_sort = cell_sort + cell_sort;
+                        }
                     }
                 });
 
@@ -445,6 +454,7 @@ var Gundert = {
         let dataTable = $('#gundert-searchresult-table').DataTable({
             // for DataTable options see https://datatables.net/reference/option/
             order: [[sort_column_no, 'asc']],
+            lengthMenu: [10, 25, 50, 100, 1000],
             responsive: true,
             stateSave: true,
             keys: true,
