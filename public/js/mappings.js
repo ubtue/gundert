@@ -34,9 +34,9 @@ var GundertCategoryMappings = {
     DefaultMapping: {"query": {"collection": "52+53"}, "result": ["date", "title"]},
     Mappings: {
         // materials
-        "printed_all": {"query": {"collection": "52"}, "result": ["date", "title", "authors", "subject_ids", "languages"]},
-        "manuscripts_all": {"query": {"collection": "53"}, "result": ["date", "title", "authors", "subject_ids", "languages"]},
-        "overall_portfolio": {"query": {"collection": "52+53"}, "result": ["projectname", "date", "title", "authors", "subject_ids", "languages", "collection"]},
+        "printed_all": {"query": {"collection": "52"}, "result": ["shelfmark", "date", "title", "authors", "subject_ids", "languages"]},
+        "manuscripts_all": {"query": {"collection": "53"}, "result": ["shelfmark", "date", "title", "authors", "subject_ids", "languages"]},
+        "overall_portfolio": {"query": {"collection": "52+53"}, "result": ["shelfmark", "date", "title", "authors", "subject_ids", "languages", "collection"]},
 
         // material by language
         "malayalam": {"query": {"collection": "52+53", "languages": "mal"}, "result": ["date", "title", "authors", "subject_ids", "collection"]},

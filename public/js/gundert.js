@@ -399,6 +399,10 @@ var Gundert = {
 
                     cell_filter += value;
 
+                    // also allow to search for projectname (should be similar to shelfmark)
+                    if (field == 'shelfmark')
+                        cell_filter += Gundert.Separators.Filter + row.projectname;
+
                     if (Gundert.NormalizeSortFields[field] !== undefined)
                         cell_sort += value.replace(Gundert.NormalizeSortFields[field], '');
                     else
