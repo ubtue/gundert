@@ -4,4 +4,4 @@
 echo "cleaning cache..."
 DIR="$(dirname $(readlink --canonicalize "$0"))"
 DIR_CACHE=$DIR/../../public/cache/
-rm $DIR_CACHE/*
+rm -r $DIR_CACHE/*
