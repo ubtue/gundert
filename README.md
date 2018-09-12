@@ -14,7 +14,7 @@ The gundert portal is meant to be a lightweight standalone php application, not 
 ||images|site-specific images|
 ||js|site-specific javascripts|
 ||materials|materials (e.g. letters) which need to be accessible via browser.
-||vendor|external dependencies partially managed by composer, see [README.md](https://github.com/ubtue/gundert/tree/master/public/vendor#readme) in this folder|
+||vendor|external dependencies which need to be publicly available, partially symlinked to /vendor. See [README.md](https://github.com/ubtue/gundert/tree/master/public/vendor#readme) in this folder.|
 |tpl||HTML page templates|
 ||pages|HTML subpage templates|
 |vendor||directory created by composer, containing external dependencies.
