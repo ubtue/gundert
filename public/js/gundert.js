@@ -368,7 +368,7 @@ var Gundert = {
 
                         // generate hyperlink if possible
                         if (row.projectname != undefined) {
-                            url = 'http://idb.ub.uni-tuebingen.de/opendigi/'+ row.projectname + '/';
+                            url = 'http://idb.ub.uni-tuebingen.de/opendigi/'+ row.projectname;
                             if (language == 'en')
                                 url += '?ui_lang=eng';
                             cell_display += '<a href="' + url + '" target="_blank">';
