@@ -6,8 +6,12 @@ var Gundert = {
     // Fields for which normalization will be performed (all non valid characters will not be considered for sorting)
     NormalizeSortFields: { 'date': /[^0-9]+/g, 'title': /[„“\[\]]+/g },
 
+    // Fields for which special characters will be normalized (e.g. Ā => A)
+    NormalizeSortCharactersFields: ['title', 'authors'],
+
     // Separators for DataTables orthogonal data
     Separators: { Display: ',<br>', Filter: ',', Sort: ',' },
+    SeparatorsAuthors: { Display: '<br>', Filter: ';', Sort: ';' },
 
     /**
      * Build query URL by mapping
@@ -342,6 +346,8 @@ var Gundert = {
                         translated_values.push(Gundert.GetDisplayText(value));
                     else if (field == 'collection')
                         translated_values.push(Gundert.GetDisplayText(field + '_' + value));
+                    else if (field == 'authors')
+                        translated_values.push(value.name);
                     else
                         translated_values.push(value);
                 });
@@ -356,9 +362,15 @@ var Gundert = {
                 translated_values.forEach(function(value) {
                     ++value_nr;
                     if (value_nr > 1) {
-                        cell_display += Gundert.Separators.Display;
-                        cell_filter += Gundert.Separators.Filter;
-                        cell_filter += Gundert.Separators.Sort;
+                        if (field == 'authors') {
+                            cell_display += Gundert.SeparatorsAuthors.Display;
+                            cell_filter += Gundert.SeparatorsAuthors.Filter;
+                            cell_sort += Gundert.SeparatorsAuthors.Sort;
+                        } else {
+                            cell_display += Gundert.Separators.Display;
+                            cell_filter += Gundert.Separators.Filter;
+                            cell_sort += Gundert.Separators.Sort;
+                        }
                     }
                     if (field == 'title') {
                         // add subtitle if exists
@@ -392,13 +404,15 @@ var Gundert = {
                     else
                         cell_sort += value;
 
-                    if (field == 'title') {
+                    if (Gundert.NormalizeSortCharactersFields.includes(field)) {
                         cell_sort = cell_sort.replace(/Ā/g, 'A');
                         cell_sort = cell_sort.replace(/Ḍ/g, 'D');
                         cell_sort = cell_sort.replace(/Ē/g, 'E');
                         cell_sort = cell_sort.replace(/Ī/g, 'I');
                         cell_sort = cell_sort.replace(/Ś/g, 'S');
-                    } else if (field == 'date') {
+                    }
+
+                    if (field == 'date') {
                         if (category == 'letters') {
                             // we can have only year (1828), or year-month (1828-08), or year-month-day (1828-03-08)
                             // so we set unspecific parts to end of period (month 12 day 31)
