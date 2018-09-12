@@ -4,23 +4,37 @@ namespace Gundert;
 
 class Letters {
     /**
+     * Extract Letters ZIP to cache dir
+     */
+    static private function ExtractLetters() {
+        $zipPath = DIR_PUBLIC_LETTERS . 'Briefe Hermann Gunderts von 1823-1893.zip';
+        $zipArchive = new \ZipArchive();
+        $zipArchive->open($zipPath);
+        $zipArchive->extractTo(DIR_PUBLIC_CACHE_LETTERS);
+        $zipArchive->close();
+    }
+
+    /**
      * Get letters as array
      * Returned value is meant to be used as input for json_encode.
      *
      * @param string $dir
      * @param string $pattern
-     * 
+     *
      * @return array
      */
     static public function GetLetters() {
-        $paths = Helper::GetFilesRecursive(DIR_PUBLIC_LETTERS_P5);
+        if (!is_dir(DIR_PUBLIC_CACHE_LETTERS_P5))
+            self::ExtractLetters();
+
+        $paths = Helper::GetFilesRecursive(DIR_PUBLIC_CACHE_LETTERS_P5);
         $letters = [];
         foreach ($paths as $path) {
             $letterId = basename($path);
             $letterSubdir = basename(dirname($path));
             $letter = [];
             $letter['id'] = $letterId;
-            $urlBase = '/materials/letters/';
+            $urlBase = '/cache/letters/';
             $letter['urlP5'] = $urlBase . 'P5/' . $letterSubdir . '/' . $letterId;
             $letterIdTxt = preg_replace('"^HG"', 'H', $letterId);
             $letterIdTxt = preg_replace('"\.(\d)$"', '\\1', $letterIdTxt);

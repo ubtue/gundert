@@ -10,11 +10,12 @@
     // directories (public)
     define('DIR_PUBLIC', DIR_BASE . 'public/');
     define('DIR_PUBLIC_CACHE', DIR_PUBLIC . 'cache/');
+    define('DIR_PUBLIC_CACHE_LETTERS', DIR_PUBLIC_CACHE . 'letters/');
+    define('DIR_PUBLIC_CACHE_LETTERS_P5', DIR_PUBLIC_CACHE_LETTERS . 'P5/');
+    define('DIR_PUBLIC_CACHE_LETTERS_TXT', DIR_PUBLIC_CACHE_LETTERS . 'TXT/');
     define('DIR_PUBLIC_JS', DIR_PUBLIC . 'js/');
     define('DIR_PUBLIC_MATERIALS', DIR_PUBLIC . 'materials/');
     define('DIR_PUBLIC_LETTERS', DIR_PUBLIC_MATERIALS . 'letters/');
-    define('DIR_PUBLIC_LETTERS_P5', DIR_PUBLIC_LETTERS . 'P5/');
-    define('DIR_PUBLIC_LETTERS_TXT', DIR_PUBLIC_LETTERS . 'TXT/');
 
     // used line endings for generating HTML/JS
     define('HTML_EOL', PHP_EOL);
