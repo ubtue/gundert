@@ -255,27 +255,6 @@ var Gundert = {
     },
 
     /**
-     * Perform the search for a given category.
-     * The json is just taken from a local variable.
-     * This is just a testing function, e.g. to use if the API is down.
-     *
-     * @param string category
-     * @param string language
-     * @param string add_headline
-     */
-    QueryDummyLocal: function(category, language, add_headline) {
-        Gundert.ShowLoader(language);
-        const mapping = GundertCategoryMappings.GetMapping(category);
-        const url = Gundert.BuildQueryURL(mapping);
-        $.ajax({
-            url: 'js/dummydata2.json',
-            success: function(result) {
-                Gundert.RenderResult(category, language, mapping, result, add_headline);
-            }
-        });
-    },
-
-    /**
      * Show errors
      */
     RenderError: function() {
@@ -550,7 +529,6 @@ var Gundert = {
     Search: function(category, add_headline=true) {
         const language = Gundert.GetLanguage();
         Gundert.Query(category, language, add_headline);
-        //Gundert.QueryDummyLocal(category, language, add_headline);
     },
 
     /**
