@@ -9,6 +9,10 @@ var Gundert = {
     // Fields for which special characters will be normalized (e.g. Ā => A)
     NormalizeSortCharactersFields: ['title', 'authors'],
 
+    // Register fields for responsive design to have a higher priority than others (default: 10000, highest: 1)
+    // see https://datatables.net/extensions/responsive/priority
+    ResponsiveFieldPriorities: { shelfmark: 1, 'title': 2 },
+
     // Separators for DataTables orthogonal data
     Separators: { Display: ',<br>', Filter: ',', Sort: ',' },
     SeparatorsAuthors: { Display: '<br>', Filter: ';', Sort: ';' },
@@ -290,7 +294,10 @@ var Gundert = {
         let th_section = '';
         let column_no = 0;
         fields.forEach(function(field) {
-            th_section += '<th class="ut-table__item ut-table__header__item">'+Gundert.GetDisplayText(field)+'</th>';
+            let priority = '';
+            if (Gundert.ResponsiveFieldPriorities[field] != undefined)
+                priority = ' data-priority="' + Gundert.ResponsiveFieldPriorities[field] + '"';
+            th_section += '<th class="ut-table__item ut-table__header__item"' + priority + '>'+Gundert.GetDisplayText(field)+'</th>';
             if (Gundert.FilterFields.includes(field))
                 filter_column_numbers.push(column_no);
             if (field == 'title')
