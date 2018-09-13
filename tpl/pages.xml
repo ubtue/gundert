@@ -59,6 +59,7 @@
         <page id="digital_humanities_tools"/>
         <page id="etexts"/>
     </page>
+    <page id="help" hidden="true"/>
     <page id="imprint" hidden="true"/>
     <page id="sitemap" hidden="true"/>
 </pages>
