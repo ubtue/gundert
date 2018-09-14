@@ -29,12 +29,12 @@
         <page id="staff"/>
         <page id="acknowledgements"/>
     </page>
-    <page id="materials" callable="false">
+    <page id="materials">
         <page id="printed_all"/>
         <page id="manuscripts_all"/>
         <page id="overall_portfolio"/>
     </page>
-    <page id="material_by_language" callable="false" sort_children="true">
+    <page id="material_by_language" sort_children="true">
         <page id="malayalam"/>
         <page id="kannada"/>
         <page id="tamil"/>
@@ -44,7 +44,7 @@
         <page id="english"/>
         <page id="other_languages" exclude_from_sort="true"/>
     </page>
-    <page id="material_by_genre" callable="false" sort_children="true">
+    <page id="material_by_genre" sort_children="true">
         <page id="fiction"/>
         <page id="non-fiction"/>
         <page id="proverbs"/>
