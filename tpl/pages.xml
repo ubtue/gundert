@@ -56,8 +56,8 @@
     </page>
     <page id="links">
         <page id="digital_catalogues"/>
-        <page id="digital_humanities_tools"/>
         <page id="etexts"/>
+        <page id="digital_humanities_tools"/>
     </page>
     <page id="help" hidden="true"/>
     <page id="imprint" hidden="true"/>
