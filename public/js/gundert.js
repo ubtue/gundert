@@ -377,9 +377,9 @@ var Gundert = {
                             cell_display += value;
                     // urlP5 and urlTXT are for custom page "letters"
                     } else if (field == 'urlP5') {
-                        cell_display += '<a href="' + value + '" target="_blank">P5</a>';
+                        cell_display += '<a class="ut-link ut-link--internal ut-link--block" href="' + value + '" target="_blank">P5</a>';
                     } else if (field == 'urlTXT') {
-                        cell_display += '<a href="' + value + '" target="_blank">TXT</a>';
+                        cell_display += '<a class="ut-link ut-link--internal ut-link--block" href="' + value + '" target="_blank">TXT</a>';
                     } else
                         cell_display += value;
 
