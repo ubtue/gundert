@@ -309,7 +309,7 @@ var Gundert = {
         table += '</thead>';
 
         // table body
-        table += '<tbody>';
+        table += '<tbody class="ut-table__body">';
         data.forEach(function(row) {
             table += '<tr class="ut-table__row">';
             fields.forEach(function(field) {
@@ -428,7 +428,7 @@ var Gundert = {
             table += '</tr>';
         });
         table += '</tbody>';
-        table += '<tfoot>';
+        table += '<tfoot class="ut-table__footer">';
         table += th_section;
         table += '</tfoot>';
         table += '</table>';
