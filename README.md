@@ -26,6 +26,7 @@ The gundert portal is meant to be a lightweight standalone php application, not 
 * config your webserver and use "public" dir as website root
 * copy inc.conf.local.tpl to inc.conf.local.php (and adjust settings if needed)
 * Please check if the TXT files on the letters page are shown in the right encoding. If not, please check your web server settings.
+* Please check if you have the right mime types defined for .woff ("application/font-woff") and .woff2 ("font/woff2")
 
 ## Update
 * `git pull`
