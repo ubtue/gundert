@@ -462,9 +462,7 @@ var Gundert = {
             stateSave: true,
             keys: true,
             "language": {
-                //local url doesnt work (though correct file is downloaded)... but works with cdn path. Strange!
-                //"url": "vendor/jquery-datatables-plugins/i18n/" + Gundert.GetLanguageForDatatables() + ".json"
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/"+Gundert.GetLanguageForDatatables()+".json"
+                "url": "vendor/jquery-datatables-plugins-fixes/i18n/" + Gundert.GetLanguageForDatatables() + ".json"
             },
             // manipulate table layout for page bar at top AND bottom
             // dom reference see: https://datatables.net/reference/option/dom
