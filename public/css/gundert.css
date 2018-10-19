@@ -27,3 +27,7 @@ option {
 .dataTables_paginate {
     padding-top: 0px !important;
 }
+
+.gundert_search_help {
+    float: right;
+}

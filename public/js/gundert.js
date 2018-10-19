@@ -466,7 +466,7 @@ var Gundert = {
             },
             // manipulate table layout for page bar at top AND bottom
             // dom reference see: https://datatables.net/reference/option/dom
-            dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+            dom: "<'row'<'col-sm-3'l><'col-sm-3'<'gundert_search_help'>f><'col-sm-6'p>>" +
                  "<'row'<'col-sm-12'tr>>" +
                  "<'row'<'col-sm-5'i><'col-sm-7'p>>",
 
@@ -517,6 +517,11 @@ var Gundert = {
 
                     ++column_no;
                 });
+
+                // insert help button
+                // see https://datatables.net/examples/advanced_init/dom_toolbar.html for example
+                // (we use onclick instead of <a> element here, because it was impossible due to a CSS bug to make it black instead of red)
+                $("div.gundert_search_help").html('<span class="ut-icon ut-icon-info-circled" role="img" aria-label="Info" onclick="window.location.href=\'/?page=help\';" style="cursor: pointer;"></span>');
             }
         });
 
