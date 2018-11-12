@@ -8,6 +8,29 @@ var Gundert = {
 
     // Fields for which special characters will be normalized (e.g. Ā => A)
     NormalizeSortCharactersFields: ['title', 'authors'],
+    NormalizeSortCharacters: {
+        'Ā': 'A',
+        'ā': 'a',
+        'Ḍ': 'D',
+        'ḍ': 'd',
+        'Ē': 'E',
+        'ē': 'e',
+        'ḥ': 'h',
+        'Ī': 'I',
+        'ī': 'i',
+        'ḻ': 'l',
+        'ḷ': 'l',
+        'ṃ': 'm',
+        'ṅ': 'n',
+        'ṇ': 'n',
+        'ō': 'o',
+        'ṛ': 'r',
+        'Ś': 'S',
+        'ś': 's',
+        'ṣ': 's',
+        'ṭ': 't',
+        'ū': 'u'
+    },
 
     // Register fields for responsive design to have a higher priority than others (default: 10000, highest: 1)
     // see https://datatables.net/extensions/responsive/priority
@@ -395,27 +418,9 @@ var Gundert = {
                         cell_sort += value;
 
                     if (Gundert.NormalizeSortCharactersFields.includes(field)) {
-                        cell_sort = cell_sort.replace(/Ā/g, 'A');
-                        cell_sort = cell_sort.replace(/ā/g, 'a');
-                        cell_sort = cell_sort.replace(/Ḍ/g, 'D');
-                        cell_sort = cell_sort.replace(/ḍ/g, 'd');
-                        cell_sort = cell_sort.replace(/Ē/g, 'E');
-                        cell_sort = cell_sort.replace(/ē/g, 'e');
-                        cell_sort = cell_sort.replace(/ḥ/g, 'h');
-                        cell_sort = cell_sort.replace(/Ī/g, 'I');
-                        cell_sort = cell_sort.replace(/ī/g, 'i');
-                        cell_sort = cell_sort.replace(/ḻ/g, 'l');
-                        cell_sort = cell_sort.replace(/ḷ/g, 'l');
-                        cell_sort = cell_sort.replace(/ṃ/g, 'm');
-                        cell_sort = cell_sort.replace(/ṅ/g, 'n');
-                        cell_sort = cell_sort.replace(/ṇ/g, 'n');
-                        cell_sort = cell_sort.replace(/ō/g, 'o');
-                        cell_sort = cell_sort.replace(/ṛ/g, 'r');
-                        cell_sort = cell_sort.replace(/Ś/g, 'S');
-                        cell_sort = cell_sort.replace(/ś/g, 's');
-                        cell_sort = cell_sort.replace(/ṣ/g, 's');
-                        cell_sort = cell_sort.replace(/ṭ/g, 't');
-                        cell_sort = cell_sort.replace(/ū/g, 'u');
+                        for (let [search, replace] of Object.entries(Gundert.NormalizeSortCharacters)) {
+                            cell_sort = cell_sort.replace(new RegExp(search, 'g'), replace);
+                        }
                     }
 
                     if (field == 'date') {
