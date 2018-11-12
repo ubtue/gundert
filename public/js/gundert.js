@@ -18,18 +18,22 @@ var Gundert = {
         'ḥ': 'h',
         'Ī': 'I',
         'ī': 'i',
+        'ı̄': 'i', // this line is viewed strange in some editors but is correct (ending apostroph behind special i character might not be viewed correctly)
         'ḻ': 'l',
         'ḷ': 'l',
         'ṃ': 'm',
+        'ñ': 'n',
         'ṅ': 'n',
         'ṇ': 'n',
         'ō': 'o',
         'ṛ': 'r',
+        'ṟ': 'r',
         'Ś': 'S',
         'ś': 's',
         'ṣ': 's',
         'ṭ': 't',
-        'ū': 'u'
+        'ū': 'u',
+        '˘': ''
     },
 
     // Register fields for responsive design to have a higher priority than others (default: 10000, highest: 1)
