@@ -20,6 +20,7 @@
 
     // Opendigi
     define('OPENDIGI_API_ENDPOINT', 'http://idb.ub.uni-tuebingen.de/opendigi/api/list');
+    define('OPENDIGI_API_TIMEOUT', 10); // in seconds
 
     // Cache params
     define('CACHE_EXPIRED_DELAY', 24 * 60 * 60); // 1 day (in seconds)

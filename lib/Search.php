@@ -62,7 +62,7 @@ class Search {
         if ($this->_languages)
             $url .= '&languages=' . implode('+', $this->_languages);
         if ($this->_notLanguages)
-            $url .= '&!languages' . implode('+', $this->_notLanguages);
+            $url .= '&!languages=' . implode('+', $this->_notLanguages);
         if ($this->_subjectIds)
             $url .= '&subject_ids=' . implode('+', $this->_subjectIds);
 
@@ -106,7 +106,10 @@ class Search {
      */
     public function getLiveResult() {
         $url = $this->_buildUrl();
+        $default_timeout = ini_get('default_socket_timeout');
+        ini_set('default_socket_timeout', OPENDIGI_API_TIMEOUT);
         $result = file_get_contents($url);
+        ini_set('default_socket_timeout', $default_timeout);
         if ($result && $result != '[]' && @json_decode($result) != false) {
             if (!is_dir(DIR_PUBLIC_CACHE_SEARCHES))
                 mkdir(DIR_PUBLIC_CACHE_SEARCHES, 0777, true);
