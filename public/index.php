@@ -39,11 +39,11 @@
     }
 
     // render selected page
-    Pagetree::initPages(DIR_TPL . 'pages.xml');
     $pageId = Pagetree::PAGE_DEFAULT;
     if (isset($_GET['page'])) {
         $pageId = $_GET['page'];
     }
+    Pagetree::initPages(DIR_TPL . 'pages.xml', $pageId);
     $page = Pagetree::getPage($pageId);
     Template::render($page);
 

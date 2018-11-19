@@ -1,0 +1,22 @@
+{
+    "printed_all": {"collection": "52"},
+    "manuscripts_all": {"collection": "53"},
+    "overall_portfolio": {"collection": "52+53"},
+
+    "malayalam": {"collection": "52+53", "languages": "mal"},
+    "kannada": {"collection": "52+53", "languages": "kan"},
+    "tamil": {"collection": "52+53", "languages": "tam"},
+    "telugu": {"collection": "52+53", "languages": "tel"},
+    "sanskrit": {"collection": "52+53", "languages": "san"},
+    "german": {"collection": "52+53", "languages": "ger"},
+    "english": {"collection": "52+53", "languages": "eng"},
+    "other_languages": {"collection": "52+53", "notLanguages": "mal+kan+tam+tel+san+ger+eng"},
+
+    "fiction": {"collection": "52+53", "subject_ids": "4035964-5"},
+    "non-fiction": {"collection": "52+53", "subject_ids": "4153493-1"},
+    "proverbs": {"collection": "52+53", "subject_ids": "4056550-6"},
+    "grammars_and_dictionaries": {"collection": "52+53", "subject_ids": "4053458-3+4066724-8+4021806-5"},
+    "religious_works": {"collection": "52+53", "subject_ids": "4010110-1"},
+    "notebooks_and_drafts": {"collection": "52+53", "subject_ids": "4225695-1"},
+    "records_archive": {"collection": "52+53", "subject_ids": "4123412-1+4128022-2+4142968-0"}
+}

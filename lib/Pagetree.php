@@ -281,8 +281,9 @@ class Pagetree {
      * using cache file if exists, else it will be generated
      *
      * @param string $xmlPath
+     * @param string $activePageId
      */
-    static public function initPages($xmlPath) {
+    static public function initPages($xmlPath, $activePageId=null) {
         $cachePath = DIR_PUBLIC_CACHE . 'pages.cache';
 
         if (!is_file($cachePath)) {
@@ -308,6 +309,11 @@ class Pagetree {
         }
 
         self::$_pages = unserialize(file_get_contents($cachePath));
+
+        foreach (self::$_pages as &$page) {
+            $page->updateParentReferences();
+            $page->updateActive($activePageId);
+        }
     }
 
     /**

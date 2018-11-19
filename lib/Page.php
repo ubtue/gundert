@@ -3,6 +3,12 @@
 namespace Gundert;
 class Page {
     /**
+     * Is the page currently active?
+     * @var bool
+     */
+    private $_active = false;
+
+    /**
      * Is the page callable?
      * This is useful for Menu entries that have children, but are not meant
      * to be called themselves.
@@ -61,6 +67,12 @@ class Page {
     private $_children = [];
 
     /**
+     * Parent page
+     * @var Page
+     */
+    private $_parent = null;
+
+    /**
      * Constructor
      *
      * @param string $id            Page ID
@@ -82,19 +94,20 @@ class Page {
         $this->_siblingNumber = $siblingNumber;
         $this->_sortChildren = $sortChildren;
         $this->_excludeFromSort = $excludeFromSort;
-        $this->addChildren($children);
+        $this->_setChildren($children);
     }
 
     /**
-     * Get all subpages (recursive) for a page
+     * Set children
      *
      * @param mixed $children   (Page or array of Page objects)
      */
-    public function addChildren($children) {
+    private function _setChildren($children) {
         if (!is_array($children)) {
             $children = [$children];
         }
 
+        $this->_children = [];
         foreach ($children as $child) {
             $this->_children[$child->getId()] = $child;
         }
@@ -150,6 +163,14 @@ class Page {
     }
 
     /**
+     * Get parent (or null)
+     * @return Page
+     */
+    public function getParent() {
+        return $this->_parent;
+    }
+
+    /**
      * Get sibling number
      *
      * @return int
@@ -165,6 +186,25 @@ class Page {
      */
     public function hasChildren() {
         return count($this->_children) > 0;
+    }
+
+    /**
+     * Is the page currently active?
+     * @return bool
+     */
+    public function isActive() {
+        return ($this->_active || $this->isChildActive());
+    }
+
+    /**
+     * Is a child page active?
+     */
+    public function isChildActive() {
+        foreach($this->_children as $child) {
+            if ($child->isActive())
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -208,5 +248,44 @@ class Page {
      */
     public function isSortChildrenActive() {
         return $this->_sortChildren;
+    }
+
+    /**
+     * Mark this page as currently active
+     */
+    public function setActive() {
+        $this->_active = true;
+    }
+
+    /**
+     * Set parent reference
+     * @param Page $parent
+     */
+    public function setParent(&$parent) {
+        $this->_parent = $parent;
+    }
+
+    /**
+     * Update parent references.
+     * Needs to be called after pagetree is loaded from page cache.
+     * (references cannot be serialized)
+     */
+    public function updateParentReferences() {
+        foreach ($this->_children as &$child) {
+            $child->setParent($this);
+            $child->updateParentReferences();
+        }
+    }
+
+    public function updateActive($activePageId) {
+        if ($this->getId() == $activePageId)
+            $this->setActive();
+        else {
+            foreach ($this->_children as &$child) {
+                $child->updateActive($activePageId);
+                if ($child->isActive())
+                    $this->setActive();
+            }
+        }
     }
 }

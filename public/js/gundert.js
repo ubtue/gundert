@@ -43,38 +43,6 @@ var Gundert = {
     // Separators for DataTables orthogonal data
     Separators: { Display: ',<br>', Filter: ',', Sort: ',' },
     SeparatorsAuthors: { Display: '<br>', Filter: ';', Sort: ';' },
-
-    /**
-     * Build query URL by mapping
-     *
-     * @note The remote URL must support CORS!
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-     *
-     * @param object mapping
-     *
-     * @return string
-     */
-    BuildQueryURL: function(mapping) {
-        let base_url = '';
-        if (mapping['url'] != undefined)
-            base_url = mapping['url'];
-        else
-            base_url = 'http://idb.ub.uni-tuebingen.de/opendigi/api/list';
-
-        let suffix = '';
-        if (mapping['query'] != undefined) {
-            for (let key in mapping['query']) {
-                if (suffix == '')
-                    suffix += '?';
-                else
-                    suffix += '&';
-
-                suffix += key + '=' + mapping['query'][key];
-            }
-        }
-        return base_url + suffix;
-    },
-
     Cache: {
 
         Enabled: true,
@@ -103,8 +71,6 @@ var Gundert = {
         *
         * @param string key
         * @param object value
-        *
-        * @return object
         */
         Set: function(key, value) {
             if (Gundert.Cache.Enabled)
@@ -262,8 +228,7 @@ var Gundert = {
     Query: function(category, language, add_headline) {
         Gundert.ShowLoader(language);
         let mapping = GundertCategoryMappings.GetMapping(category);
-        const url = Gundert.BuildQueryURL(mapping);
-        console.log("Query URL: " + url);
+        const url = mapping['url'];
         var result = Gundert.Cache.Get(url);
         if (result != undefined) {
             console.log("using cached result");
