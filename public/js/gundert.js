@@ -7,8 +7,8 @@ var Gundert = {
     NormalizeSortFields: { 'date': /[^0-9]+/g, 'title': /[„“\[\]]+/g },
 
     // Fields for which special characters will be normalized (e.g. Ā => A)
-    NormalizeSortCharactersFields: ['title', 'authors'],
-    NormalizeSortCharacters: {
+    NormalizeCharactersFields: ['title', 'authors'],
+    NormalizeCharacters: {
         'Ā': 'A',
         'ā': 'a',
         'Ḍ': 'D',
@@ -34,6 +34,12 @@ var Gundert = {
         'ṭ': 't',
         'ū': 'u',
         '˘': ''
+    },
+    NormalizeString : function(value) {
+        for (let [search, replace] of Object.entries(Gundert.NormalizeCharacters)) {
+            value = value.replace(new RegExp(search, 'g'), replace);
+        }
+        return value;
     },
 
     // Register fields for responsive design to have a higher priority than others (default: 10000, highest: 1)
@@ -386,10 +392,9 @@ var Gundert = {
                     else
                         cell_sort += value;
 
-                    if (Gundert.NormalizeSortCharactersFields.includes(field)) {
-                        for (let [search, replace] of Object.entries(Gundert.NormalizeSortCharacters)) {
-                            cell_sort = cell_sort.replace(new RegExp(search, 'g'), replace);
-                        }
+                    if (Gundert.NormalizeCharactersFields.includes(field)) {
+                        cell_filter = Gundert.NormalizeString(cell_filter);
+                        cell_sort = Gundert.NormalizeString(cell_sort);
                     }
 
                     if (field == 'date') {
@@ -512,6 +517,14 @@ var Gundert = {
                 // see https://datatables.net/examples/advanced_init/dom_toolbar.html for example
                 // (we use onclick instead of <a> element here, because it was impossible due to a CSS bug to make it black instead of red)
                 $("div.gundert_search_help").html('<span class="ut-icon ut-icon-info-circled" role="img" aria-label="Info" onclick="window.location.href=\'/?page=help\';" style="cursor: pointer;"></span>');
+
+                // Normalize characters in filter string
+                $('#gundert-searchresult-table_filter input[type=search]').keyup(function () {
+                    let table = $('#gundert-searchresult-table').DataTable();
+                    table.search(
+                        jQuery.fn.DataTable.ext.type.search.html(Gundert.NormalizeString(this.value))
+                    ).draw();
+                });
             }
         });
 
