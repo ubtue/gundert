@@ -108,7 +108,7 @@ class Search {
         $url = $this->_buildUrl();
         $default_timeout = ini_get('default_socket_timeout');
         ini_set('default_socket_timeout', OPENDIGI_API_TIMEOUT);
-        $result = file_get_contents($url);
+        $result = @file_get_contents($url);
         ini_set('default_socket_timeout', $default_timeout);
         if ($result && $result != '[]' && @json_decode($result) != false) {
             if (!is_dir(DIR_PUBLIC_CACHE_SEARCHES))
