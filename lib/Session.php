@@ -21,8 +21,8 @@ class Session {
         $displayTexts =& $_SESSION[self::KEY_DISPLAY_TEXTS];
         if (isset($displayTexts[$language][$id])) {
             return $displayTexts[$language][$id];
-        } elseif (isset($displayTexts[Languages::CODE_DEFAULT][$id])) {
-            return $displayTexts[Languages::CODE_DEFAULT][$id];
+        } elseif (isset($displayTexts[Languages::CODE_FALLBACK][$id])) {
+            return $displayTexts[Languages::CODE_FALLBACK][$id];
         } else {
             return '#' . $id . '#';
         }
@@ -66,7 +66,7 @@ class Session {
     static public function initialize() {
         session_start();
         if (!self::getLanguage()) {
-            self::setLanguage(Languages::CODE_DEFAULT);
+            self::setLanguage(Languages::getRequestedLanguage());
         }
         self::setDisplayTexts(Languages::getDisplayTexts());
     }

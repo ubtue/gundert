@@ -5,7 +5,8 @@ namespace Gundert;
 class Languages {
     const CODE_DE = 'de';
     const CODE_EN = 'en';
-    const CODE_DEFAULT = self::CODE_DE;
+    const CODE_PREFERRED = self::CODE_DE;
+    const CODE_FALLBACK = self::CODE_EN;
 
     /**
      * Get display text for the selected id
@@ -56,6 +57,26 @@ class Languages {
     }
 
     /**
+     * Try to autodetect language from HTTP request.
+     *
+     * Tries to find CODE_PREFERRED, if not found, returns CODE_FALLBACK.
+     *
+     * @return string
+     */
+    static public function getRequestedLanguage() {
+        $headers = getallheaders();
+        if (isset($headers['Accept-Language']) && preg_match_all('"(([A-Z-]+)(;q=(\d\.\d))?)"i', $headers['Accept-Language'], $matches)) {
+            $languageCandidates = $matches[2];
+            foreach($languageCandidates as $languageCandidate) {
+                if (preg_match('"^' . self::CODE_PREFERRED . '"i', $languageCandidate)) {
+                    return self::CODE_PREFERRED;
+                }
+            }
+        }
+        return self::CODE_FALLBACK;
+    }
+
+    /**
      * Get path of language file. If file doesnt exist,
      * returns path of default language file.
      *
@@ -65,8 +86,8 @@ class Languages {
      */
     static private function _getPath($language) {
         $path = DIR_LANG . $language . '.ini';
-        if ($language != self::CODE_DEFAULT && !is_file($path)) {
-            return self::_getPath($self::CODE_DEFAULT);
+        if ($language != self::CODE_FALLBACK && !is_file($path)) {
+            return self::_getPath($self::CODE_FALLBACK);
         }
         return $path;
     }
