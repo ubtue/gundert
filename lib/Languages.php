@@ -64,8 +64,7 @@ class Languages {
      * @return string
      */
     static public function getRequestedLanguage() {
-        $headers = getallheaders();
-        if (isset($headers['Accept-Language']) && preg_match_all('"(([A-Z-]+)(;q=(\d\.\d))?)"i', $headers['Accept-Language'], $matches)) {
+        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && preg_match_all('"(([A-Z-]+)(;q=(\d\.\d))?)"i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches)) {
             $languageCandidates = $matches[2];
             foreach($languageCandidates as $languageCandidate) {
                 if (preg_match('"^' . self::CODE_PREFERRED . '"i', $languageCandidate)) {
