@@ -1,0 +1,10 @@
+## need general help for this file?
+## see https://github.com/github/linguist#usage
+
+# detectables without type="programming" see: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
+*.css linguist-detectable=true
+*.phtml linguist-detectable=true
+
+# vendor folders, see: https://github.com/github/linguist/blob/master/lib/linguist/vendor.yml
+public/vendor/* linguist-vendored
+vendor/* linguist-vendored
