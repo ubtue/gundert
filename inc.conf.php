@@ -23,7 +23,7 @@
     define('OPENDIGI_API_TIMEOUT', 10); // in seconds
 
     // Cache params
-    define('CACHE_EXPIRED_DELAY', 24 * 60 * 60 * 7); // 7 days (in seconds)
+    define('CACHE_EXPIRED_DELAY', 24 * 60 * 60 * 30); // 30 days (in seconds)
 
     // used line endings for generating HTML/JS
     define('HTML_EOL', PHP_EOL);
