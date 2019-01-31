@@ -1,4 +1,8 @@
 var Gundert = {
+    // Map field name to schema.org itemprop id
+    SchemaOrgItemProps: {
+        'title': 'name'
+    },
 
     // Fields for which filter <select> will be generated
     FilterFields: [ 'collection', 'languages', 'subject_ids' ],
@@ -309,7 +313,7 @@ var Gundert = {
         // table body
         table += '<tbody class="ut-table__body">';
         data.forEach(function(row) {
-            table += '<tr class="ut-table__row">';
+            table += '<tr class="ut-table__row" itemscope itemtype="http://schema.org/CreativeWork">';
             fields.forEach(function(field) {
                 const column = row[field];
 
@@ -415,7 +419,11 @@ var Gundert = {
                     }
                 });
 
-                table += '<td class="ut-table__item ut-table__body__item" data-filter="' + Gundert.EscapeHtml(cell_filter) + '" data-sort="' + Gundert.EscapeHtml(cell_sort) + '">';
+                table += '<td class="ut-table__item ut-table__body__item" data-filter="' + Gundert.EscapeHtml(cell_filter) + '" data-sort="' + Gundert.EscapeHtml(cell_sort) + '"';
+                let itemprop = Gundert.SchemaOrgItemProps[field];
+                if (itemprop !== undefined)
+                    table += ' itemprop="' + itemprop + '"';
+                table += '>';
                 table += cell_display;
                 table += '</td>';
             });
