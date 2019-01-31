@@ -115,10 +115,10 @@ class Pagetree {
      *
      * @return string
      */
-    static public function buildSitemap() {
+    static public function buildSitemapHtml() {
         $sitemap = '<nav class="ut-nav ut-nav--vertical">';
         $sitemap .= '<ul id="ut-identifier--nav-vertical" class="ut-nav__list collapse">';
-        $sitemap .= self::iterate2('self::_buildSitemapNoChildren', 'self::_buildSitemapChildrenStart', 'self::_buildSitemapChildrenEnd');
+        $sitemap .= self::iterate2('self::_buildSitemapHtmlNoChildren', 'self::_buildSitemapHtmlChildrenStart', 'self::_buildSitemapHtmlChildrenEnd');
         $sitemap .= '</ul>';
         $sitemap .= '</nav>';
         return $sitemap;
@@ -131,7 +131,7 @@ class Pagetree {
      *
      * @return string       HTML code for the menu entry
      */
-    static private function _buildSitemapNoChildren(Page $page) {
+    static private function _buildSitemapHtmlNoChildren(Page $page) {
         return '<li class="ut-nav__item" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link" href="?page='.$page->getId().'">' . Languages::getDisplayText($page->getId()) . '</a></li>';
     }
 
@@ -142,20 +142,77 @@ class Pagetree {
      *
      * @return string
      */
-    static private function _buildSitemapChildrenStart(Page $page) {
+    static private function _buildSitemapHtmlChildrenStart(Page $page) {
         return '<li class="ut-nav__item" data-level-count="'.$page->getSiblingNumber().'"><a class="ut-link ut-nav__link" href="?page='.$page->getId().'">' . Languages::getDisplayText($page->getId()) . '</a></li><ul>';
     }
 
     /**
-     * Build start block for a sitemap element with children (callback after children)
+     * Build end block for a sitemap element with children (callback after children)
      *
      * @param Page $page    page object
-     * @param int $level    level of the page
      *
      * @return string
      */
-    static private function _buildSitemapChildrenEnd(Page $page) {
+    static private function _buildSitemapHtmlChildrenEnd(Page $page) {
         return '</ul>';
+    }
+
+    /**
+     * Build sitemap HTML structure
+     *
+     * @return string
+     */
+    static public function buildSitemapXml() {
+        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+        $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . PHP_EOL;
+        $sitemap .= 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' . PHP_EOL;
+        $sitemap .= 'xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9' . PHP_EOL;
+        $sitemap .= 'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">' . PHP_EOL;
+        $sitemap .= self::iterate2('self::_buildSitemapXmlNoChildren', 'self::_buildSitemapXmlChildrenStart', 'self::_buildSitemapXmlChildrenEnd');
+        $sitemap .= '</urlset>';
+        return $sitemap;
+    }
+
+    /**
+     * Build a sitemap entry for an element without children (callback)
+     *
+     * @param Page $page    page object
+     *
+     * @return string       XML code for the page
+     */
+    static private function _buildSitemapXmlNoChildren(Page $page) {
+        if ($page->isHidden())
+            return '';
+
+        $xml = '<url>' . PHP_EOL;
+        $xml .= "\t<loc>" . 'https://www.gundert-portal.de/';
+        $xml .= '?page=' . htmlspecialchars($page->getId());
+        $xml .= '</loc>' . PHP_EOL;
+        $xml .= "\t<changefreq>monthly</changefreq>" . PHP_EOL;
+        $xml .= '</url>' . PHP_EOL;
+        return $xml;
+    }
+
+    /**
+     * Build start block for a sitemap element with children (callback before children)
+     *
+     * @param Page $page    page object
+     *
+     * @return string
+     */
+    static private function _buildSitemapXmlChildrenStart(Page $page) {
+        return self::_buildSitemapXmlNoChildren($page);
+    }
+
+    /**
+     * Build end block for a sitemap element with children (callback after children)
+     *
+     * @param Page $page    page object
+     *
+     * @return string
+     */
+    static private function _buildSitemapXmlChildrenEnd(Page $page) {
+        return '';
     }
 
     /**

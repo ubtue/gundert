@@ -164,7 +164,7 @@ class Template {
                         'MATOMO'                    => self::_getMatomoSnippet(),
                         'PAGE_ID'                   => $page->getId(),
                         'PAGE_TITLE'                => Languages::getDisplayText($page->getId()),
-                        'SITEMAP'                   => Pagetree::buildSitemap(),
+                        'SITEMAP'                   => Pagetree::buildSitemapHtml(),
         ];
 
         // perform replacing
