@@ -165,6 +165,7 @@ class Pagetree {
     static public function buildSitemapXml() {
         $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . PHP_EOL;
+        $sitemap .= 'xmlns:xhtml="http://www.w3.org/1999/xhtml"' . PHP_EOL;
         $sitemap .= 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' . PHP_EOL;
         $sitemap .= 'xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9' . PHP_EOL;
         $sitemap .= 'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">' . PHP_EOL;
