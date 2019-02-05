@@ -184,11 +184,15 @@ class Pagetree {
         if ($page->isHidden())
             return '';
 
+        $url = 'https://www.gundert-portal.de/?page=' . htmlspecialchars($page->getId());
+
         $xml = '<url>' . PHP_EOL;
-        $xml .= "\t<loc>" . 'https://www.gundert-portal.de/';
-        $xml .= '?page=' . htmlspecialchars($page->getId());
-        $xml .= '</loc>' . PHP_EOL;
+        $xml .= "\t<loc>" . $url . '</loc>' . PHP_EOL;
         $xml .= "\t<changefreq>monthly</changefreq>" . PHP_EOL;
+        foreach (Languages::CODES as $lang) {
+            $url2 = $url . htmlspecialchars('&language=' . $lang);
+            $xml .= "\t" . '<xhtml:link rel="alternate" hreflang="' . $lang . '" href="' . $url2 .'" />' . PHP_EOL;
+        }
         $xml .= '</url>' . PHP_EOL;
         return $xml;
     }
