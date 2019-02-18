@@ -158,7 +158,7 @@ class Pagetree {
     }
 
     /**
-     * Build sitemap HTML structure
+     * Build sitemap XML structure
      *
      * @return string
      */
@@ -188,7 +188,7 @@ class Pagetree {
         $url = 'https://www.gundert-portal.de/?page=' . htmlspecialchars($page->getId());
 
         $xml = '<url>' . PHP_EOL;
-        $xml .= "\t<loc>" . $url . '</loc>' . PHP_EOL;
+        $xml .= "\t<loc>" . $url . htmlspecialchars('&language=' . Languages::CODE_PREFERRED) . '</loc>' . PHP_EOL;
         $xml .= "\t<changefreq>monthly</changefreq>" . PHP_EOL;
         foreach (Languages::CODES as $lang) {
             $url2 = $url . htmlspecialchars('&language=' . $lang);
