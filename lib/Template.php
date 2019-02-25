@@ -44,6 +44,37 @@ class Template {
     }
 
     /**
+     * Get URL to alternate language for the current page
+     *
+     * @param string $code
+     */
+    static private function _getAlternateLanguageUrl($code) {
+        $queryBase = preg_replace('"&?language=[a-z]+&?"i', '', $_SERVER['QUERY_STRING']);
+        $url = '/';
+
+        if ($queryBase != '')
+            $url .= '?' . $queryBase . '&language=' . urlencode($code);
+        else
+            $url .= '?language=' . urlencode($code);
+
+        return $url;
+    }
+
+    /**
+     * Get snippet of links with hreflang attributes for SEO
+     *
+     * @return string
+     */
+    static private function _getHreflangsSnippet() {
+        $snippet = '';
+        foreach (Languages::CODES as $code) {
+            $url = self::_getAlternateLanguageUrl($code);
+            $snippet .= '<link rel="alternate" lang="' . $code . '" hreflang="' . $url .  '"/>';
+        }
+        return $snippet;
+    }
+
+    /**
      * Get contents of main template
      */
     static private function _getMainContents() {
@@ -156,16 +187,19 @@ class Template {
     static private function _renderMarkers(Page $page, &$contents) {
         // setup markers
         $markers =  [   'BREADCRUMB'                => implode(' &gt; ', Pagetree::getBreadcrumbPath($page, true)),
-                        'LANGUAGE_PICKER_DE'        => '?language=' . urlencode(Languages::CODE_DE) . '&page=' . urlencode($page->getId()),
-                        'LANGUAGE_PICKER_EN'        => '?language=' . urlencode(Languages::CODE_EN) . '&page=' . urlencode($page->getId()),
                         'LANGUAGE_CODE'             => Session::getLanguage(),
                         'LANGUAGE_CODE_LOWER'       => mb_strtolower(Session::getLanguage()),
                         'LANGUAGE_CODE_UPPER'       => mb_strtoupper(Session::getLanguage()),
                         'MATOMO'                    => self::_getMatomoSnippet(),
                         'PAGE_ID'                   => $page->getId(),
                         'PAGE_TITLE'                => Languages::getDisplayText($page->getId()),
+                        'SEO-HREFLANGS'             => self::_getHreflangsSnippet(),
                         'SITEMAP'                   => Pagetree::buildSitemapHtml(),
         ];
+
+        foreach (Languages::CODES as $code) {
+            $markers['LANGUAGE_PICKER_' . mb_strtoupper($code)] = self::_getAlternateLanguageUrl($code);
+        }
 
         // perform replacing
         foreach ($markers as $key => $value) {
