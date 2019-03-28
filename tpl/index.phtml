@@ -52,7 +52,20 @@
         <div class="ut-page ut-page--layout-10">
 
             <!-- Header -->
-            <header class="ut-page-header">
+            <header class="ut-page__header ut-page-header">
+                <nav class="ut-nav ut-nav--skipanchors" aria-label="Bereiche überspringen">
+                    <ul class="ut-nav__list ">
+                        <li class="ut-nav__item " data-level-count="1">
+                            <a class="ut-link ut-nav__link hidden-xs hidden-sm sr-only sr-only-focusable" href="#ut-identifier--main-nav" tabindex="0">Direkt zur Hauptnavigation</a>
+                        </li>
+                        <li class="ut-nav__item " data-level-count="2">
+                            <a class="ut-link ut-nav__link sr-only sr-only-focusable" href="#ut-identifier--main-content" tabindex="0">Direkt zum Inhalt</a>
+                        </li>
+                        <li class="ut-nav__item " data-level-count="3">
+                            <a class="ut-link ut-nav__link sr-only sr-only-focusable" href="#ut-identifier--footer" tabindex="0">Direkt zur Fussleiste</a>
+                        </li>
+                    </ul>
+                </nav>
                 <div class="container ut-page-header__container">
                     <div class="ut-page-header__menu">
                         <nav class="ut-page-header__switch ut-switchbar">
@@ -167,7 +180,7 @@
             </header>
 
             <!-- Content -->
-            <div class="ut-page__main" role="main">
+            <div id="ut-identifier--main-content" class="ut-page__main" role="main">
 
                 <!-- Middle Column -->
                 <div class="ut-wrapper">
@@ -183,7 +196,7 @@
             </div>
 
             <!-- Footer -->
-            <footer class="ut-page__footer ut-page-footer " id="ut-identifier--footer">
+            <footer id="ut-identifier--footer" class="ut-page__footer ut-page-footer ">
                 <!-- ###FOOTER### Start -->
                 <h1 class="ut-heading ut-heading--h1">Footer</h1>
                 <!-- ###FOOTER### End -->
