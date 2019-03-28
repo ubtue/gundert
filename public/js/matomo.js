@@ -1,5 +1,5 @@
 <!-- Matomo -->
-<script type="text/javascript">
+<script>
   var _paq = _paq || [];
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
   _paq.push(["setCookieDomain", "*.gundert-portal.de"]);
