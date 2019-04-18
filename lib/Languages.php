@@ -8,6 +8,7 @@ class Languages {
     const CODE_PREFERRED = self::CODE_DE;
     const CODE_FALLBACK = self::CODE_EN;
     const CODES = [self::CODE_DE, self::CODE_EN];
+    const UIDS = [self::CODE_DE => 0, self::CODE_EN => 1];
 
     /**
      * Get display text for the selected id
