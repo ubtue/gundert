@@ -31,7 +31,7 @@ class Pagetree {
      * @return string
      */
     static public function buildMenu() {
-        $menu = '<ul class="ut-nav__list ut-nav__list--level-1">';
+        $menu = '<ul class="ut-nav__list ut-nav__list--level-1 lory-slides js_slides">';
         $menu .= self::iterate2('self::_buildMenuNoChildren', 'self::_buildMenuChildrenStart', 'self::_buildMenuChildrenEnd');
         $menu .= '</ul>';
         return $menu;

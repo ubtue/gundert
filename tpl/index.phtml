@@ -7,14 +7,12 @@
         <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 
         <!-- CSS includes (vendor) -->
-        <link rel="stylesheet" type="text/css" href="vendor/ut-galileo/css/style.css" media="all">
-        <link rel="stylesheet" type="text/css" href="vendor/ut-galileo/css/styleguide.min.css" media="all">
-        <link rel="stylesheet" type="text/css" href="vendor/ut-galileo/css/prism-typeahead.min.css" media="all">
+        <link rel="stylesheet" type="text/css" href="vendor/ut-typo3/css/merged.css" media="all">
+        <link rel="stylesheet" type="text/css" href="vendor/ut-typo3/css/ut.fixes.local.css" media="all">
         <link rel="stylesheet" type="text/css" href="vendor/jquery-datatables/css/jquery.dataTables.min.css" media="all">
         <link rel="stylesheet" type="text/css" href="vendor/jquery-datatables-responsive/css/dataTables.responsive.css" media="all">
 
         <!-- CSS includes (local) -->
-        <link rel="stylesheet" type="text/css" href="css/ut.fixes.local.css" media="all">
         <link rel="stylesheet" type="text/css" href="css/gundert.css" media="all">
 
         <!-- JS includes (vendor) -->
@@ -36,6 +34,7 @@
         <script src="vendor/bootstrap/js/transition.js"></script>
 
         <!-- ut dependencies (rest of UT is at bottom of page, needed to stay there because else we have problems with the navigation -->
+        <script src="vendor/ut-typo3/js/merged_top.js"></script>
         <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
         <script src="vendor/modernizr/modernizr.min.js"></script>
         <script src="vendor/popper/popper.js"></script>
@@ -54,14 +53,14 @@
             <!-- Header -->
             <header class="ut-page__header ut-page-header">
                 <nav class="ut-nav ut-nav--skipanchors" aria-label="Bereiche überspringen">
-                    <ul class="ut-nav__list ">
-                        <li class="ut-nav__item " data-level-count="1">
+                    <ul class="ut-nav__list">
+                        <li class="ut-nav__item" data-level-count="1">
                             <a class="ut-link ut-nav__link hidden-xs hidden-sm sr-only sr-only-focusable" href="#ut-identifier--main-nav" tabindex="0">Direkt zur Hauptnavigation</a>
                         </li>
-                        <li class="ut-nav__item " data-level-count="2">
+                        <li class="ut-nav__item" data-level-count="2">
                             <a class="ut-link ut-nav__link sr-only sr-only-focusable" href="#ut-identifier--main-content" tabindex="0">Direkt zum Inhalt</a>
                         </li>
-                        <li class="ut-nav__item " data-level-count="3">
+                        <li class="ut-nav__item" data-level-count="3">
                             <a class="ut-link ut-nav__link sr-only sr-only-focusable" href="#ut-identifier--footer" tabindex="0">Direkt zur Fussleiste</a>
                         </li>
                     </ul>
@@ -92,11 +91,11 @@
                                         </div>
                                         <div class="ut-switchblock__content">
                                             <nav class="ut-nav ut-nav--language">
-                                                <ul class="ut-nav__list ">
-                                                    <li class="ut-nav__item " data-level-count="1">
+                                                <ul class="ut-nav__list">
+                                                    <li class="ut-nav__item" data-level-count="1">
                                                         <a class="ut-link ut-nav__link" href="###LANGUAGE_PICKER_DE###" title="Sprache Deutsch wählen">Deutsch</a>
                                                     </li>
-                                                    <li class="ut-nav__item " data-level-count="2">
+                                                    <li class="ut-nav__item" data-level-count="2">
                                                         <a class="ut-link ut-nav__link" href="###LANGUAGE_PICKER_EN###" title="Sprache Englisch wählen">English</a>
                                                     </li>
                                                 </ul>
@@ -118,11 +117,11 @@
                     </div>
                     <div class="ut-page-header__banner">
 			<div class="ut-page-header__logos">
-                            <a href="https://www.uni-tuebingen.de" title="" class="ut-logo-link ut-logo-link--main ">
-                                <img src="vendor/ut-galileo/img/Logo_Universitaet_Tuebingen.svg" class="ut-img ut-img--logo ut-img--logo-main " alt="Logo der Universität Tübingen">
+                            <a href="https://www.uni-tuebingen.de" title="" class="ut-logo-link ut-logo-link--main">
+                                <img src="vendor/ut-typo3/img/Logo_Universitaet_Tuebingen.svg" class="ut-img ut-img--logo ut-img--logo-main" alt="Logo der Universität Tübingen">
                             </a>
-                            <a href="https://www.uni-tuebingen.de/exzellenzinitiative/" title="" class="ut-logo-link ut-logo-link--excellence ">
-                                <img src="vendor/ut-galileo/img/Logo_Universitaet_Tuebingen_Exzellent_EN.svg" class="ut-img ut-img--logo ut-img--logo-excellence-###LANGUAGE_CODE_LOWER### " alt="Logo Exzellenzinitiative der Universität Tübingen">
+                            <a href="https://www.uni-tuebingen.de/exzellenzinitiative/" title="" class="ut-logo-link ut-logo-link--excellence">
+                                <img src="vendor/ut-typo3/img/Logo_Universitaet_Tuebingen_Exzellent_EN.svg" class="ut-img ut-img--logo ut-img--logo-excellence-###LANGUAGE_CODE_LOWER###" alt="Logo Exzellenzinitiative der Universität Tübingen">
                             </a>
                         </div>
                         <div class="ut-page-header__dropdowns"></div>
@@ -146,32 +145,34 @@
                                 <span class="ut-switchblock__close-icon ut-icon ut-icon-cancel" role="button"></span>
                             </div>
 
-                            <div class="ut-switchblock__content">
-                                <nav id="ut-identifier--main-nav" class="ut-nav ut-nav--main">
-                                    <!-- ###TOPNAV### Start -->
-                                    <ul class="ut-nav__list ut-nav__list--level-1 ">
-                                        <li class="ut-nav__item ut-nav__item--level-1 " data-level-count="1">
-                                            <div class="ut-nav__link-group ">
-                                                <a class="ut-link ut-nav__link ut-nav__link--level-1" href="#" tabindex="0">Universität</a>					<a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen">
-                                                <a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen">
-                                                    <span class="ut-nav__toggle-line"></span>
-                                                    <span class="ut-nav__toggle-icon"></span>
-                                                </a>
-                                            </div>
-
-                                            <ul class="ut-nav__list ut-nav__list--level-2 ">
-                                                <li class="ut-nav__item ut-nav__item--close-level">
-                                                    <a href="#" class="ut-nav__link ut-nav__link--close-level">
-                                                        <span class="ut-icon ut-icon-angle-left ut-nav__link-icon ut-nav__link-icon--left"></span>zurück
+                            <div class="ut-switchblock__content" data-breadcrumbuids="0">
+                                <nav id="ut-identifier--main-nav" class="ut-nav ut-nav--main lory-slider js_variablewidth variablewidth" data-current-languageuid="###LANGUAGE_UID###">
+                                    <div class="lory-frame js_frame">
+                                        <!-- ###TOPNAV### Start -->
+                                        <ul class="ut-nav__list ut-nav__list--level-1 lory-slides js_slides">
+                                            <li class="ut-nav__item ut-nav__item--level-1" data-level-count="1">
+                                                <div class="ut-nav__link-group">
+                                                    <a class="ut-link ut-nav__link ut-nav__link--level-1" href="#" tabindex="0">Universität</a>
+                                                    <a class="ut-nav__toggle-link" tabindex="-1" role="button" aria-label="-Menü aufklappen/zuklappen">
+                                                        <span class="ut-nav__toggle-line"></span>
+                                                        <span class="ut-nav__toggle-icon"></span>
                                                     </a>
-                                                </li>
-                                                <li class="ut-nav__item ut-nav__item--area-title">
-                                                    <a href="" class="ut-nav__link ut-nav__link--area-title" tabindex="0">Universität</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <!-- ###TOPNAV### End -->
+                                                </div>
+
+                                                <ul class="ut-nav__list ut-nav__list--level-2">
+                                                    <li class="ut-nav__item ut-nav__item--close-level">
+                                                        <a href="#" class="ut-nav__link ut-nav__link--close-level">
+                                                            <span class="ut-icon ut-icon-angle-left ut-nav__link-icon ut-nav__link-icon--left"></span>zurück
+                                                        </a>
+                                                    </li>
+                                                    <li class="ut-nav__item ut-nav__item--area-title">
+                                                        <a href="" class="ut-nav__link ut-nav__link--area-title" tabindex="0">Universität</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <!-- ###TOPNAV### End -->
+                                    </div>
                                 </nav>
                             </div>
                         </div>
@@ -196,7 +197,7 @@
             </div>
 
             <!-- Footer -->
-            <footer id="ut-identifier--footer" class="ut-page__footer ut-page-footer ">
+            <footer id="ut-identifier--footer" class="ut-page__footer ut-page-footer">
                 <!-- ###FOOTER### Start -->
                 <h1 class="ut-heading ut-heading--h1">Footer</h1>
                 <!-- ###FOOTER### End -->
@@ -205,15 +206,7 @@
         <!-- ###DOCUMENT### End -->
 
         <!-- ut => MUST BE AT END OF PAGE, ELSE WE HAVE PROBLEMS RENDERING/EXTENDING THE NAVIGATION -->
-        <script src="vendor/ut-galileo/js/polyfill.js"></script>
-        <script src="vendor/ut-galileo/js/viewport.js"></script>
-        <script src="vendor/ut-galileo/js/multi-carousel.js"></script>
-        <script src="vendor/ut-galileo/js/nav.js"></script>
-        <script src="vendor/ut-galileo/js/reorganize.js"></script>
-        <script src="vendor/ut-galileo/js/switchbar.js"></script>
-        <script src="vendor/ut-galileo/js/lightbox.js"></script>
-        <script src="vendor/ut-galileo/js/include.js"></script>
-        <script src="vendor/ut-galileo/js/only-patternlab.js"></script>
+        <script src="vendor/ut-typo3/js/merged_bottom.js"></script>
 
         ###MATOMO###
     </body>
