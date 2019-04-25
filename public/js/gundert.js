@@ -5,13 +5,13 @@ var Gundert = {
     },
 
     // Fields for which filter <select> will be generated
-    FilterFields: [ 'collection', 'languages', 'subject_ids' ],
+    FilterFields: [ 'collection', 'languages', 'subjects' ],
 
     // Fields for which normalization will be performed (all non valid characters will not be considered for sorting)
     NormalizeSortFields: { 'date': /[^0-9]+/g, 'title': /[„“\[\]]+/g },
 
     // Fields for which special characters will be normalized (e.g. Ā => A)
-    NormalizeCharactersFields: ['title', 'authors'],
+    NormalizeCharactersFields: ['title', 'names'],
     NormalizeCharacters: {
         'Ā': 'A',
         'ā': 'a',
@@ -55,10 +55,11 @@ var Gundert = {
     SeparatorsAuthors: { Display: '<br>', Filter: ';', Sort: ';' },
     Cache: {
 
+        // this is not only important for search results, but also for filter settings etc.!
         Enabled: true,
 
        /**
-        * Get search result from cache
+        * Get cache entry
         *
         * @param string key
         *
@@ -77,7 +78,7 @@ var Gundert = {
         },
 
        /**
-        * Store search result to cache
+        * Store cache entry
         *
         * @param string key
         * @param object value
@@ -204,12 +205,12 @@ var Gundert = {
     },
 
     /**
-     * creates a div element, which can be used to display the search result
+     * creates or reuses gundert-searchresult div element and fills with innerHTML
      *
      * @param string language
      * @return DomElement
      */
-    GetOrCreateSearchResult: function(language) {
+    GetOrCreateSearchResult: function(language, innerHTML) {
         let div_search_result = document.getElementById('gundert-searchresult');
         if (div_search_result == undefined) {
             let div_parent = document.getElementById('gundert-contentmiddle');
@@ -220,7 +221,9 @@ var Gundert = {
             div_search_result = div_container.firstChild;
         }
 
-        return div_search_result;
+        // Setting the innerHTML needs to be done by jQuery,
+        // else datatables might not see that the HTML has changed
+        $('#gundert-searchresult').html(innerHTML);
     },
 
     HasLanguageChanged: function() {
@@ -239,7 +242,7 @@ var Gundert = {
         Gundert.ShowLoader(language);
         let mapping = GundertCategoryMappings.GetMapping(category);
         const url = mapping['url'];
-        var result = Gundert.Cache.Get(url);
+        let result = Gundert.Cache.Get(url);
         if (result != undefined) {
             console.log("using cached result");
             Gundert.RenderResult(category, language, mapping, result, add_headline);
@@ -264,8 +267,8 @@ var Gundert = {
      * Show errors
      */
     RenderError: function() {
-        let div_search_result = Gundert.GetOrCreateSearchResult('error');
-        div_search_result.innerHTML = '<font color="red">SORRY! The external information could not be received, please try again later.</font>';
+        let innerHTML = '<font color="red">SORRY! The external information could not be received, please try again later.</font>';
+        Gundert.GetOrCreateSearchResult('error', innerHTML);
     },
 
     /**
@@ -315,17 +318,24 @@ var Gundert = {
         data.forEach(function(row) {
             table += '<tr class="ut-table__row" itemscope itemtype="http://schema.org/CreativeWork">';
             fields.forEach(function(field) {
-                const column = row[field];
+                let column = row[field];
+                if (field == "shelfmark")
+                    column = row.identifiers.shelfmark;
 
                 // normalize values to array
                 let values = [];
                 if (Array.isArray(column)) {
                     column.forEach(function(value) {
-                        if (value != "")
+                        if (field == 'subjects')
+                            values.push(value.gnd_id);
+                        else if (field == 'names')
+                            values.push(value.name);
+                        else if (value != "")
                             values.push(value);
                     });
-                } else if (column !== undefined && column != "")
+                } else if (column !== undefined && column != "") {
                     values.push(column);
+                }
 
                 // translate values if necessary
                 let translated_values = [];
@@ -334,8 +344,6 @@ var Gundert = {
                         translated_values.push(Gundert.GetDisplayText(value));
                     else if (field == 'collection')
                         translated_values.push(Gundert.GetDisplayText(field + '_' + value));
-                    else if (field == 'authors')
-                        translated_values.push(value.name);
                     else
                         translated_values.push(value);
                 });
@@ -350,7 +358,7 @@ var Gundert = {
                 translated_values.forEach(function(value) {
                     ++value_nr;
                     if (value_nr > 1) {
-                        if (field == 'authors') {
+                        if (field == 'names') {
                             cell_display += Gundert.SeparatorsAuthors.Display;
                             cell_filter += Gundert.SeparatorsAuthors.Filter;
                             cell_sort += Gundert.SeparatorsAuthors.Sort;
@@ -389,9 +397,9 @@ var Gundert = {
 
                     // also allow to search for projectname (should be similar to shelfmark)
                     if (field == 'shelfmark')
-                        cell_filter += Gundert.Separators.Filter + row.projectname;
+                        cell_filter += Gundert.Separators.Filter + row.identifiers.shelfmark;
 
-                    if (Gundert.NormalizeSortFields[field] !== undefined)
+                    if (Gundert.NormalizeSortFields[field] !== undefined && value != null)
                         cell_sort += value.replace(Gundert.NormalizeSortFields[field], '');
                     else
                         cell_sort += value;
@@ -437,8 +445,7 @@ var Gundert = {
         table += '</table>';
 
         // Trigger DataTable plugin
-        let div_search_result = Gundert.GetOrCreateSearchResult(language);
-        div_search_result.innerHTML = table;
+        Gundert.GetOrCreateSearchResult(language, table);
 
         // set custom css classes
         //$.fn.dataTable.ext.classes.sFilterInput = 'ut-form__input';
@@ -455,6 +462,9 @@ var Gundert = {
             dataTable.destroy();
             Gundert.Filters.SetAll({});
         }
+
+        // define global variable for util, or we can't use it later in initComplete function
+        var util = $.fn.dataTable.util;
 
         // render DataTable
         let dataTable = $('#gundert-searchresult-table').DataTable({
@@ -485,12 +495,12 @@ var Gundert = {
                         select.appendTo($(column.footer()).empty());
                         select.on('change', function(event) {
                             Gundert.Filters.Set(event.currentTarget.id, $(this).val());
-                            let val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            let val = util.escapeRegex($(this).val());
                             if (val === '')
                                 val = '.*';
 
                             // filter by using pattern for data-filter attribute
-                            const sep = $.fn.dataTable.util.escapeRegex(Gundert.Separators.Filter);
+                            const sep = util.escapeRegex(Gundert.Separators.Filter);
                             const pattern = '(^\\s*'+val+'\\s*$)|(^\\s*'+val+'\\s*'+sep+')|('+sep+'\\s*'+val+'\\s*'+sep+')|('+sep+'\\s*'+val+'\\s*$)';
                             column
                                 .search( pattern, true, false )
@@ -509,7 +519,6 @@ var Gundert = {
                         option_values.sort().forEach(function(option_value) {
                             let option = '<option value="' + option_value + '"';
                             if (option_value == Gundert.Filters.Get(filter_id)) {
-                                console.log('setting "' + filter_id + '" filter to "' + option_value + '"');
                                 option += ' selected';
                             }
                             option += '>' + option_value + '</option>';
@@ -566,7 +575,7 @@ var Gundert = {
      * @param string language
      */
     ShowLoader: function(language) {
-        let div_search_result = Gundert.GetOrCreateSearchResult(language);
-        div_search_result.innerHTML = '<div align="center"><span class="ut-icon ut-icon--animate-spin" role="img" aria-label="loading..."></span></div>';
+        let innerHTML = '<div align="center"><span class="ut-icon ut-icon--animate-spin" role="img" aria-label="loading..."></span></div>';
+        Gundert.GetOrCreateSearchResult(language, innerHTML);
     },
 };
