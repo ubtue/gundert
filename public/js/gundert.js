@@ -244,7 +244,6 @@ var Gundert = {
         const url = mapping['url'];
         let result = Gundert.Cache.Get(url);
         if (result != undefined) {
-            console.log("using cached result");
             Gundert.RenderResult(category, language, mapping, result, add_headline);
         } else {
             $.ajax({
@@ -330,10 +329,18 @@ var Gundert = {
                             values.push(value.gnd_id);
                         else if (field == 'names')
                             values.push(value.name);
-                        else if (value != "")
+                        else if (value != '')
                             values.push(value);
                     });
-                } else if (column !== undefined && column != "") {
+                } else if (field == 'title') {
+                    if (column == null || column == '') {
+                        if (row.longtitle != undefined && row.longtitle != null)
+                            values.push(row.longtitle);
+                    } else if (row.subtitle != undefined && row.subtitle != null)
+                        values.push(column + ' - ' + row.subtitle);
+                    else
+                        values.push(column);
+                } else if (column !== undefined && column != '' && column != null) {
                     values.push(column);
                 }
 
@@ -369,10 +376,6 @@ var Gundert = {
                         }
                     }
                     if (field == 'title') {
-                        // add subtitle if exists
-                        if (row.subtitle != undefined)
-                            value += " - " + row.subtitle;
-
                         // generate hyperlink if possible
                         if (row.projectname != undefined) {
                             url = 'http://idb.ub.uni-tuebingen.de/opendigi/'+ row.projectname;
