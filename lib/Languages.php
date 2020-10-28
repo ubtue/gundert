@@ -88,7 +88,7 @@ class Languages {
     static private function _getPath($language) {
         $path = DIR_LANG . $language . '.ini';
         if ($language != self::CODE_FALLBACK && !is_file($path)) {
-            return self::_getPath($self::CODE_FALLBACK);
+            return self::_getPath(self::CODE_FALLBACK);
         }
         return $path;
     }
