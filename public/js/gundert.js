@@ -347,9 +347,13 @@ var Gundert = {
                 // translate values if necessary
                 let translated_values = [];
                 values.forEach(function(value) {
-                    if (GundertCategoryMappings.TranslatableFields.includes(field))
-                        translated_values.push(Gundert.GetDisplayText(value));
-                    else if (field == 'collection')
+                    if (GundertCategoryMappings.TranslatableFields.includes(field)) {
+                        let translated_value = Gundert.GetDisplayText(value);
+
+                        // 2023-07-29: Hide Subject GND Numbers if translation is missing
+                        if (!(field == 'subjects' && translated_value.includes('#')))
+                            translated_values.push(translated_value);
+                    } else if (field == 'collection')
                         translated_values.push(Gundert.GetDisplayText(field + '_' + value));
                     else
                         translated_values.push(value);
