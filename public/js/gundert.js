@@ -383,8 +383,8 @@ var Gundert = {
                                 url += '?ui_lang=eng';
                             cell_display += '<a href="' + url + '" target="_blank">';
                             cell_display += value + '</a>';
-                        } else if(row.doi != undefined) {
-                            url = 'https://doi.org/' + row.doi;
+                        } else if (row.identifiers.doi != undefined) {
+                            url = 'https://doi.org/' + row.identifiers.doi;
                             cell_display += '<a href="' + url + '" target="_blank">' + value + '</a>';
                         } else
                             cell_display += value;
