@@ -19,8 +19,12 @@
     define('DIR_PUBLIC_LETTERS', DIR_PUBLIC_MATERIALS . 'letters/');
 
     // Opendigi
-    define('OPENDIGI_API_ENDPOINT', 'http://idb.ub.uni-tuebingen.de/opendigi/api/list');
+    define('OPENDIGI_API_ENDPOINT', 'https://opendigi.ub.uni-tuebingen.de/opendigi/api/list');
     define('OPENDIGI_API_TIMEOUT', 10); // in seconds
+
+    // CSP headers (content security policy) to avoid XSS attacks and so on
+    // unfortunately we need to use 'unsafe-inline' to be compatible with the uni-tuebingen webdesign assets
+    define('CSP_HEADERS', ['default-src \'self\' \'unsafe-inline\' https://*.uni-tuebingen.de']);
 
     // Cache params
     define('CACHE_EXPIRED_DELAY', 24 * 60 * 60 * 30); // 30 days (in seconds)

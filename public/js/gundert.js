@@ -315,7 +315,7 @@ var Gundert = {
         // table body
         table += '<tbody class="ut-table__body">';
         data.forEach(function(row) {
-            table += '<tr class="ut-table__row" itemscope itemtype="http://schema.org/CreativeWork">';
+            table += '<tr class="ut-table__row" vocab="https://schema.org/" typeof="CreativeWork">';
             fields.forEach(function(field) {
                 let column = row[field];
                 if (field == "shelfmark")
@@ -382,7 +382,7 @@ var Gundert = {
                     if (field == 'title') {
                         // generate hyperlink if possible
                         if (row.projectname != undefined) {
-                            url = 'http://idb.ub.uni-tuebingen.de/opendigi/'+ row.projectname;
+                            url = 'https://opendigi.ub.uni-tuebingen.de/opendigi/'+ row.projectname;
                             if (language == 'en')
                                 url += '?ui_lang=eng';
                             cell_display += '<a href="' + url + '" target="_blank">';
@@ -437,7 +437,7 @@ var Gundert = {
                 table += '<td class="ut-table__item ut-table__body__item" data-filter="' + Gundert.EscapeHtml(cell_filter) + '" data-sort="' + Gundert.EscapeHtml(cell_sort) + '"';
                 let itemprop = Gundert.SchemaOrgItemProps[field];
                 if (itemprop !== undefined)
-                    table += ' itemprop="' + itemprop + '"';
+                    table += ' property="' + itemprop + '"';
                 table += '>';
                 table += cell_display;
                 table += '</td>';
