@@ -99,6 +99,7 @@ class Template {
         $snippet = '<!-- Matomo disabled -->';
         if (Config::IsMatomoEnabled()) {
             $snippet = file_get_contents(DIR_PUBLIC_JS . 'matomo.js');
+            $snippet = PHP_EOL . '<script nonce="' . CSP_NONCE . '">' . PHP_EOL . $snippet . '</script>' . PHP_EOL;
         }
         return $snippet;
     }
@@ -187,6 +188,7 @@ class Template {
     static private function _renderMarkers(Page $page, &$contents) {
         // setup markers
         $markers =  [   'BREADCRUMB'                => implode(' &gt; ', Pagetree::getBreadcrumbPath($page, true)),
+                        'CSP_NONCE'                 => CSP_NONCE,
                         'LANGUAGE_CODE'             => Session::getLanguage(),
                         'LANGUAGE_CODE_LOWER'       => mb_strtolower(Session::getLanguage()),
                         'LANGUAGE_CODE_UPPER'       => mb_strtoupper(Session::getLanguage()),

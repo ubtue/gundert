@@ -24,6 +24,9 @@
 
     // CSP headers (content security policy) to avoid XSS attacks and so on
     // unfortunately we need to use 'unsafe-inline' to be compatible with the uni-tuebingen webdesign assets
+    define('CSP_NONCE', \mt_rand(0, PHP_INT_MAX));
+    // Note: the CSP_NONCE is used in templates, however it will be inactive as long as it's unused in the CSP headers.
+    //       (still trying to figure out why there are problems within the typo3 layout assets.)
     define('CSP_HEADERS', ['default-src \'self\' \'unsafe-inline\' https://*.uni-tuebingen.de']);
 
     // Cache params
@@ -43,4 +46,3 @@
     require(DIR_LIB . 'Search.php');
     require(DIR_LIB . 'Session.php');
     require(DIR_LIB . 'Template.php');
-?>
