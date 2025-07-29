@@ -69,8 +69,12 @@ var Gundert = {
             if (!Gundert.Cache.Enabled)
                 return undefined;
 
+            let cacheEntry = sessionStorage.getItem(key);
+            if (cacheEntry === null)
+                return undefined;
+
             try {
-                return JSON.parse(sessionStorage[key]);
+                return JSON.parse(cacheEntry);
             } catch (e) {
                 console.log(e);
                 return undefined;
