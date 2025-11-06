@@ -8,8 +8,8 @@
         }
     ],
     "require": {
-        "components/bootstrap": "^3.3",
-	"components/jquery": "^3.3",
+        "components/bootstrap": "^3.4",
+	"components/jquery": "^3.7",
 	"components/jqueryui": "^1.12",
 	"datatables/datatables": "^1.10",
 	"drmonty/datatables-plugins": "^1.10",
